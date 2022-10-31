@@ -32,7 +32,7 @@
 #Setting S_WarmUpNb 0	as _("Number of warm up")
 #Setting S_WarmUpDuration 0 as _("Duration of one warm up")
 #Setting S_WarmUpTimeout -1 as _("Warm up timeout")
-#Setting S_UseOldUI True as _("Use ManiaPlanet's interface for chrono and speed")
+#Setting S_UseOldUI False as _("Use ManiaPlanet's interface for chrono and speed")
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 // Constants
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
