@@ -161,12 +161,14 @@ Void SetupUi()  // for CTmRules
 		
 	G_LayerChrono = UIManager.UILayerCreate();
 	G_LayerSpeedAndDist = UIManager.UILayerCreate();
+	G_LayerCheckpoint = UIManager.UILayerCreate();
 
 	G_LayerSpeedAndDist.ManialinkPage = DrawSpeedUI();
 	G_LayerChrono.ManialinkPage = DrawChronoUI(0);
 	
 	UIManager.UIAll.UILayers.add(G_LayerChrono);
 	UIManager.UIAll.UILayers.add(G_LayerSpeedAndDist);
+	UIManager.UIAll.UILayers.add(G_LayerCheckpoint);
 }
 
 Void SetupRules()	{
@@ -334,7 +336,14 @@ Void DoValidate(Boolean IsTest) {
 			}
 			if(Event.Type == CSmModeEvent::EType::OnPlayerTriggersWaypoint && !IsTest)	{
 				CpsPassed += 1;
-				
+
+				declare CurCP_BestTime = -1;
+				if(Event.Player.Score.BestRaceTimes.count > CpsPassed)
+					CurCP_BestTime = Event.Player.Score.BestRaceTimes[CpsPassed-1];
+				else
+					CurCP_BestTime = -1;
+				G_LayerCheckpoint.ManialinkPage = UpdateCheckPointUI(Event.WaypointTime, CurCP_BestTime);
+
 				//when player passes all the checkpoints and gets into finish
 				if(CpsPassed > CpCount)	{
 					ValidationStatus = CMapType::ValidationStatus::Validated;	
