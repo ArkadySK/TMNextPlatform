@@ -415,6 +415,60 @@ main()	{
 """;
 }
 
+// --------------------------------------- //
+/** Update checkpoint difference UI
+ *
+ *
+ */
+Text UpdateCheckPointUI(Integer _WaypointTime, Integer _AnotherTime)	{
+	return """<manialink version="3">
+	<frame z-index="-10">
+		<label halign="center" style="TextRaceChrono" textsize="4" pos="0 20" id="cas" text=""/>
+		<label halign="center" style="TextRaceChrono" textsize="4" pos="0 15" id="cas2" text=""/>
+	</frame>
+	<script><!--
+	
+	#Include "TextLib" as TextLib
+	Text TimeToTextMP(Integer _Time)	{
+		declare Text temp = TextLib::TimeToText(_Time, True);
+		if(_Time < 0)	{
+			temp = TextLib::SubString(temp, 2, 7);
+			return "-" ^ temp;
+		}
+		if(_Time < 600000)	{
+			temp = TextLib::SubString(temp, 1, 7);
+			return temp;
+		}
+		return temp;
+	}
+
+	main()	{
+		Audio.PlaySoundEvent(CAudioManager::ELibSound::Checkpoint, 0, 1.);
+		declare Time = {{{_WaypointTime}}};
+		declare Time2 = {{{_AnotherTime}}};
+		
+		(Page.GetFirstChild("cas") as CMlLabel).SetText(TimeToTextMP(Time));
+		
+		if(Time2 == -1)	
+			(Page.GetFirstChild("cas2") as CMlLabel).Hide();
+	
+		declare diff = Time - Time2;
+		declare Text style;
+		if(diff < 0)
+			style = "$00F";
+		else
+			style = "$F00+";	
+		(Page.GetFirstChild("cas2") as CMlLabel).SetText("" ^ style ^ TimeToTextMP(diff));
+		sleep(1500);
+		(Page.GetFirstChild("cas") as CMlLabel).Hide();
+		(Page.GetFirstChild("cas2") as CMlLabel).Hide();
+	}
+	
+	
+	--></script>
+	</manialink>
+	""";
+	}
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 /** Get the time left to the players to finish the round after the first player
