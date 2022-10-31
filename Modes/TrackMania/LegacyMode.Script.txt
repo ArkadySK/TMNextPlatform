@@ -120,8 +120,8 @@ main()	{
 }
 
 
-declare CUILayer ChronoLayer;	
-declare CUILayer CPLayer;
+declare CUILayer G_ChronoLayer;	
+declare CUILayer G_CPLayer;
 
 ***MB_Private_StartServer***
 ***
@@ -182,8 +182,8 @@ else
 	Scores_SetSortCriteria(CSmMode::ESmScoreSortOrder::BestRace);
 
 
-ChronoLayer = UIManager.UILayerCreate();
-CPLayer = UIManager.UILayerCreate();
+G_ChronoLayer = UIManager.UILayerCreate();
+G_CPLayer = UIManager.UILayerCreate();
 
 foreach(Player in Players)  {
 	declare Integer NbRespawnsRecord for Player;
@@ -193,10 +193,10 @@ foreach(Player in Players)  {
 	NbRespawnsRecord = 999;
 
   declare Player_UI = UIManager.GetUI(Player);
-	Player_UI.UILayers.add(ChronoLayer); 
-	Player_UI.UILayers.add(CPLayer); 
+	Player_UI.UILayers.add(G_ChronoLayer); 
+	Player_UI.UILayers.add(G_CPLayer); 
 	
-  ChronoLayer.ManialinkPage = DrawChronoUI();
+  G_ChronoLayer.ManialinkPage = DrawChronoUI();
 
 }
 ***
@@ -261,7 +261,7 @@ foreach (Event in PendingEvents) {
 		else
 			BestCPTime = -1;
 		
-  	CPLayer.ManialinkPage = UpdateCheckPointUI(Event.WaypointTime, BestCPTime);
+  	G_CPLayer.ManialinkPage = UpdateCheckPointUI(Event.WaypointTime, BestCPTime);
 		declare Player_UI = UIManager.GetUI(Event.Player);
 
 		if (Event.IsFinish) {
