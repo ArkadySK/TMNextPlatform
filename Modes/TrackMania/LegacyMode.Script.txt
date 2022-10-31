@@ -1,0 +1,293 @@
+#Extends "Libs/Nadeo/TMxSM/Race/ModeRounds.Script.txt"
+//#Extends "Libs/Nadeo/TMNext/TrackMania/Modes/TMNextBase.Script.txt"
+#Include "Libs/Nadeo/ScoresTable2.Script.txt" as ST2
+
+#Include "TextLib" as TextLib
+#Include "MathLib" as MathLib
+
+#Setting S_IsPlatform False
+
+Text DrawChronoUI()	{
+return """<manialink version="3">
+
+<label id="nbRespawnsLabel" hidden="1" halign="center" style="TextRaceChrono" textsize="10" pos="0 -78" text="???"/>
+<label id="timeLabel" hidden="1" halign="center" style="TextRaceChrono" textsize="8" pos="0 -80" text="???"/>
+
+<frame pos="158 -80" id="SpeedFrame">
+<label id="speedLabel" halign="right" style="TextRaceChrono" textsize="8" pos="0 0" text="0"/>
+
+<label id="distLabel" halign="right" style="TextRaceChrono" textsize="2" pos="-6 4" text="0"/>
+<label halign="right" textsize="1" pos="0 3" text="m"/>
+</frame>
+
+<script><!--
+
+#Include "TextLib" as TextLib
+#Include "MathLib" as MathLib
+
+CSmPlayer GetOwner() {
+    wait(GUIPlayer != Null || InputPlayer != Null);
+		if (GUIPlayer != Null) return GUIPlayer;
+    return InputPlayer;
+}
+
+Text TimeToTextMP(Integer _Time)	{
+	declare Text temp = TextLib::TimeToText(_Time, True);
+	if(_Time < 0)	{
+		temp = TextLib::SubString(temp, 2, 7);
+		return "-" ^ temp;
+	}
+	if(_Time < 600000)	{
+		temp = TextLib::SubString(temp, 1, 7);
+		return temp;
+	}
+	return temp;
+}
+
+main()	{
+	declare Player <=> GetOwner();
+	Player.TrustClientSimu = False;
+	
+	if({{{S_IsPlatform}}})
+		(Page.GetFirstChild("nbRespawnsLabel") as CMlLabel).Show();
+	else
+		(Page.GetFirstChild("timeLabel") as CMlLabel).Show();
+		
+	while(True)	{
+		(Page.GetFirstChild("speedLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Speed * 36 / 10));
+		(Page.GetFirstChild("distLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Distance));
+		if({{{S_IsPlatform}}})
+			(Page.GetFirstChild("nbRespawnsLabel") as CMlLabel).SetText(""^Player.Score.NbRespawnsRequested);
+		else
+			(Page.GetFirstChild("timeLabel") as CMlLabel).SetText(TimeToTextMP(Player.CurrentRaceTime));
+		yield;
+	}
+}
+
+--></script>
+</manialink>
+""";
+}
+
+Text UpdateCheckPointUI(Integer _WaypointTime, Integer _AnotherTime)	{
+return """<manialink version="3">
+<frame z-index="-10">
+	<label halign="center" style="TextRaceChrono" textsize="4" pos="0 20" id="cas" text=""/>
+	<label halign="center" style="TextRaceChrono" textsize="4" pos="0 15" id="cas2" text=""/>
+</frame>
+<script><!--
+
+#Include "TextLib" as TextLib
+Text TimeToTextMP(Integer _Time)	{
+	declare Text temp = TextLib::TimeToText(_Time, True);
+	if(_Time < 0)	{
+		temp = TextLib::SubString(temp, 2, 7);
+		return "-" ^ temp;
+	}
+	if(_Time < 600000)	{
+		temp = TextLib::SubString(temp, 1, 7);
+		return temp;
+	}
+	return temp;
+}
+
+main()	{
+	Audio.PlaySoundEvent(CAudioManager::ELibSound::Checkpoint, 0, 1.);
+	declare Time = {{{_WaypointTime}}};
+	declare Time2 = {{{_AnotherTime}}};
+	
+	(Page.GetFirstChild("cas") as CMlLabel).SetText(TimeToTextMP(Time));
+	
+	if(Time2 == -1)	
+		(Page.GetFirstChild("cas2") as CMlLabel).Hide();
+
+	declare diff = Time - Time2;
+	declare Text style;
+	if(diff < 0)
+		style = "$00F";
+	else
+		style = "$F00+";	
+	(Page.GetFirstChild("cas2") as CMlLabel).SetText("" ^ style ^ TimeToTextMP(diff));
+	sleep(1500);
+	(Page.GetFirstChild("cas") as CMlLabel).Hide();
+	(Page.GetFirstChild("cas2") as CMlLabel).Hide();
+}
+
+
+--></script>
+</manialink>
+""";
+}
+
+
+declare CUILayer ChronoLayer;	
+declare CUILayer CPLayer;
+
+***MB_Private_StartServer***
+***
+
+ST2::Load();
+ST2::SetStyle("LibST_Base");
++++ScoresTable+++
+ST2::Build("SM"); 
+***
+
+***ScoresTable***
+***
+// ---------------------------------- //
+// Global settings
+ST2::SetSize(<164.5, 11.>, <161., 59.5>, <160., 15.5>);
+ST2::SetFormat(2, 8);
+ST2::SetTextScale(1.1);
+ST2::SetBackgroundProperties(<0., 5.>, <200., 100.>);
+ST2::SetTeamsScoresVisibility(False);
+
+// ---------------------------------- //
+// Columns
+ST2::SetColWidth("LibST_Avatar", 2.5);
+ST2::SetColWidth("LibST_ManiaStars", 2.);
+ST2::SetColWidth("LibST_Tools", 1.5);
+ST2::CreateCol("LibST_TMRespawns", "Respawns", "0", 12., 1.);
+ST2::CreateCol("LibST_TMBestTime", "BestTime", "-", 15., 2.);
+
+// ---------------------------------- //
+// Teams mode
+ST2::SetTeamsMode(False);
+
+***
+
+Void PreLoadUI()	{
+	UseClans = False;
+	UseLaunchedCheckpoints = False;
+	UIManager.UIAll.ScoreTableOnlyManialink = True;
+	UIManager.UIAll.ScoreTableVisibility = CUIConfig::EVisibility::Normal;
+}
+
+
+Void EndRaceSequence(Text _text, CPlayer _Player)	{
+	declare Player_UI = UIManager.GetUI(_Player);
+	Player_UI.ScoreTableVisibility = CUIConfig::EVisibility::ForcedVisible;
+	Player_UI.UISequence = CUIConfig::EUISequence::Finish;
+	Player_UI.BigMessage = _text;
+}
+	
+***Match_InitMap***
+***
+PreLoadUI();
+
+Scores_ClearAll();
+if(S_IsPlatform)
+	Scores_SetSortCriteria(CSmMode::ESmScoreSortOrder::Respawns);
+else
+	Scores_SetSortCriteria(CSmMode::ESmScoreSortOrder::BestRace);
+
+
+ChronoLayer = UIManager.UILayerCreate();
+CPLayer = UIManager.UILayerCreate();
+
+foreach(Player in Players)  {
+	declare Integer NbRespawnsRecord for Player;
+	
+	//	Scores.all.NbRespawnsRequested = 999;
+	
+	NbRespawnsRecord = 999;
+
+  declare Player_UI = UIManager.GetUI(Player);
+	Player_UI.UILayers.add(ChronoLayer); 
+	Player_UI.UILayers.add(CPLayer); 
+	
+  ChronoLayer.ManialinkPage = DrawChronoUI();
+
+}
+***
+
+***Match_PlayLoop***
+***
+
+foreach(Player in Players)	{
+	
+	declare Boolean Better for Player;
+	declare Boolean IsFinished for Player;
+	declare Integer NbRespawnsRecord for Player;
+	declare Integer TimeToUnspawn for Player;
+	declare Integer cpindex for Player;
+	
+	declare Player_UI = UIManager.GetUI(Player);
+	if(Player.StartTime == Now)	{
+		Better = False;
+		IsFinished = False;
+		cpindex = 0;	
+		Player_UI.BigMessage = "";
+	}
+	
+	
+	
+	//------------------------------
+	
+	if (IsFinished && Player != Null) {
+		
+		if(TimeToUnspawn < Now)	{
+			if(Player.StartTime >= Now)	{
+				log("why restart");
+			}
+			else
+				UnspawnPlayer(GetPlayer(Player.Login));
+			IsFinished = False;
+		}
+		
+		NbRespawnsRecord = Player.Score.NbRespawnsRequested;
+		
+			
+		if(Player.Score != Null) {
+			assert(Player.Score.Id != NullId);
+		}
+	}
+}
+
+
+foreach (Event in PendingEvents) {
+	
+	// Waypoint
+	if (Event.Type == CSmModeEvent::EType::OnPlayerTriggersWaypoint) {
+		declare Integer PrevPlayer_Score_NbRespawnsRequested for Event.Player;
+		declare Integer NbRespawnsRecord for Event.Player;	
+		declare Integer cpindex for Event.Player;
+		
+		cpindex += 1;
+		declare BestCPTime = -1;
+		
+		if(Event.Player.Score.BestRaceTimes.count > cpindex)
+			BestCPTime = Event.Player.Score.BestRaceTimes[cpindex-1];
+		else
+			BestCPTime = -1;
+		
+  	CPLayer.ManialinkPage = UpdateCheckPointUI(Event.WaypointTime, BestCPTime);
+		declare Player_UI = UIManager.GetUI(Event.Player);
+
+		if (Event.IsFinish) {
+			declare Boolean IsFinished for Event.Player;
+			declare Boolean Better for Event.Player;
+			declare Integer TimeToUnspawn for Event.Player;	
+			TimeToUnspawn = Now + 2000;
+			EndRaceSequence("Finished", Event.Player);
+					
+			Player_SetCurRaceAsPrevRace(Event.Player);
+
+			if(Event.Player.Score.NbRespawnsRequested <= NbRespawnsRecord)	{			 
+				Better = True; 
+				Player_SetCurRaceAsBestRace(Event.Player);
+				
+				Player_ClearRaceWaypointTimes(Event.Player);
+				Player_SetFinishTime(Event.Player, Event.Player.EndTime); //co to robi?
+				
+			}	
+			else
+				Better = False;
+				
+			IsFinished = True;
+		}
+	}
+}
+***
+Void do_nothink()	{
+}
