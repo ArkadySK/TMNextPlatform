@@ -75,13 +75,70 @@ main()	{
 """;
 }
 
+// --------------------------------------- //
+/** Update checkpoint difference UI
+ *
+ *
+ */
+ Text UpdateCheckPointUI(Integer _WaypointTime, Integer _AnotherTime)	{
+	return """<manialink version="3">
+	<frame z-index="-10">
+		<label halign="center" style="TextRaceChrono" textsize="4" pos="0 20" id="cas" text=""/>
+		<label halign="center" style="TextRaceChrono" textsize="4" pos="0 15" id="cas2" text=""/>
+	</frame>
+	<script><!--
+	
+	#Include "TextLib" as TextLib
+	Text TimeToTextMP(Integer _Time)	{
+		declare Text temp = TextLib::TimeToText(_Time, True);
+		if(_Time < 0)	{
+			temp = TextLib::SubString(temp, 2, 7);
+			return "-" ^ temp;
+		}
+		if(_Time < 600000)	{
+			temp = TextLib::SubString(temp, 1, 7);
+			return temp;
+		}
+		return temp;
+	}
+
+	main()	{
+		Audio.PlaySoundEvent(CAudioManager::ELibSound::Checkpoint, 0, 1.);
+		declare Time = {{{_WaypointTime}}};
+		declare Time2 = {{{_AnotherTime}}};
+		
+		(Page.GetFirstChild("cas") as CMlLabel).SetText(TimeToTextMP(Time));
+		
+		if(Time2 == -1)	
+			(Page.GetFirstChild("cas2") as CMlLabel).Hide();
+	
+		declare diff = Time - Time2;
+		declare Text style;
+		if(diff < 0)
+			style = "$00F";
+		else
+			style = "$F00+";	
+		(Page.GetFirstChild("cas2") as CMlLabel).SetText("" ^ style ^ TimeToTextMP(diff));
+		sleep(1500);
+		(Page.GetFirstChild("cas") as CMlLabel).Hide();
+		(Page.GetFirstChild("cas2") as CMlLabel).Hide();
+	}
+	
+	
+	--></script>
+	</manialink>
+	""";
+	}
+
+
 /////////////////////////////////////
 // Validate
 
 declare Ident[Text] G_Vehicles;
 
-declare CUILayer UILayer;
-declare CUILayer SpeedUILayer;
+declare CUILayer G_LayerChrono;
+declare CUILayer G_LayerSpeedAndDist;
+declare CUILayer G_LayerCheckpoint;
 
 Void SetupUi()  // for CTmRules
 {
@@ -102,14 +159,14 @@ Void SetupUi()  // for CTmRules
 	UIManager.UIAll.OverlayHideCountdown = True;
 	//UiRaceChrono = CTmMode::ETmRaceChronoBehaviour::Hidden;
 		
-	UILayer = UIManager.UILayerCreate();
-	SpeedUILayer = UIManager.UILayerCreate();
+	G_LayerChrono = UIManager.UILayerCreate();
+	G_LayerSpeedAndDist = UIManager.UILayerCreate();
 
-	SpeedUILayer.ManialinkPage = DrawSpeedUI();
-	UILayer.ManialinkPage = DrawChronoUI(0);
+	G_LayerSpeedAndDist.ManialinkPage = DrawSpeedUI();
+	G_LayerChrono.ManialinkPage = DrawChronoUI(0);
 	
-	UIManager.UIAll.UILayers.add(UILayer);
-	UIManager.UIAll.UILayers.add(SpeedUILayer);
+	UIManager.UIAll.UILayers.add(G_LayerChrono);
+	UIManager.UIAll.UILayers.add(G_LayerSpeedAndDist);
 }
 
 Void SetupRules()	{
@@ -120,8 +177,9 @@ Void SetupRules()	{
 Void CleanupUi(CSmMode _Rules)  // for CTmRules
 {
 	_Rules.UIManager.ResetAll();
-	UILayer = Null;
-	SpeedUILayer = Null;
+	G_LayerChrono
+ = Null;
+	G_LayerSpeedAndDist = Null;
 }
 
 
@@ -221,7 +279,7 @@ Void RestartRace(CSmPlayer _Player)	{
 	Mode.UIManager.UIAll.UISequence = CUIConfig::EUISequence::Playing;
 	CpsPassed = 0;
 	NbRespawns = 0;
-	UILayer.ManialinkPage = DrawChronoUI(NbRespawns);
+	G_LayerChrono.ManialinkPage = DrawChronoUI(NbRespawns);
 }
 
 Void DoValidate(Boolean IsTest) {	
@@ -272,7 +330,7 @@ Void DoValidate(Boolean IsTest) {
 			// check the checkpoints
 			if(Event.Type == CSmModeEvent::EType::OnPlayerRequestRespawn)	{
 				NbRespawns += 1;
-				UILayer.ManialinkPage = DrawChronoUI(NbRespawns);
+				G_LayerChrono.ManialinkPage = DrawChronoUI(NbRespawns);
 			}
 			if(Event.Type == CSmModeEvent::EType::OnPlayerTriggersWaypoint && !IsTest)	{
 				CpsPassed += 1;
