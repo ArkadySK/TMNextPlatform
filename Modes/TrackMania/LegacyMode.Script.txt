@@ -12,7 +12,7 @@
 Text DrawGameplayTextUI()	{
 return """<manialink version="3">
 
-<label id="boosterLabel" text="" translate="1" textemboss="1" halign="center" textsize="5" pos="0 50"/>
+<label id="boosterLabel" text="" translate="1" textemboss="1" halign="center" textsize="4" pos="0 60"/>
 
 <script><!--
 
