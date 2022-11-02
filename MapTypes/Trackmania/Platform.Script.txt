@@ -13,6 +13,44 @@ declare Integer NbRespawns;
 declare Integer CpCount;
 declare Integer CpsPassed;
 
+Text DrawGameplayTextUI()	{
+return """<manialink version="3">
+
+<label id="boosterLabel" text="" translate="1" textemboss="1" halign="center" textsize="4" pos="0 60"/>
+
+<script><!--
+
+CSmPlayer GetOwner() {
+    wait(GUIPlayer != Null || InputPlayer != Null);
+	if (GUIPlayer != Null) return GUIPlayer;
+    return InputPlayer;
+}
+
+Void SetBoosterLabelText(Text _Text)	{
+	(Page.GetFirstChild("boosterLabel") as CMlLabel).SetText(_Text);
+}
+
+main()	{
+	declare Player <=> GetOwner();
+
+	while(True)	{
+		if(Player == Null) continue;
+		declare Boolean IsFreeWheel = Player.HandicapNoGasDuration > 0 && Player.HandicapNoGasDuration < 1600;
+		declare Boolean IsTurbo2 = Player.EngineTurboRatio > 1.;
+		if(IsFreeWheel)
+			SetBoosterLabelText("Free wheeling!");
+		else if(IsTurbo2)
+			SetBoosterLabelText("Turbo 200%");
+		else
+			SetBoosterLabelText("");
+		yield;
+	}	
+}
+--></script>
+</manialink>
+""";
+}
+
 Text DrawChronoUI(Integer _NbRespawns)	{
 	return """
 	<manialink version="3">
@@ -139,10 +177,13 @@ declare Ident[Text] G_Vehicles;
 declare CUILayer G_LayerChrono;
 declare CUILayer G_LayerSpeedAndDist;
 declare CUILayer G_LayerCheckpoint;
+declare CUILayer G_LayerGameplay;
 
 Void SetupUi()  // for CTmRules
 {
-	UIManager.UIAll.ScoreTableVisibility = CUIConfig::EVisibility::ForcedHidden;
+	UIManager.UIAll.ScoreTableVisibility = CUIConfig::EVisibility::Normal;
+	UIManager.UIAll.ScoreTableOnlyManialink = True;
+	UIManager.UIAll.ScoreTable = "";
 	
 	UIManager.UIAll.OverlayMute321Go = False;
 	UIManager.UIAll.OverlayHideBackground = True;
@@ -162,13 +203,16 @@ Void SetupUi()  // for CTmRules
 	G_LayerChrono = UIManager.UILayerCreate();
 	G_LayerSpeedAndDist = UIManager.UILayerCreate();
 	G_LayerCheckpoint = UIManager.UILayerCreate();
+	G_LayerGameplay = UIManager.UILayerCreate();
 
 	G_LayerSpeedAndDist.ManialinkPage = DrawSpeedUI();
 	G_LayerChrono.ManialinkPage = DrawChronoUI(0);
+	G_LayerGameplay.ManialinkPage = DrawGameplayTextUI();
 	
 	UIManager.UIAll.UILayers.add(G_LayerChrono);
 	UIManager.UIAll.UILayers.add(G_LayerSpeedAndDist);
 	UIManager.UIAll.UILayers.add(G_LayerCheckpoint);
+	UIManager.UIAll.UILayers.add(G_LayerGameplay);
 }
 
 Void SetupRules()	{
@@ -198,7 +242,10 @@ Void SetObjectives(Integer _Author, Integer _Gold, Integer _Silver, Integer _Bro
 	ObjectiveSilver 	= _Silver;
 	ObjectiveBronze 	= _Bronze;
 
-	Map.ObjectiveTextAuthor = " ";
+	if(_Author == _Gold)
+		Map.ObjectiveTextAuthor = " ";
+	else
+		Map.ObjectiveTextAuthor = """{{{ObjectiveAuthor}}} respawns""";
 	Map.ObjectiveTextGold 	= """{{{ObjectiveGold}}} respawns""";
 	Map.ObjectiveTextSilver = """{{{ObjectiveSilver}}} respawns""";
 	Map.ObjectiveTextBronze = """{{{ObjectiveBronze}}} respawns""";
