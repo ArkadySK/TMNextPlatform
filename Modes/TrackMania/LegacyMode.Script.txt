@@ -31,9 +31,12 @@ main()	{
 
 	while(True)	{
 		if(Player == Null) continue;
-
-		if(Player.HandicapNoGasDuration > 0 && Player.HandicapNoGasDuration < 1600)
+		declare Boolean IsFreeWheel = Player.HandicapNoGasDuration > 0 && Player.HandicapNoGasDuration < 1600;
+		declare Boolean IsTurbo2 = Player.EngineTurboRatio > 1.;
+		if(IsFreeWheel)
 			SetBoosterLabelText("Free wheeling!");
+		else if(IsTurbo2)
+			SetBoosterLabelText("Turbo 200%");
 		else
 			SetBoosterLabelText("");
 		yield;
