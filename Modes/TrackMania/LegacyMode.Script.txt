@@ -1,11 +1,52 @@
+/// Solo mode for Platform gamemode for TMNext
+/// Goal: Least nb of respawns
+///
 #Extends "Libs/Nadeo/TMxSM/Race/ModeRounds.Script.txt"
-//#Extends "Libs/Nadeo/TMNext/TrackMania/Modes/TMNextBase.Script.txt"
 #Include "Libs/Nadeo/ScoresTable2.Script.txt" as ST2
 
 #Include "TextLib" as TextLib
 #Include "MathLib" as MathLib
 
 #Setting S_IsPlatform False
+
+Text DrawGameplayTextUI()	{
+return """<manialink version="3">
+
+<label id="boosterLabel" text="" translate="1" textemboss="1" halign="center" textsize="4" pos="0 60"/>
+
+<script><!--
+
+CSmPlayer GetOwner() {
+    wait(GUIPlayer != Null || InputPlayer != Null);
+	if (GUIPlayer != Null) return GUIPlayer;
+    return InputPlayer;
+}
+
+Void SetBoosterLabelText(Text _Text)	{
+	(Page.GetFirstChild("boosterLabel") as CMlLabel).SetText(_Text);
+}
+
+main()	{
+	declare Player <=> GetOwner();
+
+	while(True)	{
+		if(Player == Null) continue;
+		declare Boolean IsFreeWheel = Player.HandicapNoGasDuration > 0 && Player.HandicapNoGasDuration < 1600;
+		declare Boolean IsTurbo2 = Player.EngineTurboRatio > 1.;
+		if(IsFreeWheel)
+			SetBoosterLabelText("Free wheeling!");
+		else if(IsTurbo2)
+			SetBoosterLabelText("Turbo 200%");
+		else
+			SetBoosterLabelText("");
+		yield;
+	}	
+}
+--></script>
+</manialink>
+""";
+}
+
 
 Text DrawChronoUI()	{
 return """<manialink version="3">
@@ -122,6 +163,7 @@ main()	{
 
 declare CUILayer G_ChronoLayer;	
 declare CUILayer G_CPLayer;
+declare CUILayer G_GameplayLayer;
 
 ***MB_Private_StartServer***
 ***
@@ -184,6 +226,7 @@ else
 
 G_ChronoLayer = UIManager.UILayerCreate();
 G_CPLayer = UIManager.UILayerCreate();
+G_GameplayLayer = UIManager.UILayerCreate();
 
 foreach(Player in Players)  {
 	declare Integer NbRespawnsRecord for Player;
@@ -192,11 +235,13 @@ foreach(Player in Players)  {
 	
 	NbRespawnsRecord = 999;
 
-  declare Player_UI = UIManager.GetUI(Player);
+  	declare Player_UI = UIManager.GetUI(Player);
 	Player_UI.UILayers.add(G_ChronoLayer); 
 	Player_UI.UILayers.add(G_CPLayer); 
-	
-  G_ChronoLayer.ManialinkPage = DrawChronoUI();
+	Player_UI.UILayers.add(G_GameplayLayer);
+
+  	G_ChronoLayer.ManialinkPage = DrawChronoUI();
+	G_GameplayLayer.ManialinkPage = DrawGameplayTextUI();
 
 }
 ***
@@ -261,7 +306,7 @@ foreach (Event in PendingEvents) {
 		else
 			BestCPTime = -1;
 		
-  	G_CPLayer.ManialinkPage = UpdateCheckPointUI(Event.WaypointTime, BestCPTime);
+  		G_CPLayer.ManialinkPage = UpdateCheckPointUI(Event.WaypointTime, BestCPTime);
 		declare Player_UI = UIManager.GetUI(Event.Player);
 
 		if (Event.IsFinish) {
