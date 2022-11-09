@@ -33,6 +33,7 @@
 #Setting S_WarmUpDuration 0 as _("Duration of one warm up")
 #Setting S_WarmUpTimeout -1 as _("Warm up timeout")
 #Setting S_UseOldUI False as _("Use ManiaPlanet's interface for chrono and speed")
+#Setting S_UseLaunchedCheckpoints False as _("Use launched respawns")
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 // Constants
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -177,6 +178,7 @@ Users_SetNbFakeUsers(C_FakeUsersNb, 0);
 
 Map_Skipped = True;
 CarRank::Reset();
+UseLaunchedCheckpoints = S_UseLaunchedCheckpoints;
 
 // Warm up
 UIModules_ScoresTable::SetFooterInfo(_("Warm up"));
