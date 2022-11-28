@@ -218,7 +218,7 @@ Void SetupUi()  // for CTmRules
 Void SetupRules()	{
 	Mode.RespawnBehaviour = CSmMode::ERespawnBehaviour::AlwaysRespawn;
 	Mode.GiveUpBehaviour = CSmMode::EGiveUpBehaviour::GiveUp;
-	UseLaunchedCheckpoints = False;
+	Mode.UseLaunchedCheckpoints = False;
 }
 
 Void CleanupUi(CSmMode _Rules)  // for CTmRules
