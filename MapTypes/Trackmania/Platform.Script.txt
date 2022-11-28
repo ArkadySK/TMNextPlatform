@@ -9,9 +9,9 @@
 
 #Const SupportedTasks "Validation"
 
-declare Integer NbRespawns;
-declare Integer CpCount;
-declare Integer CpsPassed;
+declare Integer G_NbRespawns;
+declare Integer G_CpCount;
+declare CAnchorData[] G_PassedCpAnchors;
 
 Text DrawGameplayTextUI()	{
 return """<manialink version="3">
@@ -51,10 +51,10 @@ main()	{
 """;
 }
 
-Text DrawChronoUI(Integer _NbRespawns)	{
+Text DrawChronoUI(Integer _G_NbRespawns)	{
 	return """
 	<manialink version="3">
-		<label id="nbRespawnsLabel" halign="center" style="TextRaceChrono" textsize="8" pos="0 -80" text="{{{_NbRespawns}}}"/>
+		<label id="G_NbRespawnsLabel" halign="center" style="TextRaceChrono" textsize="8" pos="0 -80" text="{{{_G_NbRespawns}}}"/>
 	</manialink>
 	""";
 }
@@ -224,11 +224,9 @@ Void SetupRules()	{
 Void CleanupUi(CSmMode _Rules)  // for CTmRules
 {
 	_Rules.UIManager.ResetAll();
-	G_LayerChrono
- = Null;
+	G_LayerChrono = Null;
 	G_LayerSpeedAndDist = Null;
 }
-
 
 
 Void SetObjectives(Integer _Author, Integer _Gold, Integer _Silver, Integer _Bronze)
@@ -252,6 +250,7 @@ Void SetObjectives(Integer _Author, Integer _Gold, Integer _Silver, Integer _Bro
 	Map.ObjectiveTextBronze = """{{{ObjectiveBronze}}} respawns""";
 }
 
+
 Void SetDefaultObjectives(Integer _AuthorRespawns)
 {
 	
@@ -261,26 +260,38 @@ Void SetDefaultObjectives(Integer _AuthorRespawns)
 	3 + _AuthorRespawns + _AuthorRespawns/2);
 }
 
+
+CAnchorData FindAnchorByPosition(Vec3 _Pos)	{
+	foreach	(Anchor in AnchorData)	{
+		if (Anchor.WaypointType == CAnchorData::EWaypointType::Checkpoint)
+			log(_Pos ^ " vs " ^ Anchor.Position);
+			if(Anchor.Position == _Pos)
+				return Anchor;
+	}
+	return Null;
+}
+
+
 Void UpdateValidability()
 {
 	// Clear map metedata if modified
-	declare persistent BestScore_NbRespawns for Map = -1;
+	declare persistent BestScore_G_NbRespawns for Map = -1;
 	declare metadata Integer ObjectiveAuthor for Map /*default*/= 999;
 	ClearMapMetadata();
-	BestScore_NbRespawns = -1;
+	BestScore_G_NbRespawns = -1;
 
 	// Analyse the blocks of the map
 	declare MultilapCount = GetMultilapBlockCount();
 	declare IsMultilap = (MultilapCount == 1);
 	declare StartCount = 0;
 	declare FinishesCount = 0;
-	CpCount = 0;
+	G_CpCount = 0;
 
 	foreach	(Anchor in AnchorData)	{
 		if (Anchor.WaypointType == CAnchorData::EWaypointType::Start)
 			StartCount += 1;
   		if (Anchor.WaypointType == CAnchorData::EWaypointType::Checkpoint)
-			CpCount += 1;
+			G_CpCount += 1;
   		if (Anchor.WaypointType == CAnchorData::EWaypointType::Finish)
     		FinishesCount += 1;
 	}
@@ -291,7 +302,7 @@ Void UpdateValidability()
 		return;
 	}
 	
-	if (IsMultilap && CpCount == 0) {
+	if (IsMultilap && G_CpCount == 0) {
 		ValidationStatus = CMapType::ValidationStatus::NotValidable;
 		ValidabilityRequirementsMessage = _("This multilaps map requires at least one checkpoint.");
 		return;
@@ -327,9 +338,9 @@ Void RestartRace(CSmPlayer _Player)	{
 	Mode.UIManager.UIAll.StatusMessage = "";
 	EnterPlayground(1);
 	Mode.UIManager.UIAll.UISequence = CUIConfig::EUISequence::Playing;
-	CpsPassed = 0;
-	NbRespawns = 0;
-	G_LayerChrono.ManialinkPage = DrawChronoUI(NbRespawns);
+	G_PassedCpAnchors.clear();
+	G_NbRespawns = 0;
+	G_LayerChrono.ManialinkPage = DrawChronoUI(G_NbRespawns);
 }
 
 Void DoValidate(Boolean IsTest) {	
@@ -338,17 +349,17 @@ Void DoValidate(Boolean IsTest) {
 		assert(ValidationStatus == ::ValidationStatus::Validable  || ValidationStatus == ::ValidationStatus::Validated);
 
 
-	declare persistent BestScore_NbRespawns for Map = -1;
+	declare persistent BestScore_G_NbRespawns for Map = -1;
 
 	if (ValidationStatus == ::ValidationStatus::Validable) {
 		ClearMapMetadata();
-		BestScore_NbRespawns = -1;
+		BestScore_G_NbRespawns = -1;
 		
 	} else {
 		// Keep previous validation, only improve.
 		declare metadata Integer ObjectiveAuthor for Map /*default*/= 999;
-		BestScore_NbRespawns = ObjectiveAuthor;		// start from previous record.
-		log("BestScore_NbRespawns: "^BestScore_NbRespawns ^ ", AT: " ^ ObjectiveAuthor);
+		BestScore_G_NbRespawns = ObjectiveAuthor;		// start from previous record.
+		log("BestScore_G_NbRespawns: "^BestScore_G_NbRespawns ^ ", AT: " ^ ObjectiveAuthor);
 	}
 	
 
@@ -365,53 +376,61 @@ Void DoValidate(Boolean IsTest) {
 		yield;
 
 		if(Players.count == 0 || Player == Null)	{
-			NbRespawns = 0;
-			CpsPassed = 0;
+			G_NbRespawns = 0;
+			G_PassedCpAnchors.clear();
 			ValidationEndRequested = True;
 			continue;
 		}
 		
 		foreach(Event in Mode.PendingEvents) {
 			if(Event.GiveUp)	{
-				NbRespawns = -1;
-				CpsPassed = 0;
+				G_NbRespawns = -1;
+				G_PassedCpAnchors.clear();
 			}
 
 			// check the checkpoints
 			if(Event.Type == CSmModeEvent::EType::OnPlayerRequestRespawn)	{
-				NbRespawns += 1;
-				G_LayerChrono.ManialinkPage = DrawChronoUI(NbRespawns);
+				G_NbRespawns += 1;
+				G_LayerChrono.ManialinkPage = DrawChronoUI(G_NbRespawns);
 			}
 			if(Event.Type == CSmModeEvent::EType::OnPlayerTriggersWaypoint && !IsTest)	{
-				CpsPassed += 1;
-
+				declare CurAnchor <=> FindAnchorByPosition(Event.Landmark.Position);
+				if(CurAnchor == Null)	{
+					log("ERROR - CP anchor not found!");
+					continue;
+				}
+				if(G_PassedCpAnchors.exists(CurAnchor))
+					continue;
+				else	{
+					G_PassedCpAnchors.add(CurAnchor);
+				}
 				declare CurCP_BestTime = -1;
-				if(Event.Player.Score.BestRaceTimes.count > CpsPassed)
-					CurCP_BestTime = Event.Player.Score.BestRaceTimes[CpsPassed-1];
+				if(Event.Player.Score.BestRaceTimes.count > G_PassedCpAnchors.count)
+					CurCP_BestTime = Event.Player.Score.BestRaceTimes[G_PassedCpAnchors.count-1];
 				else
 					CurCP_BestTime = -1;
 				G_LayerCheckpoint.ManialinkPage = UpdateCheckPointUI(Event.WaypointTime, CurCP_BestTime);
 
 				//when player passes all the checkpoints and gets into finish
-				if(CpsPassed > CpCount)	{
+				if(G_PassedCpAnchors.count > G_CpCount)	{
 					ValidationStatus = CMapType::ValidationStatus::Validated;	
 					
-					if (BestScore_NbRespawns == -1 || NbRespawns < BestScore_NbRespawns) {
+					if (BestScore_G_NbRespawns == -1 || G_NbRespawns < BestScore_G_NbRespawns) {
 						Mode.UIManager.UIAll.StatusMessage = TextLib::Compose(_("You set a new personal record!"));
-						if (NbRespawns != 1) //len pre preklady, nebojte sa
-							Mode.UIManager.UIAll.BigMessage = TextLib::Compose(_("%1 respawns"), TextLib::ToText(NbRespawns));
+						if (G_NbRespawns != 1) //len pre preklady, nebojte sa
+							Mode.UIManager.UIAll.BigMessage = TextLib::Compose(_("%1 respawns"), TextLib::ToText(G_NbRespawns));
 						else 
 							Mode.UIManager.UIAll.BigMessage = _("1 respawn");
-						BestScore_NbRespawns = NbRespawns;
-						SetDefaultObjectives(BestScore_NbRespawns);					
+						BestScore_G_NbRespawns = G_NbRespawns;
+						SetDefaultObjectives(BestScore_G_NbRespawns);					
 					}
-					else if(NbRespawns == BestScore_NbRespawns)	{
+					else if(G_NbRespawns == BestScore_G_NbRespawns)	{
 						Mode.UIManager.UIAll.StatusMessage = TextLib::Compose(_("Equalled."));
-						Mode.UIManager.UIAll.BigMessage = TextLib::Compose(_("Best: %1"), TextLib::ToText(BestScore_NbRespawns));
+						Mode.UIManager.UIAll.BigMessage = TextLib::Compose(_("Best: %1"), TextLib::ToText(BestScore_G_NbRespawns));
 					}
 					else	{
 						Mode.UIManager.UIAll.StatusMessage = TextLib::Compose(_("Try again!"));
-						Mode.UIManager.UIAll.BigMessage = TextLib::Compose(_("Best: %1"), TextLib::ToText(BestScore_NbRespawns));
+						Mode.UIManager.UIAll.BigMessage = TextLib::Compose(_("Best: %1"), TextLib::ToText(BestScore_G_NbRespawns));
 					}
 					Mode.UIManager.UIAll.UISequence = CUIConfig::EUISequence::Outro;
 					sleep(3000);
@@ -425,6 +444,7 @@ Void DoValidate(Boolean IsTest) {
 	LeavePlayground();
 
 }
+
 
 /////////////////////////////////////
 // EditObjectives
