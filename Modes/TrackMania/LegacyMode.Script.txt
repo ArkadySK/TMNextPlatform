@@ -7,7 +7,7 @@
 #Include "TextLib" as TextLib
 #Include "MathLib" as MathLib
 
-#Setting S_IsPlatform False
+#Setting S_IsPlatform True
 
 Text DrawGameplayTextUI()	{
 return """<manialink version="3">
