@@ -1,0 +1,515 @@
+
+<manialink name="Page_HomePage" version="3">
+	
+	<stylesheet>
+		<style id="LabelWelcome" posn="-128 49" style="TextRankingsBig" sizen="40 5"/>
+		<style id="LabelActivity" posn="-128 43" style="TextSubTitle1" sizen="44 5"/>		
+		<style id="WhiteBTN GreenBTN BlueBTN RedBTN BlackBTN" style="TextButtonBig"/>
+		<style id="1 2 3 4 5"  style="Icons128x128_1" sizen="9 9" halign="right" valign="center"/>
+		
+		<style id="M_Medal1 M_Medal2 M_Medal3 M_Medal4 M_Medal5 M_Medal6 M_Medal7 M_Medal8 M_Medal9 M_Medal10 M_Medal11 M_Medal12 M_Medal13 M_Medal14 M_Medal15" style="MedalsBig" substyle="MedalSlot" pos="-38 24" z-index="25" size="10 10"/> 	
+		<style id="Zamocek0" pos="-46 39" z-index="3" size="15 14" style="Icons128x128_1" substyle="Padlock" scriptevents="1" halign="center"/>
+		<style id="M_Name1 M_Name2 M_Name3 M_Name4 M_Name5 M_Name6 M_Name7 M_Name8 M_Name9 M_Name10 M_Name11 M_Name12 M_Name13 M_Name14 M_Name15" posn="-46 15.5" sizen="30 6"  style="TextButtonBig" textsize="0.6" valign="center2" z-index="10" halign="center" textemboss="1"/>		
+		<style id="M_SP1 M_SP2 M_SP3 M_SP4 M_SP5 M_SP6 M_SP7 M_SP8 M_SP9 M_SP10 M_SP11 M_SP12 M_SP13 M_SP14 M_SP15" style="TextRaceChronoOfficial" textsize="2.8" valign="center2" z-index="10"/>		
+		<style id="M_Icon1 M_Icon2 M_Icon3 M_Icon4 M_Icon5 M_Icon6 M_Icon7 M_Icon8 M_Icon9 M_Icon10 M_Icon11 M_Icon12 M_Icon13 M_Icon14 M_Icon15" keepratio="Clip" size="30 30"  hidden="1" bgcolor="FFA"/>
+		<style id="M_Main1 M_Main2 M_Main3 M_Main4 M_Main5 M_Main10 M_Main6 M_Main8 M_Main7 M_Main9 M_Main11 M_Main12 M_Main13 M_Main14 M_Main15" size="32 36" style="Bgs1" substyle="BgButtonSmall"/>
+		<style id="P1 P2 P3 P4 P5 P6 P7 P8 P9 P10" pos="69 75" z-index="5" size="70 4" style="TextChallengeNameSmall" textsize="2.0" valign="center" textcolor="FFFFFFFF"/>
+	</stylesheet>
+	
+	<frame id="MainPanel" z-index="-4">		
+			
+			<quad style="Bgs1" substyle="BgButtonOff" posn="-150 92" sizen="70 183" z-index="-4"/>
+			<label id="LabelWelcome" text="Play Solo" posn="-128 49" sizen="34 8" translate="1"/>
+			<label id="LabelActivity" text="Choose a difficulty" posn="-128 42" sizen="60 10" translate="1"/>
+			<label id="CampText2" posn="159 -90" sizen="61 10" translate="1" style="TextValueSmallSm" halign="right" valign="bottom" text="None" textsize="3" hidden="1"/>			
+		</frame>	
+		
+		  <frame id="nocol" z-index="20" hidden="1">
+					<label pos="40 32" z-index="11" size="220 22" text="Choose a difficulty" translate="1" halign="center" valign="center" style="TextTitle3" textsize="6" textcolor="FFFFFFFF" textemboss="1"/>
+					<quad pos="40 -2" z-index="11" size="55 77" bgcolor="FFFA" style="Icons128x128_Blink" substyle="BackFocusable" halign="center" valign="center"/>
+					<quad style="Bgs1InRace" substyle="BgGradRight"  posn="39.9 94.7" sizen="263 189" z-index="10" halign="center" scriptevents="1"/>
+	
+				</frame>
+			
+			<frame id="camp" pos="30 -140" scale=".9" hidden="1">
+				<label pos="20 62" z-index="0" size="80 9" text="Race" id="CampText" style="TextRankingsBig" textsize="2.5" translate="1" valign="center2" textcolor="000000FF" halign="center"/>		
+				<quad pos="20 67" z-index="-1" size="90 10" bgcolor="FFFA" image="file://Media/Images/Icon/ButtonRank.png" halign="center"/>
+				<quad id="LeftCamp" pos="-29 62" z-index="0" size="8 8" bgcolor="FFFA" halign="center" valign="center" scriptevents="1" style="Icons128x128_1" substyle="BackFocusable"/>
+				<quad id="RightCamp" pos="69 62" z-index="0" size="8 8" bgcolor="FFFA" halign="center" valign="center" scriptevents="1" style="Icons128x128_1" substyle="BackFocusable" scale="-1"/>
+			</frame>
+			
+			
+			
+			<frame id="MedalsTotal" hidden="" z-index="-2">
+				
+				<quad style="Bgs1" substyle="BgList"  sizen="38 10" posn="-30 54" z-index="-1"/>
+				
+				<label id="SP" sizen="30 14" posn="-19 49" style="TextRankingsBig" textsize="4" text="0" valign="center" halign="center" z-index="2"/>	
+				<quad pos="-4 54" z-index="2" size="10 10" style="Icons128x128_1" substyle="MedalCount"/>
+				<quad style="Bgs1" substyle="BgCardProperty"  posn="40 56.5" sizen="168 16" z-index="-5" halign="center"/>
+				<quad style="Bgs1InRace" substyle="BgGlow2"  posn="40 71" sizen="174 8" z-index="1" halign="center"/>
+				
+				<label id="header" text="Your Medals World Ranking" sizen="189 5" posn="41 62" style="TextButtonBig" textsize="2.5" translate="1" halign="center" valign="center"/>
+			<quad style="Bgs1" substyle="BgTitle"  posn="40 67" sizen="168 11" halign="center"/>
+			<quad style="Bgs1" substyle="BgMetalBar"  posn="40 41" sizen="168 1.5" halign="center"/>
+
+
+			</frame>
+			
+			<frame id="MedalsMap" hidden="1" z-index="1" pos="0 0">
+			
+				<label pos="-26 62" z-index="0" size="61 9" text="Country" id="Zone_" style="TextRankingsBig" textsize="2" translate="1" valign="center2" textcolor="000000FF"/>
+				<quad pos="-35 66" z-index="5" size="8 8" id="Flag" style="Icons128x128_1" substyle="Vehicles"/>
+				<quad pos="-38 67" z-index="-1" size="75 10" bgcolor="FFFA" style="Bgs1" substyle="BgCardPlayer"/>
+		
+				<quad id="Left" pos="-43 62" z-index="0" size="8 8" halign="center" valign="center" scriptevents="1" style="Icons128x128_1" substyle="BackFocusable"/>
+				<quad id="Right" pos="42 62" z-index="0" size="8 8" halign="center" valign="center" scriptevents="1" style="Icons128x128_1" substyle="BackFocusable" scale="-1"/>
+				<quad style="Bgs1" substyle="BgButtonOff"  posn="40.5 81.7" sizen="189 42" z-index="-2" halign="center" scriptevents="1" id="QQ"/>
+				
+				<frame id="keby_to_išlo_tak_to_tam_je" hidden="1">
+				<quad pos="-44 58" z-index="2" size="15 15" style="Icons128x128_1" substyle="SkillPoints"/>
+				<quad style="Bgs1" substyle="BgList"  sizen="50 10" posn="-46 55" z-index="-1"/>				
+				<label pos="-26 49.5" z-index="0" size="25 12" style="TextRaceChrono" textsize="4.5" valign="center2" id="SPMap" text="0"/>		
+				</frame>
+				<label id="header0" text="Official time rankings for this Map" sizen="102 5" posn="1 78" style="TextButtonBig" textsize="2.5" translate="1" halign="center"/>
+				
+				<label pos="6 54" z-index="0" size="16 5" text="Training" translate="1" textsize="2" style="TextCardRaceRank"/>
+				<label pos="6 49" z-index="0" size="20 5" text="Official" translate="1" textsize="2" style="TextTitle2" hidden="1"/>
+				<label pos="24 54" z-index="50" size="21 5" textsize="2" style="TextRankingsBig" textcolor="0085CCFF" id="TrainingMap" translate="1" text="0:00:00"/>
+				<label pos="24 49" z-index="50" size="21 5" text="No record" translate="1" textsize="2" style="TextRankingsBig" textcolor="0085CCFF" id="OfcMap" hidden="1"/>
+				<frame hidden="" pos="1 10" scale=".9">
+					<label scriptevents="1" id="P1"/>
+					<label scriptevents="1" id="P2" pos="69 71"/>
+					<label scriptevents="1" id="P3" pos="69 67"/>
+					<label scriptevents="1" id="P4" pos="69 63"/>			
+					<label scriptevents="1" id="P5" pos="69 59"/>
+					<label scriptevents="1" id="P6" pos="69 55"/>
+					<label scriptevents="1" id="P7" pos="69 51"/>
+					<label scriptevents="1" id="P8" pos="69 47"/>
+					<label scriptevents="1" id="P9" pos="69 43"/>
+					<label scriptevents="1" id="P10" pos="69 39"/>
+				</frame>
+			</frame>
+											
+		<quad id="Titlelogo"  sizen="70 70" pos="-150 90" z-index="-0.151" style="TitleLogos" substyle="Title" image="file://Media/Images/MenuHeader.png" hidden="1"/>
+	
+	<frame id="FrameMenuButtons" pos="-144 27.5">
+	<frame pos="-2 -14.5" scale=".92">
+				<label id="WhiteBTN" text="White" scriptevents="1" sizen="59 17" posn="3 12" valign="center2" translate="1" textemboss="1" substyle="Beginner"/>
+				<label id="GreenBTN" text="Green" scriptevents="1" sizen="61 17" posn="3 -1" translate="1" valign="center2" textemboss="1" substyle="Easy"/>
+				<label id="BlueBTN" text="Blue" scriptevents="1" sizen="56 17" pos="3 -14" z-index="" valign="center2" translate="1" textemboss="1" substyle="Medium"/>
+				<label id="RedBTN" text="Red" scriptevents="1" sizen="55 17" pos="3 -27" z-index="5" translate="1" valign="center2" textemboss="1" substyle="Hard"/>
+				<label id="BlackBTN" text="Black" scriptevents="1" sizen="61 16" posn="3 -40" translate="1" valign="center2" textemboss="1" substyle="Extreme"/>
+	</frame>
+				<quad id="aa" style="Icons128x128_1"  sizen="16 16" pos="-2 24" z-index="-0.151" substyle="Solo"/>
+				<label pos="-16 -114" z-index="0" size="20 5" text="Legacy Browser" style="CardButtonSmallS" scale=".65" scriptevents="1" action="menu_solo"/>
+				<quad id="1" pos="59 -3.5" substyle="Beginner"/>
+				<quad id="2" pos="59 -15" substyle="Easy" />
+				<quad id="3" pos="59 -27" substyle="Medium"/>
+				<quad id="4" pos="59 -39" substyle="Hard"/>
+				<quad id="5" pos="59 -51" substyle="Extreme"/>
+				
+				<quad id="1BTN" style="Bgs1" substyle="BgGradLeft"  sizen="74 17" pos="-15 40" z-index="-0.151" hidden="1"/>
+				<quad id="2BTN" style="Bgs1" substyle="BgGradLeft"  sizen="74 17" pos="-15 21" z-index="-0.0755" hidden="1"/>
+				<quad id="3BTN" style="Bgs1" substyle="BgGradLeft"  posn="-15 2" sizen="74 17" hidden="1"/>
+				<quad id="4BTN" style="Bgs1" substyle="BgGradLeft" pos="-15 -17" sizen="74 17" hidden="1"/>
+				<quad id="5BTN" style="Bgs1" substyle="BgGradLeft" pos="-15 -37" sizen="74 17" hidden="1"/>
+	</frame>
+	
+		<frame pos="0 -8">	
+		<frame id="GG" hidden="" z-index="-25">			
+
+			<quad pos="32 -71" z-index="0" size="8 8"style="Icons128x128_1" substyle="BackFocusable"  halign="center" valign="center" scriptevents="1" rot="90" id="Up"/>
+			<quad id="Down" pos="48 -71" z-index="0" size="8 8" rot="-90" style="Icons128x128_1" substyle="BackFocusable" halign="center" valign="center" scriptevents="1"/>
+			<quad id="M_Main1" pos="-44 45" scriptevents="1" hidden="1" />				
+			<quad id="M_Main2" pos="-10 45" scriptevents="1" hidden="1"/>
+			<quad id="M_Main3" pos="24 45" scriptevents="1" hidden="1"/>
+			<quad id="M_Main4" pos="58 45" scriptevents="1" hidden="1"/>
+			<quad id="M_Main5" pos="92 45" scriptevents="1" hidden="1"/>
+			<quad id="M_Main6" pos="-44 9" scriptevents="1" hidden="1"/>				
+			<quad id="M_Main7" pos="-10 9" scriptevents="1" hidden="1"/>
+			<quad id="M_Main8" pos="24 9" scriptevents="1" hidden="1"/>
+			<quad id="M_Main9" pos="58 9" scriptevents="1" hidden="1"/>
+			<quad id="M_Main10" pos="92 9" scriptevents="1" hidden="1"/>	
+			<quad id="M_Main11" pos="-44 -27" scriptevents="1" hidden="1"/>				
+			<quad id="M_Main12" pos="-10 -27" scriptevents="1" hidden="1"/>
+			<quad id="M_Main13" pos="24 -27" scriptevents="1" hidden="1"/>
+			<quad id="M_Main14" pos="58 -27" scriptevents="1" hidden="1"/>
+			<quad id="M_Main15" pos="92 -27" scriptevents="1" hidden="1"/>									
+							
+		</frame>
+			
+			
+		<frame id="LockFrame" z-index="1000" hidden="1">
+		
+		<quad style="Bgs1" substyle="BgCardProperty"  posn="0 17" sizen="168 25" z-index="-5" halign="center" hidden=""/>
+		<quad style="Bgs1InRace" substyle="BgGlow2"  posn="0 20" sizen="174 8" z-index="1" halign="center"/>
+	
+		<quad style="Bgs1" substyle="BgMetalBar"  posn="0 -8" sizen="168 1.5" halign="center"/>
+		
+		<label  z-index="3" size="157 5" valign="center" pos="-78.5 7" translate="1" autonewline="1" style="TextCardMedium" id="LockR" text="Locked" textsize="2.2"/>
+		<quad id="ZamocekZrus" pos="0 -3" size="85 8.77"  z-index="20" image="file://Media/Images/Icon/share_nations.png" halign="center" valign="center" imagefocus="file://Media/Images/Icon/share_nations_over.png" scriptevents="1" hidden="1"/>
+		<label pos="0 1" z-index="21" size="50.5 5" text="OK" style="CardButtonMediumL" textsize="3" textcolor="222222FF" halign="center" translate="1" id="ZamocekZrus" scriptevents="1"/>
+		<quad pos="0 0" z-index="0" size="400 200" halign="center" valign="center" scriptevents="1" style="Bgs1" substyle="BgEmpty"/>
+		</frame>
+		
+		<frame z-index="-8">
+			<quad id="M_Icon1" pos="-43 44" hidden="1"/>
+			<quad id="M_Icon2" pos="-9 44" hidden="1"/>
+			<quad id="M_Icon3" pos="25 44" hidden="1"/>
+			<quad id="M_Icon4" pos="59 44" hidden="1"/>
+			<quad id="M_Icon5" pos="93 44" hidden="1"/>
+			<quad id="M_Icon6"  pos="-43 8" hidden="1"/>
+			<quad id="M_Icon7" pos="-9 8" hidden="1"/>
+			<quad id="M_Icon8" pos="25 8" hidden="1"/>
+			<quad id="M_Icon9" pos="59 8" hidden="1"/>
+			<quad id="M_Icon10" pos="93 8" hidden="1"/>
+			<quad id="M_Icon11" pos="-43 -28" hidden="1"/>
+			<quad id="M_Icon12" pos="-9 -28" hidden="1"/>
+			<quad id="M_Icon13" pos="25 -28" hidden="1"/>
+			<quad id="M_Icon14" pos="59 -28" hidden="1"/>
+			<quad id="M_Icon15" pos="93 -28" hidden="1"/>
+		</frame>
+	
+		<frame id="Str1" hidden="" z-index="10">	
+			<label id="M_Name1" pos="-28 12"/>
+			<label id="M_Name2" pos="6 12"/>
+			<label id="M_Name3" pos="40 12"/>
+			<label id="M_Name4" pos="74 12"/>
+			<label id="M_Name5" pos="108 12"/>
+			<label id="M_Name6" pos="-28 -24"/>
+			<label id="M_Name7" pos="6 -24"/>
+			<label id="M_Name8" pos="40 -24"/>
+			<label id="M_Name9" pos="74 -24"/>
+			<label id="M_Name10" pos="108 -24"/>
+			<label id="M_Name11" pos="-28 -60"/>
+			<label id="M_Name12" pos="6 -60"/>
+			<label id="M_Name13" pos="40 -60"/>
+			<label id="M_Name14" pos="74 -60"/>
+			<label id="M_Name15" pos="108 -60"/>
+		</frame>
+		
+		<frame z-index="0">
+			<quad id="M_Medal1" hidden="1" pos="-23 24"/>
+			<quad id="M_Medal2" hidden="1" pos="11 24"/>
+			<quad id="M_Medal3" hidden="1" pos="45 24"/>
+			<quad id="M_Medal4" hidden="1" pos="79 24"/>
+			<quad id="M_Medal5" hidden="1" pos="113 24"/>
+			<quad id="M_Medal6" hidden="1" pos="-23 -12"/>
+			<quad id="M_Medal7" hidden="1" pos="11 -12"/>
+			<quad id="M_Medal8" hidden="1" pos="45 -12"/>
+			<quad id="M_Medal9" hidden="1" pos="79 -12"/>
+			<quad id="M_Medal10" hidden="1" pos="113 -12"/>
+			<quad id="M_Medal11" hidden="1" pos="-23 -48"/>
+			<quad id="M_Medal12" hidden="1" pos="11 -48"/>
+			<quad id="M_Medal13" hidden="1" pos="45 -48"/>
+			<quad id="M_Medal14" hidden="1" pos="79 -48"/>
+			<quad id="M_Medal15" hidden="1" pos="113 -48"/>
+		
+			<frame id="M_Lock1" hidden="1" z-index="20">
+				<quad id="Zamocek0"/>
+			</frame>
+			<frame id="M_Lock2" hidden="1" z-index="20">
+				<quad id="Zamocek0"/>
+			</frame>
+			<frame id="M_Lock3" hidden="1" z-index="20">
+				<quad id="Zamocek0"/>
+			</frame>
+			<frame id="M_Lock4" hidden="1" z-index="20">
+				<quad id="Zamocek0"/>
+			</frame>
+			<frame id="M_Lock5" hidden="1">
+				<quad id="Zamocek0"/>
+			</frame>
+			<frame id="M_Lock6" hidden="1">
+				<quad id="Zamocek0"/>
+			</frame>
+			<frame id="M_Lock7" hidden="1">
+				<quad id="Zamocek0"/>
+			</frame>
+			<frame id="M_Lock8" hidden="1">
+				<quad id="Zamocek0"/>
+			</frame>
+			<frame id="M_Lock9" hidden="1">
+				<quad id="Zamocek0"/>
+			</frame>
+			<frame id="M_Lock10" hidden="1">
+				<quad id="Zamocek0"/>
+			</frame>		
+			<frame id="M_Lock11" hidden="1">
+				<quad id="Zamocek0"/>
+			</frame>
+			<frame id="M_Lock12" hidden="1">
+				<quad id="Zamocek0"/>
+			</frame>
+			<frame id="M_Lock13" hidden="1">
+				<quad id="Zamocek0"/>
+			</frame>
+			<frame id="M_Lock14" hidden="1">
+				<quad id="Zamocek0"/>
+			</frame>
+			<frame id="M_Lock15" hidden="1">
+				<quad id="Zamocek0"/>
+			</frame>
+		</frame>
+		</frame>
+<frame id="BackBTN">
+		<label id="xko" text="Back" scriptevents="1" posn="-160 -72" style="CardMain_Quit" sizen="46.4 6" textsize="3.5" translate="1" z-index="10"/>
+		
+		<quad sizen="13 13" posn="-157 -75" z-index="10" halign="left" style="Icons128x128_1" substyle="BackFocusable" hidden="1"/>
+		
+	</frame>
+	<script><!--
+// @Component start component-checkbox
+// /*
+#Include "TextLib" as TL
+// */
+// @Component end component-checkbox
+
+// @Component start share-menu-navigation
+// /*
+#Include "TextLib" as TL
+// */
+// @Component end share-menu-navigation
+
+// @Component start component-navigation
+// /*
+#Include "TextLib" as TL		
+// */
+// @Component end component-navigation
+
+Void Deselect()	{
+	for (yy, 1, 15) {
+		(Page.GetFirstChild("M_Main"^yy) as CMlQuad).StyleSelected = False;
+	}
+}
+Void RefreshRank()	{
+	for (yy, 1, 10) {
+		(Page.GetFirstChild("P"^yy) as CMlLabel).SetText("");
+	}
+}
+
+Void ShowMessage(Text _Text)	{
+	Page.GetFirstChild("LockFrame").Show();
+	(Page.GetFirstChild("LockR") as CMlLabel).SetText(_Text);
+}
+
+Void ClearShownMaps()	{
+	for (y, 1, 15)	{
+				(Page.GetFirstChild("M_Main"^y) as CMlQuad).Hide();
+				(Page.GetFirstChild("M_Icon"^y) as CMlQuad).Hide();
+				(Page.GetFirstChild("M_Medal"^y) as CMlQuad).Hide();
+				(Page.GetFirstChild("M_Lock"^y) as CMlFrame).Hide();
+				(Page.GetFirstChild("M_Name"^y) as CMlLabel).SetText("");
+			}}
+
+Void UpdateMapSelection(CTaskResult_MapList _MapInfosTask)	{
+
+	declare Text ScContext = "";
+	//pre každú trať v danej kampani, farbe a strane 
+	wait(!_MapInfosTask.IsProcessing);	
+	ClearShownMaps();
+	
+	declare i = 1;
+	foreach (Map in _MapInfosTask.MapInfos)	{
+		if(i > 15)
+			continue;			
+	
+	if (Map.Unlocked == False) {
+		(Page.GetFirstChild("M_Lock"^i) as CMlFrame).Show();
+		(Page.GetFirstChild("M_Name"^i) as CMlLabel).SetText("");
+		(Page.GetFirstChild("M_Icon"^i) as CMlQuad).ImageUrl = "";
+		(Page.GetFirstChild("M_Medal"^i) as CMlQuad).Hide();
+		//(Page.GetFirstChild("M_Main"^i) as CMlQuad).Substyle = "BgNotPlayed";
+		}
+		else	{
+		(Page.GetFirstChild("M_Icon"^i) as CMlQuad).ImageUrl = "file://Thumbnails/MapUid/"^Map.MapUid;
+		(Page.GetFirstChild("M_Lock"^i) as CMlFrame).Hide();
+		(Page.GetFirstChild("M_Name"^i) as CMlLabel).SetText(Map.Name);
+		(Page.GetFirstChild("M_Medal"^i) as CMlQuad).Show();
+	}
+	
+	
+	//meDAJly
+	
+	declare NbMedals = ScoreMgr.Map_GetMultiAsyncLevel(NullId, Map.MapUid, ScContext);
+	switch (NbMedals)	{
+		case 4: {
+			(Page.GetFirstChild("M_Medal"^i) as CMlQuad).Substyle = "MedalNadeo";
+		}				
+		case 3: {
+			(Page.GetFirstChild("M_Medal"^i) as CMlQuad).Substyle = "MedalGold";
+			}
+		case 2: {
+			(Page.GetFirstChild("M_Medal"^i) as CMlQuad).Substyle = "MedalSilver";
+		}
+		case 1: {
+			(Page.GetFirstChild("M_Medal"^i) as CMlQuad).Substyle = "MedalBronze";
+		}
+		case 0: {
+			(Page.GetFirstChild("M_Medal"^i) as CMlQuad).Substyle = "MedalSlot";
+		}
+	}	
+	
+	(Page.GetFirstChild("M_Main"^i) as CMlQuad).Show();
+	(Page.GetFirstChild("M_Icon"^i) as CMlQuad).Show();
+	
+	i += 1;
+	}		
+}	
+
+
+main() {	
+	declare UpQuad <=> (Page.MainFrame.GetFirstChild("Up") 	as CMlQuad);
+	declare DownQuad <=> (Page.MainFrame.GetFirstChild("Down") 	as CMlQuad);	
+	declare MedalsTotal_ <=> (Page.MainFrame.GetFirstChild("MedalsTotal") 	as CMlFrame);
+	declare MedalsMap_ <=> (Page.MainFrame.GetFirstChild("MedalsMap") 	as CMlFrame);
+
+	declare Text ScContext = "";
+	declare Text Color;	//uroven trate
+	
+	UpQuad.Hide();
+
+	log("the menu is loading...");
+
+	//declare CurMapInfosTask = DataFileMgr.Map_GetFilteredGameList(4, "", False, True, True);
+	declare CurMapInfosTask = DataFileMgr.Map_GetGameList("", False);
+	declare CurFoldersTask = DataFileMgr.Map_GetGameList("Converted\\TM2UF Platform", False);
+	sleep(100);
+	wait(!CurFoldersTask.IsProcessing);
+	
+	log("menu loaded successfully");
+	DownQuad.Hide();
+		
+	EnableMenuNavigation(True, True, Page.GetFirstChild("xko"), 1);
+		
+	while(True){	
+		switch (Color)	{
+			case "A":	{
+				CurMapInfosTask = DataFileMgr.Map_GetGameList(CurFoldersTask.SubFolders[0], False);
+				UpdateMapSelection(CurMapInfosTask);
+				Color = "";
+			}
+			case "B":	{
+				CurMapInfosTask = DataFileMgr.Map_GetGameList(CurFoldersTask.SubFolders[1], False);
+				UpdateMapSelection(CurMapInfosTask);
+				Color = "";
+			}
+			case "C":	{
+				CurMapInfosTask = DataFileMgr.Map_GetGameList(CurFoldersTask.SubFolders[2], False);
+				UpdateMapSelection(CurMapInfosTask);
+				Color = "";
+			}
+			case "D":	{
+				CurMapInfosTask = DataFileMgr.Map_GetGameList(CurFoldersTask.SubFolders[3], False);
+				UpdateMapSelection(CurMapInfosTask);
+				Color = "";
+			}
+			case "E":	{
+				CurMapInfosTask = DataFileMgr.Map_GetGameList(CurFoldersTask.SubFolders[4], False);
+				UpdateMapSelection(CurMapInfosTask);
+				Color = "";
+			}
+		}
+		
+		
+    	foreach (Event in PendingEvents) {
+			if (Event.Type ==  CMlEvent::Type::MouseClick) {
+				for (y, 1, 15){				
+					if (Event.ControlId == "M_Main"^y) {
+						
+						declare CMapInfo Map;
+						Map <=> CurMapInfosTask.MapInfos[y-1];
+												
+						if ((Page.GetFirstChild("M_Main"^y) as CMlQuad).StyleSelected == False) 	{
+							Deselect();
+							MedalsTotal_ .Hide();
+							MedalsMap_ .Show();
+							
+							declare Integer Record_= ScoreMgr.Map_GetRecord(NullId, Map.MapUid, ScContext);					
+							(Page.GetFirstChild("M_Main"^y) as CMlQuad).StyleSelected = True;
+							(Page.GetFirstChild("header0") as CMlLabel).SetText("Official time rankings for "^Map.Name);
+							
+							if (Record_!=-1)	(Page.GetFirstChild("TrainingMap") as CMlLabel).SetText(TL::TimeToText(Record_, True));
+							else (Page.GetFirstChild("TrainingMap") as CMlLabel).SetText("Not Played");	
+						}
+						else {
+							if(Map.Unlocked)	{
+								wait(TitleControl.IsReady);
+								TitleControl.PlayMap(Map.FileName, "Modes\\TrackMania\\LegacyMode.Script.txt", "");
+							}
+							else {
+								if (Color == "A") {
+									ShowMessage("You need a bronze medal on the previous map to unlock this map.");
+								}
+								else if (Color == "B") {
+									ShowMessage("You need a silver medal on the previous map to unlock this map.");
+								}
+								else if (Color == "C") {
+									ShowMessage("You need a silver medal on the previous map to unlock this map.");
+								}
+								else if (Color == "D") {
+									ShowMessage("You need a gold medal on the previous map to unlock this map.");
+								}
+								else if (Color == "E") {
+									ShowMessage("You need a gold medal on all the previous maps to unlock this map.");
+								}
+							}
+							MedalsTotal_.Show();
+							MedalsMap_.Hide();
+						}
+					}
+				}
+				
+				if (Event.ControlId == "ZamocekZrus") {
+					Page.GetFirstChild("LockFrame").Hide();
+				}
+				
+				if (Event.ControlId == "xko") {
+					SendCustomEvent("menu_main", [""]);
+				}
+				if (Event.ControlId == "WhiteBTN" || Event.ControlId == "GreenBTN" || Event.ControlId == "BlueBTN" || Event.ControlId == "RedBTN" || Event.ControlId == "BlackBTN")	{
+					Deselect();
+					RefreshRank();
+					MedalsTotal_ .Show();
+					MedalsMap_ .Hide();
+				}
+				if (Event.ControlId == "WhiteBTN" && Color != "A")  {
+					if(CurFoldersTask.SubFolders.count > 0)
+						Color = "A";
+					else
+						ShowMessage("Folder not found!");
+        		} 
+				if (Event.ControlId == "GreenBTN" && Color != "B") {
+					if(CurFoldersTask.SubFolders.count > 1)
+						Color = "B";
+					else
+						ShowMessage("Folder not found!");
+       		 	} 
+				if (Event.ControlId == "BlueBTN" && Color != "C")	{
+					if(CurFoldersTask.SubFolders.count > 2)
+						Color = "C";
+					else
+						ShowMessage("Folder not found!");
+       		 	}
+				if (Event.ControlId == "RedBTN" && Color != "D") {
+					if(CurFoldersTask.SubFolders.count > 3)
+						Color = "D";
+					else
+						ShowMessage("Folder not found!");
+       		 	}
+				if (Event.ControlId == "BlackBTN" && Color != "E") {
+					if(CurFoldersTask.SubFolders.count > 4)
+						Color = "E";
+					else
+						ShowMessage("Folder not found!");
+       		 	}
+			}
+		}
+		yield;
+	}
+	log("this very page was done by arkady, 2023 :)");	
+}
+
+	--></script>
+</manialink>
