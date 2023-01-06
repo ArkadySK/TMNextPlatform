@@ -1,6 +1,5 @@
 
-<manialink name="Page_HomePage" version="3">
-	
+	<manialink name="Page_HomePage" version="3">
 	<stylesheet>
 		<style id="LabelWelcome" posn="-128 49" style="TextRankingsBig" sizen="40 5"/>
 		<style id="LabelActivity" posn="-128 43" style="TextSubTitle1" sizen="44 5"/>		
@@ -29,7 +28,7 @@
 					<quad pos="40 -2" z-index="11" size="55 77" bgcolor="FFFA" style="Icons128x128_Blink" substyle="BackFocusable" halign="center" valign="center"/>
 					<quad style="Bgs1InRace" substyle="BgGradRight"  posn="39.9 94.7" sizen="263 189" z-index="10" halign="center" scriptevents="1"/>
 	
-				</frame>
+			</frame>
 			
 			<frame id="camp" pos="30 -140" scale=".9" hidden="1">
 				<label pos="20 62" z-index="0" size="80 9" text="Race" id="CampText" style="TextRankingsBig" textsize="2.5" translate="1" valign="center2" textcolor="000000FF" halign="center"/>		
@@ -40,7 +39,7 @@
 			
 			
 			
-			<frame id="MedalsTotal" hidden="" z-index="-2">
+			<frame id="MedalsTotal" hidden="0" z-index="-2">
 				
 				<quad style="Bgs1" substyle="BgList"  sizen="38 10" posn="-30 54" z-index="-1"/>
 				
@@ -77,7 +76,7 @@
 				<label pos="6 49" z-index="0" size="20 5" text="Official" translate="1" textsize="2" style="TextTitle2" hidden="1"/>
 				<label pos="24 54" z-index="50" size="21 5" textsize="2" style="TextRankingsBig" textcolor="0085CCFF" id="TrainingMap" translate="1" text="0:00:00"/>
 				<label pos="24 49" z-index="50" size="21 5" text="No record" translate="1" textsize="2" style="TextRankingsBig" textcolor="0085CCFF" id="OfcMap" hidden="1"/>
-				<frame hidden="" pos="1 10" scale=".9">
+				<frame hidden="0" pos="1 10" scale=".9">
 					<label scriptevents="1" id="P1"/>
 					<label scriptevents="1" id="P2" pos="69 71"/>
 					<label scriptevents="1" id="P3" pos="69 67"/>
@@ -97,7 +96,7 @@
 	<frame pos="-2 -14.5" scale=".92">
 				<label id="WhiteBTN" text="White" scriptevents="1" sizen="59 17" posn="3 12" valign="center2" translate="1" textemboss="1" substyle="Beginner"/>
 				<label id="GreenBTN" text="Green" scriptevents="1" sizen="61 17" posn="3 -1" translate="1" valign="center2" textemboss="1" substyle="Easy"/>
-				<label id="BlueBTN" text="Blue" scriptevents="1" sizen="56 17" pos="3 -14" z-index="" valign="center2" translate="1" textemboss="1" substyle="Medium"/>
+				<label id="BlueBTN" text="Blue" scriptevents="1" sizen="56 17" pos="3 -14" z-index="0" valign="center2" translate="1" textemboss="1" substyle="Medium"/>
 				<label id="RedBTN" text="Red" scriptevents="1" sizen="55 17" pos="3 -27" z-index="5" translate="1" valign="center2" textemboss="1" substyle="Hard"/>
 				<label id="BlackBTN" text="Black" scriptevents="1" sizen="61 16" posn="3 -40" translate="1" valign="center2" textemboss="1" substyle="Extreme"/>
 	</frame>
@@ -116,8 +115,8 @@
 				<quad id="5BTN" style="Bgs1" substyle="BgGradLeft" pos="-15 -37" sizen="74 17" hidden="1"/>
 	</frame>
 	
-		<frame pos="0 -8">	
-		<frame id="GG" hidden="" z-index="-25">			
+	<frame pos="0 -8">	
+		<frame id="GG" z-index="-25">			
 
 			<quad pos="32 -71" z-index="0" size="8 8"style="Icons128x128_1" substyle="BackFocusable"  halign="center" valign="center" scriptevents="1" rot="90" id="Up"/>
 			<quad id="Down" pos="48 -71" z-index="0" size="8 8" rot="-90" style="Icons128x128_1" substyle="BackFocusable" halign="center" valign="center" scriptevents="1"/>
@@ -138,19 +137,17 @@
 			<quad id="M_Main15" pos="92 -27" scriptevents="1" hidden="1"/>									
 							
 		</frame>
-			
-			
 		<frame id="LockFrame" z-index="1000" hidden="1">
 		
-		<quad style="Bgs1" substyle="BgCardProperty"  posn="0 17" sizen="168 25" z-index="-5" halign="center" hidden=""/>
-		<quad style="Bgs1InRace" substyle="BgGlow2"  posn="0 20" sizen="174 8" z-index="1" halign="center"/>
-	
-		<quad style="Bgs1" substyle="BgMetalBar"  posn="0 -8" sizen="168 1.5" halign="center"/>
+			<quad style="Bgs1" substyle="BgCardProperty"  posn="0 17" sizen="168 25" z-index="-5" halign="center" hidden="0"/>
+			<quad style="Bgs1InRace" substyle="BgGlow2"  posn="0 20" sizen="174 8" z-index="1" halign="center"/>
 		
-		<label  z-index="3" size="157 5" valign="center" pos="-78.5 7" translate="1" autonewline="1" style="TextCardMedium" id="LockR" text="Locked" textsize="2.2"/>
-		<quad id="ZamocekZrus" pos="0 -3" size="85 8.77"  z-index="20" image="file://Media/Images/Icon/share_nations.png" halign="center" valign="center" imagefocus="file://Media/Images/Icon/share_nations_over.png" scriptevents="1" hidden="1"/>
-		<label pos="0 1" z-index="21" size="50.5 5" text="OK" style="CardButtonMediumL" textsize="3" textcolor="222222FF" halign="center" translate="1" id="ZamocekZrus" scriptevents="1"/>
-		<quad pos="0 0" z-index="0" size="400 200" halign="center" valign="center" scriptevents="1" style="Bgs1" substyle="BgEmpty"/>
+			<quad style="Bgs1" substyle="BgMetalBar"  posn="0 -8" sizen="168 1.5" halign="center"/>
+			
+			<label  z-index="3" size="157 5" valign="center" pos="-78.5 7" translate="1" autonewline="1" style="TextCardMedium" id="LockR" text="Locked" textsize="2.2"/>
+			<quad id="ZamocekZrus" pos="0 -3" size="85 8.77"  z-index="20" image="file://Media/Images/Icon/share_nations.png" halign="center" valign="center" imagefocus="file://Media/Images/Icon/share_nations_over.png" scriptevents="1" hidden="1"/>
+			<label pos="0 1" z-index="21" size="50.5 5" text="OK" style="CardButtonMediumL" textsize="3" textcolor="222222FF" halign="center" translate="1" id="ZamocekZrus" scriptevents="1"/>
+			<quad pos="0 0" z-index="0" size="400 200" halign="center" valign="center" scriptevents="1" style="Bgs1" substyle="BgEmpty"/>
 		</frame>
 		
 		<frame z-index="-8">
@@ -171,7 +168,7 @@
 			<quad id="M_Icon15" pos="93 -28" hidden="1"/>
 		</frame>
 	
-		<frame id="Str1" hidden="" z-index="10">	
+		<frame id="Str1" hidden="0" z-index="10">	
 			<label id="M_Name1" pos="-28 12"/>
 			<label id="M_Name2" pos="6 12"/>
 			<label id="M_Name3" pos="40 12"/>
@@ -252,31 +249,13 @@
 				<quad id="Zamocek0"/>
 			</frame>
 		</frame>
-		</frame>
-<frame id="BackBTN">
-		<label id="xko" text="Back" scriptevents="1" posn="-160 -72" style="CardMain_Quit" sizen="46.4 6" textsize="3.5" translate="1" z-index="10"/>
-		
-		<quad sizen="13 13" posn="-157 -75" z-index="10" halign="left" style="Icons128x128_1" substyle="BackFocusable" hidden="1"/>
-		
 	</frame>
+	<frame id="BackBTN">
+		<label id="xko" text="Back" scriptevents="1" posn="-160 -72" style="CardMain_Quit" sizen="46.4 6" textsize="3.5" translate="1" z-index="10"/>
+		<quad sizen="13 13" posn="-157 -75" z-index="10" halign="left" style="Icons128x128_1" substyle="BackFocusable" hidden="1"/>	
+	</frame>
+
 	<script><!--
-// @Component start component-checkbox
-// /*
-#Include "TextLib" as TL
-// */
-// @Component end component-checkbox
-
-// @Component start share-menu-navigation
-// /*
-#Include "TextLib" as TL
-// */
-// @Component end share-menu-navigation
-
-// @Component start component-navigation
-// /*
-#Include "TextLib" as TL		
-// */
-// @Component end component-navigation
 
 Void Deselect()	{
 	for (yy, 1, 15) {
@@ -287,6 +266,28 @@ Void RefreshRank()	{
 	for (yy, 1, 10) {
 		(Page.GetFirstChild("P"^yy) as CMlLabel).SetText("");
 	}
+}
+
+Text TimeToText(Integer score)	{
+	// Dirty as hell, I would rather use TL but it crashes the scripts so...
+	declare hours = score / 60000 * 60;
+	declare minutes = score / 60000;
+	declare seconds = score / 1000 - minutes * 60;
+	declare ms = (score - seconds * 1000 - minutes * 60000) / 10;
+	
+	Text secondsText = ""^seconds;
+	if(hours < 10)
+	secondsText = "0"^seconds;
+	
+	Text msText = ""^msText;
+	if(msText < 10)
+	Text msText = "0"^msText;
+
+	if(hours == 0)
+		return minutes ^ ":" ^ secondsText ^ "." ^ msText;
+	else
+		return hours ^ ":" ^ minutes ^ ":" ^ secondsText ^ "." ^ msText;
+	return "";
 }
 
 Void ShowMessage(Text _Text)	{
@@ -320,7 +321,6 @@ Void UpdateMapSelection(CTaskResult_MapList _MapInfosTask)	{
 		(Page.GetFirstChild("M_Name"^i) as CMlLabel).SetText("");
 		(Page.GetFirstChild("M_Icon"^i) as CMlQuad).ImageUrl = "";
 		(Page.GetFirstChild("M_Medal"^i) as CMlQuad).Hide();
-		//(Page.GetFirstChild("M_Main"^i) as CMlQuad).Substyle = "BgNotPlayed";
 		}
 		else	{
 		(Page.GetFirstChild("M_Icon"^i) as CMlQuad).ImageUrl = "file://Thumbnails/MapUid/"^Map.MapUid;
@@ -372,7 +372,6 @@ main() {
 
 	log("the menu is loading...");
 
-	//declare CurMapInfosTask = DataFileMgr.Map_GetFilteredGameList(4, "", False, True, True);
 	declare CurMapInfosTask = DataFileMgr.Map_GetGameList("", False);
 	declare CurFoldersTask = DataFileMgr.Map_GetGameList("Converted\\TM2UF Platform", False);
 	sleep(100);
@@ -426,12 +425,16 @@ main() {
 							MedalsTotal_ .Hide();
 							MedalsMap_ .Show();
 							
-							declare Integer Record_= ScoreMgr.Map_GetRecord(NullId, Map.MapUid, ScContext);					
+							declare Integer Record = ScoreMgr.Map_GetRecord(NullId, Map.MapUid, ScContext);					
 							(Page.GetFirstChild("M_Main"^y) as CMlQuad).StyleSelected = True;
 							(Page.GetFirstChild("header0") as CMlLabel).SetText("Official time rankings for "^Map.Name);
 							
-							if (Record_!=-1)	(Page.GetFirstChild("TrainingMap") as CMlLabel).SetText(TL::TimeToText(Record_, True));
-							else (Page.GetFirstChild("TrainingMap") as CMlLabel).SetText("Not Played");	
+							declare Text RecordText;
+							if (Record !=-1)	
+								RecordText = TimeToText(Record, True);
+							else
+								RecordText = "Not Played";
+							(Page.GetFirstChild("TrainingMap") as CMlLabel).SetText(RecordText);
 						}
 						else {
 							if(Map.Unlocked)	{
@@ -510,6 +513,5 @@ main() {
 	}
 	log("this very page was done by arkady, 2023 :)");	
 }
-
-	--></script>
+--></script>
 </manialink>
