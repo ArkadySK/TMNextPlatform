@@ -1,5 +1,4 @@
-
-	<manialink name="Page_HomePage" version="3">
+<manialink name="Page_HomePage" version="3">
 	<stylesheet>
 		<style id="LabelWelcome" posn="-128 49" style="TextRankingsBig" sizen="40 5"/>
 		<style id="LabelActivity" posn="-128 43" style="TextSubTitle1" sizen="44 5"/>		
@@ -268,25 +267,30 @@ Void RefreshRank()	{
 	}
 }
 
-Text TimeToText(Integer score)	{
+Text TimeToText(Integer _score, Boolean _useMS)	{
 	// Dirty as hell, I would rather use TL but it crashes the scripts so...
-	declare hours = score / 60000 * 60;
-	declare minutes = score / 60000;
-	declare seconds = score / 1000 - minutes * 60;
-	declare ms = (score - seconds * 1000 - minutes * 60000) / 10;
+	declare hours = _score / 60000 * 60;
+	declare minutes = _score / 60000;
+	declare seconds = _score / 1000 - minutes * 60;
+	declare ms = (_score - seconds * 1000 - minutes * 60000) / 10;
 	
-	Text secondsText = ""^seconds;
-	if(hours < 10)
-	secondsText = "0"^seconds;
+	declare secondsText = ":"^seconds;
+	if (seconds < 10)
+		secondsText = ":0"^seconds;
 	
-	Text msText = ""^msText;
-	if(msText < 10)
-	Text msText = "0"^msText;
+	declare Text msText;
+
+	if(_useMS)	{
+		msText = "."^ms;
+		if (ms < 10)
+			msText = ".0"^ms;
+	}
+
 
 	if(hours == 0)
-		return minutes ^ ":" ^ secondsText ^ "." ^ msText;
+		return minutes ^ secondsText ^ msText;
 	else
-		return hours ^ ":" ^ minutes ^ ":" ^ secondsText ^ "." ^ msText;
+		return hours ^ ":" ^ minutes ^ secondsText ^ msText;
 	return "";
 }
 
