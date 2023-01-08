@@ -9,6 +9,186 @@
 
 #Setting S_IsPlatform True
 
+
+Text PauseMenu()	{
+	return """<manialink version="3">
+	<stylesheet>
+		<style id="buttonResume buttonExit ButtonNextMap ButtonRestartMap ButtonOpponents ButtonRankings ButtonMapInfo ButtonShowSkins QUITgame" textcolor="FFFFFFE7" focusareacolor2="2E2E2ECB" focusareacolor1="2E2E2ECB" sizen="55 17" style="CardButtonSmallXXXL" scale="1"/>
+		</stylesheet>
+	<frame z-index="100">
+	
+		<quad pos="0 -96" z-index="-50" size="320 200" halign="center" valign="bottom" bgcolor="1C1C1C5C" style="Bgs1" substyle="BgGradBottom" scriptevents="1" opacity=".4"/>
+		
+		<frame id="LockFrame" pos="0 0" z-index="90" hidden="1">
+			<quad pos="0 -1" z-index="1" size="165 30" halign="center" valign="center" id="bg00" style="Bgs1" substyle="BgDialogBlur"/>
+			
+			<label  z-index="3" size="150 12.8" pos="-75 9.49" translate="1" autonewline="1" id="LockR" text="Locked" textsize="2.5"/>		
+			
+			<label pos="0 -10.5" z-index="2" size="50 8" text="Close" halign="center" translate="1" id="ZamocekZrus" scriptevents="1" valign="center" style="CardButtonMediumXL"/>
+			<quad pos="0 0" z-index="0" size="400 200" halign="center" valign="center" scriptevents="1" style="Bgs1" substyle="BgEmpty"/>
+		</frame>
+	
+		<frame id="HideOpt" z-index="20" pos="0 25" scale="1.2">
+			
+					
+				
+			<frame pos="0 -10" scale=".85" id="menubuttons">	
+					
+				<label pos="0 19" z-index="0" size="119 7" text="Race menu" style="TextRankingsBig" translate="1" halign="center" textsize="3" valign="center"/>
+				<quad pos="0 -46" z-index="-5" size="120 70" bgcolor="FFFA" style="Bgs1" substyle="BgDialogBlur" halign="center" valign="bottom"/>	
+				<quad pos="0 27" z-index="-3" size="126 15" bgcolor="FFFA" halign="center" style="Bgs1" substyle="BgGlow2"/>	
+				
+				<label id="buttonResume" text="Continue" posn="-30 -38" translate="1" valign="center2" z-index="2" textsize="4" scriptevents="1" halign="center"  style="CardButtonMediumL" scale="1.1"/>	
+					
+				<label id="ButtonRestartMap" text="Restart" pos="0 -13" halign="center" valign="center2" textsize="4" translate="1" scriptevents="1"/>	
+				<label id="ButtonOpponents" text="Select Opponents" pos="0 -6" halign="center" valign="center2" textsize="4" translate="1" scriptevents="1"/>	
+					
+				<label id="ButtonMapInfo" text="Information" pos="0 1" halign="center" valign="center2" textsize="4" translate="1" scriptevents="1"/>	
+				
+				<label text="Leave" textsize="4" translate="1" id="buttonExit" scriptevents="1" z-index="10" halign="center" valign="center2" focusareacolor1="DD4646CF" pos="30 -38" style="CardButtonMediumL" scale="1.1"/>
+			</frame>	
+		</frame>
+	</frame>
+	<script><!--
+	#Include "TextLib" as TextLib
+	#Include "MathLib" as MathLib
+	#Include "AnimLib" as AnimLib
+	declare Integer i;
+	declare Integer maxi;
+	declare CMlFrame Buttons;
+	declare Text[] ButtonNames;
+	
+	Void ResumePlay()	{
+		i=0;
+		CloseInGameMenu(CMlScriptIngame::EInGameMenuResult::Resume);
+		Audio.PlaySoundEvent(CAudioManager::ELibSound::HideDialog, 0, 1.);
+	}
+	
+	Void FocusButton(Integer _i)	{
+		declare ButtonName = ButtonNames[_i];
+		(Page.GetFirstChild(ButtonName) as CMlLabel).Focus();
+		log(ButtonName);
+	
+	}
+	
+	Void MoveRight()	{
+	
+		if(!Page.GetFirstChild("LockFrame").Visible)	{
+			if(i!=maxi)	{
+				i += 1;
+			}
+			else
+				i = 0;
+		}
+		FocusButton(i);
+	}
+	
+	Void MoveLeft()	{
+		
+		if(!Page.GetFirstChild("LockFrame").Visible)	{
+			if(i!=0)	{
+				i -= 1;
+			}
+			else
+				i = ButtonNames.count -1;
+		}
+		FocusButton(i);
+	}
+	
+	Void ShowMessage(Text _Msg)	{
+			log(_Msg);
+	}
+		
+	main()	{		
+		declare Boolean Escape = False;
+		i = 0; //index
+		declare TimerRequest = Now - 10000;
+		declare LatestClick = "";
+		ButtonNames = ["buttonResume", "buttonExit", "ButtonMapInfo", "ButtonOpponents", "ButtonRestartMap"];
+				
+		maxi = ButtonNames.count - 1;
+		declare netwrite Boolean RestartMap for UI;
+		
+		declare Text UIState for LocalUser;
+		UIState = "InGame";
+		
+		
+		wait(Players.count != 0);
+		declare netwrite Boolean ShowMapInfo for UI;
+		declare netwrite Boolean ShowOpponents for UI;
+	
+		EnableMenuNavigation(True,False,Null,50);
+	
+		while(True) {
+			if(LatestClick!="")	{
+				UIState = "InGame";
+				switch(LatestClick)	{
+					case "buttonResume":	{
+						ResumePlay();
+					}
+					case "ButtonRestartMap":	{
+						/*RestartMap0 = True;
+						ResumePlay();*/
+						CloseInGameMenu(CMlScriptIngame::EInGameMenuResult::ServerSettings);
+					}
+					case "ButtonOpponents":	{
+						CloseInGameMenu(CMlScriptIngame::EInGameMenuResult::AdvancedMenu);
+						//ResumePlay();
+					}
+					case "ButtonMapInfo":	{
+						ShowCurChallengeCard();
+						ResumePlay();
+					}
+					case "buttonExit":	{	
+						Audio.ClearAllDelayedSoundsEvents();
+						CloseInGameMenu(CMlScriptIngame::EInGameMenuResult::Quit);
+						}
+					}
+					LatestClick = "";
+				}
+			
+			
+				foreach(Event,PendingEvents) {
+					switch(Event.Type) {
+						
+						case CMlEvent::Type::MenuNavigation: {
+							if(Event.MenuNavAction == CMlEvent::EMenuNavAction::Cancel) {
+								ResumePlay();
+							}
+							if(Event.MenuNavAction == CMlEvent::EMenuNavAction::Right || Event.MenuNavAction == CMlEvent::EMenuNavAction::Down)	{
+								MoveRight();	
+							}
+							if(Event.MenuNavAction == CMlEvent::EMenuNavAction::Left || Event.MenuNavAction == CMlEvent::EMenuNavAction::Up)	{
+								MoveLeft();
+							}
+							if(Event.MenuNavAction == CMlEvent::EMenuNavAction::Select)	{
+								LatestClick = ButtonNames[i];									
+							}
+						}
+						case CMlEvent::Type::MouseClick: {
+							if(ButtonNames.exists(Event.ControlId)) {
+								LatestClick = Event.ControlId;
+							}
+							else	{
+								if (Event.ControlId == "Right")	{
+									MoveRight();
+								}
+								if (Event.ControlId == "Left")	{
+									MoveLeft();
+								}
+							}
+						}
+					}
+				}
+				yield;
+			}
+		}
+		-->
+	</script>
+	</manialink>""";
+}
+
+
 Text DrawGameplayTextUI()	{
 return """<manialink version="3">
 
@@ -164,6 +344,7 @@ main()	{
 declare CUILayer G_ChronoLayer;	
 declare CUILayer G_CPLayer;
 declare CUILayer G_GameplayLayer;
+declare CUILayer G_PauseMenuLayer;
 
 ***MB_Private_StartServer***
 ***
@@ -227,6 +408,7 @@ else
 G_ChronoLayer = UIManager.UILayerCreate();
 G_CPLayer = UIManager.UILayerCreate();
 G_GameplayLayer = UIManager.UILayerCreate();
+G_PauseMenuLayer = UIManager.UILayerCreate();
 
 foreach(Player in Players)  {
 	declare Integer NbRespawnsRecord for Player;
@@ -235,13 +417,17 @@ foreach(Player in Players)  {
 	
 	NbRespawnsRecord = 999;
 
-  	declare Player_UI = UIManager.GetUI(Player);
+ 	declare Player_UI = UIManager.GetUI(Player);
 	Player_UI.UILayers.add(G_ChronoLayer); 
 	Player_UI.UILayers.add(G_CPLayer); 
 	Player_UI.UILayers.add(G_GameplayLayer);
+	Player_UI.UILayers.add(G_PauseMenuLayer);
 
-  	G_ChronoLayer.ManialinkPage = DrawChronoUI();
+  G_ChronoLayer.ManialinkPage = DrawChronoUI();
 	G_GameplayLayer.ManialinkPage = DrawGameplayTextUI();
+	G_PauseMenuLayer.ManialinkPage = PauseMenu();
+
+	G_PauseMenuLayer.Type = CUILayer::EUILayerType::InGameMenu;
 
 }
 ***
