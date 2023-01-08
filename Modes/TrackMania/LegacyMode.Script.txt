@@ -343,6 +343,7 @@ declare CUILayer G_CPLayer;
 declare CUILayer G_GameplayLayer;
 declare CUILayer G_PauseMenuLayer;
 
+declare CGhost CurGhost;
 ***MB_Private_StartServer***
 ***
 
@@ -452,6 +453,13 @@ foreach(Player in Players)	{
 	
 	//------------------------------
 	
+	if (IsFinished && Player == Null)	{
+		log("trying to load CurGhost");
+		wait(CurGhost != Null);	
+		log("CurGhost is loaded!");
+		ScoreMgr.Map_SetNewRecord_v2(NullId, Map.MapInfo.MapUid, "", "", CurGhost);
+	}
+
 	if (IsFinished && Player != Null) {
 		
 		if(TimeToUnspawn < Now)	{
@@ -461,16 +469,12 @@ foreach(Player in Players)	{
 			else
 				UnspawnPlayer(GetPlayer(Player.Login));
 			IsFinished = False;
-		}
-		
-		if(Better)	{
-			Better = False;
-			NbRespawnsRecord = Player.Score.NbRespawnsRequested;
-			log("NbRespawns Record: " ^ NbRespawnsRecord ^ " ...setting new solo record!");
-			declare CGhost CurGhost = ScoreMgr.Playground_GetPlayerGhost(Player);
-			wait(CurGhost != Null);
-			log("CurGhost is loaded!");
-			ScoreMgr.Map_SetNewRecord_v2(Player.Id, Map.MapInfo.MapUid, "Platform", "", CurGhost);
+
+			if(Better)	{ // not sure if i keep this
+				Better = False;
+				NbRespawnsRecord = Player.Score.NbRespawnsRequested;
+				log("NbRespawns Record: " ^ NbRespawnsRecord ^ " ...setting new solo record!");		
+			}
 		}
 		
 			
@@ -501,11 +505,14 @@ foreach (Event in PendingEvents) {
 		declare Player_UI = UIManager.GetUI(Event.Player);
 
 		if (Event.IsFinish) {
+			PassOn(Event);
+			CurGhost = ScoreMgr.Playground_GetPlayerGhost(Event.Player);
+			
 			declare Boolean IsFinished for Event.Player;
 			declare Boolean Better for Event.Player;
 			declare Integer TimeToUnspawn for Event.Player;	
 			TimeToUnspawn = Now + 2000;
-					
+			
 			Player_SetCurRaceAsPrevRace(Event.Player);
 
 			if(Event.Player.Score.NbRespawnsRequested <= NbRespawnsRecord)	{			 
@@ -514,13 +521,15 @@ foreach (Event in PendingEvents) {
 				Player_ClearRaceWaypointTimes(Event.Player);
 				Player_SetFinishTime(Event.Player, Event.Player.EndTime);	
 				EndRaceSequence("Improvement!", Event.Player);
+				
 			}	
 			else	{
 				EndRaceSequence("Finished", Event.Player);
 				Better = False;
 			}
-				
+			
 			IsFinished = True;
+				
 		}
 	}
 }
