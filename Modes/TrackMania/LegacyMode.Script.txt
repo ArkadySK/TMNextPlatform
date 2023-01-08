@@ -420,7 +420,7 @@ foreach(Player in Players)  {
 	Player_UI.UILayers.add(G_GameplayLayer);
 	Player_UI.UILayers.add(G_PauseMenuLayer);
 
-  G_ChronoLayer.ManialinkPage = DrawChronoUI();
+  	G_ChronoLayer.ManialinkPage = DrawChronoUI();
 	G_GameplayLayer.ManialinkPage = DrawGameplayTextUI();
 	G_PauseMenuLayer.ManialinkPage = PauseMenu();
 
@@ -463,7 +463,15 @@ foreach(Player in Players)	{
 			IsFinished = False;
 		}
 		
-		NbRespawnsRecord = Player.Score.NbRespawnsRequested;
+		if(Better)	{
+			Better = False;
+			NbRespawnsRecord = Player.Score.NbRespawnsRequested;
+			log("NbRespawns Record: " ^ NbRespawnsRecord ^ " ...setting new solo record!");
+			declare CGhost CurGhost = ScoreMgr.Playground_GetPlayerGhost(Player);
+			wait(CurGhost != Null);
+			log("CurGhost is loaded!");
+			ScoreMgr.Map_SetNewRecord_v2(Player.Id, Map.MapInfo.MapUid, "Platform", "", CurGhost);
+		}
 		
 			
 		if(Player.Score != Null) {
@@ -497,20 +505,20 @@ foreach (Event in PendingEvents) {
 			declare Boolean Better for Event.Player;
 			declare Integer TimeToUnspawn for Event.Player;	
 			TimeToUnspawn = Now + 2000;
-			EndRaceSequence("Finished", Event.Player);
 					
 			Player_SetCurRaceAsPrevRace(Event.Player);
 
 			if(Event.Player.Score.NbRespawnsRequested <= NbRespawnsRecord)	{			 
 				Better = True; 
 				Player_SetCurRaceAsBestRace(Event.Player);
-				
 				Player_ClearRaceWaypointTimes(Event.Player);
-				Player_SetFinishTime(Event.Player, Event.Player.EndTime); //co to robi?
-				
+				Player_SetFinishTime(Event.Player, Event.Player.EndTime);	
+				EndRaceSequence("Improvement!", Event.Player);
 			}	
-			else
+			else	{
+				EndRaceSequence("Finished", Event.Player);
 				Better = False;
+			}
 				
 			IsFinished = True;
 		}
