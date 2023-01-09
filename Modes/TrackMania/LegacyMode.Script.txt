@@ -433,54 +433,35 @@ foreach(Player in Players)  {
 ***Match_PlayLoop***
 ***
 
-foreach(Player in Players)	{
+declare Player <=> Players[0];
 	
-	declare Boolean Better for Player;
-	declare Boolean IsFinished for Player;
-	declare Integer NbRespawnsRecord for Player;
-	declare Integer TimeToUnspawn for Player;
-	declare Integer cpindex for Player;
+declare Boolean IsFinished for Player;
+declare Integer NbRespawnsRecord for Player;
+declare Integer TimeToUnspawn for Player;
+declare Integer cpindex for Player;
+
+declare Player_UI = UIManager.GetUI(Player);
+if(Player.StartTime == Now)	{
+	IsFinished = False;
+	cpindex = 0;	
+	Player_UI.BigMessage = "";
+}
+
+
+if (IsFinished && Player != Null) {
 	
-	declare Player_UI = UIManager.GetUI(Player);
-	if(Player.StartTime == Now)	{
-		Better = False;
+	if(TimeToUnspawn < Now)	{
+		if(Player.StartTime >= Now)	{
+			log("why restart");
+		}
+		else
+			UnspawnPlayer(GetPlayer(Player.Login));
 		IsFinished = False;
-		cpindex = 0;	
-		Player_UI.BigMessage = "";
 	}
 	
-	
-	
-	//------------------------------
-	
-	if (IsFinished && Player == Null)	{
-		log("trying to load CurGhost");
-		wait(CurGhost != Null);	
-		log("CurGhost is loaded!");
-		ScoreMgr.Map_SetNewRecord_v2(NullId, Map.MapInfo.MapUid, "", "", CurGhost);
-	}
-
-	if (IsFinished && Player != Null) {
 		
-		if(TimeToUnspawn < Now)	{
-			if(Player.StartTime >= Now)	{
-				log("why restart");
-			}
-			else
-				UnspawnPlayer(GetPlayer(Player.Login));
-			IsFinished = False;
-
-			if(Better)	{ // not sure if i keep this
-				Better = False;
-				NbRespawnsRecord = Player.Score.NbRespawnsRequested;
-				log("NbRespawns Record: " ^ NbRespawnsRecord ^ " ...setting new solo record!");		
-			}
-		}
-		
-			
-		if(Player.Score != Null) {
-			assert(Player.Score.Id != NullId);
-		}
+	if(Player.Score != Null) {
+		assert(Player.Score.Id != NullId);
 	}
 }
 
@@ -506,26 +487,32 @@ foreach (Event in PendingEvents) {
 
 		if (Event.IsFinish) {
 			PassOn(Event);
-			CurGhost = ScoreMgr.Playground_GetPlayerGhost(Event.Player);
 			
 			declare Boolean IsFinished for Event.Player;
-			declare Boolean Better for Event.Player;
 			declare Integer TimeToUnspawn for Event.Player;	
 			TimeToUnspawn = Now + 2000;
 			
 			Player_SetCurRaceAsPrevRace(Event.Player);
 
 			if(Event.Player.Score.NbRespawnsRequested <= NbRespawnsRecord)	{			 
-				Better = True; 
+				CurGhost = Ghost_RetrieveFromPlayer(Event.Player);
+				log("PB #1! = " ^Event.Player.Score.NbRespawnsRequested);
 				Player_SetCurRaceAsBestRace(Event.Player);
 				Player_ClearRaceWaypointTimes(Event.Player);
 				Player_SetFinishTime(Event.Player, Event.Player.EndTime);	
 				EndRaceSequence("Improvement!", Event.Player);
+
+				NbRespawnsRecord = Event.Player.Score.NbRespawnsRequested;
+				wait(CurGhost != Null);	
+				CurGhost.Result.NbRespawns = NbRespawnsRecord;
+				log(CurGhost.Result);
+			
+				ScoreMgr.Map_SetNewRecord_v2(NullId, Map.MapInfo.MapUid, "", "", CurGhost);
+				DataFileMgr.Ghost_Release(CurGhost.Id);	
 				
 			}	
 			else	{
 				EndRaceSequence("Finished", Event.Player);
-				Better = False;
 			}
 			
 			IsFinished = True;
