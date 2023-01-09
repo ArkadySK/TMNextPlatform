@@ -338,12 +338,26 @@ main()	{
 }
 
 
+Integer GetMapRecord()	{
+	if(S_IsPlatform == True)	{
+		declare MapGhost = ScoreMgr.Map_GetRecordGhost(NullId, Map.MapInfo.MapUid, "");
+		wait(MapGhost.HasSucceeded);
+		
+		if(MapGhost.Ghost!=Null)	{
+			return MapGhost.Ghost.Result.NbRespawns;
+		}
+		else
+			return -1;
+	}
+	
+	return ScoreMgr.Map_GetRecord(NullId, Map.MapInfo.MapUid, "");
+}
+
 declare CUILayer G_ChronoLayer;	
 declare CUILayer G_CPLayer;
 declare CUILayer G_GameplayLayer;
 declare CUILayer G_PauseMenuLayer;
-
-declare CGhost CurGhost;
+declare Integer G_MapRecord;
 ***MB_Private_StartServer***
 ***
 
@@ -351,6 +365,7 @@ ST2::Load();
 ST2::SetStyle("LibST_Base");
 +++ScoresTable+++
 ST2::Build("SM"); 
+
 ***
 
 ***ScoresTable***
@@ -395,6 +410,9 @@ Void EndRaceSequence(Text _text, CPlayer _Player)	{
 ***Match_InitMap***
 ***
 PreLoadUI();
+
+G_MapRecord = GetMapRecord();
+log("loaded map record: " ^G_MapRecord);
 
 Scores_ClearAll();
 if(S_IsPlatform)
@@ -471,7 +489,6 @@ foreach (Event in PendingEvents) {
 	// Waypoint
 	if (Event.Type == CSmModeEvent::EType::OnPlayerTriggersWaypoint) {
 		declare Integer PrevPlayer_Score_NbRespawnsRequested for Event.Player;
-		declare Integer NbRespawnsRecord for Event.Player;	
 		declare Integer cpindex for Event.Player;
 		
 		cpindex += 1;
@@ -494,17 +511,17 @@ foreach (Event in PendingEvents) {
 			
 			Player_SetCurRaceAsPrevRace(Event.Player);
 
-			if(Event.Player.Score.NbRespawnsRequested <= NbRespawnsRecord)	{			 
-				CurGhost = Ghost_RetrieveFromPlayer(Event.Player);
+			if(Event.Player.Score.NbRespawnsRequested <= G_MapRecord || G_MapRecord == -1)	{			 
+				declare CurGhost = Ghost_RetrieveFromPlayer(Event.Player);
 				log("PB #1! = " ^Event.Player.Score.NbRespawnsRequested);
 				Player_SetCurRaceAsBestRace(Event.Player);
 				Player_ClearRaceWaypointTimes(Event.Player);
 				Player_SetFinishTime(Event.Player, Event.Player.EndTime);	
 				EndRaceSequence("Improvement!", Event.Player);
 
-				NbRespawnsRecord = Event.Player.Score.NbRespawnsRequested;
+				G_MapRecord = Event.Player.Score.NbRespawnsRequested;
 				wait(CurGhost != Null);	
-				CurGhost.Result.NbRespawns = NbRespawnsRecord;
+				CurGhost.Result.NbRespawns = G_MapRecord;
 				log(CurGhost.Result);
 			
 				ScoreMgr.Map_SetNewRecord_v2(NullId, Map.MapInfo.MapUid, "", "", CurGhost);
