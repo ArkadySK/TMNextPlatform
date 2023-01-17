@@ -338,16 +338,21 @@ main()	{
 }
 
 
-Integer GetMapRecord()	{
-	if(S_IsPlatform == True)	{
-		declare MapGhost = ScoreMgr.Map_GetRecordGhost(NullId, Map.MapInfo.MapUid, "");
-		wait(MapGhost.HasSucceeded);
+CGhost GetRecordGhost()	{
+	declare MapGhost = ScoreMgr.Map_GetRecordGhost(NullId, Map.MapInfo.MapUid, "");
+	wait(MapGhost.HasSucceeded);
 		
-		if(MapGhost.Ghost!=Null)	{
-			return MapGhost.Ghost.Result.NbRespawns;
-		}
-		else
+	if(MapGhost.Ghost!=Null)	{
+		return MapGhost.Ghost;
+	}
+	return Null;
+}
+
+Integer GetMapRecord(CGhost _recordGhost)	{
+	if(S_IsPlatform == True)	{
+		if (_recordGhost == Null)
 			return -1;
+		return _recordGhost.Result.NbRespawns;
 	}
 	
 	return ScoreMgr.Map_GetRecord(NullId, Map.MapInfo.MapUid, "");
@@ -357,7 +362,10 @@ declare CUILayer G_ChronoLayer;
 declare CUILayer G_CPLayer;
 declare CUILayer G_GameplayLayer;
 declare CUILayer G_PauseMenuLayer;
+
+declare CGhost G_RecordGhost;
 declare Integer G_MapRecord;
+
 ***MB_Private_StartServer***
 ***
 
@@ -411,8 +419,10 @@ Void EndRaceSequence(Text _text, CPlayer _Player)	{
 ***
 PreLoadUI();
 
-G_MapRecord = GetMapRecord();
-log("loaded map record: " ^G_MapRecord);
+G_RecordGhost = GetRecordGhost();
+G_MapRecord = GetMapRecord(G_RecordGhost);
+
+log("loaded map record: " ^G_MapRecord ^ ", PB Ghost info: " ^ G_RecordGhost);
 
 Scores_ClearAll();
 if(S_IsPlatform)
