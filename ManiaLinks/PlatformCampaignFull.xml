@@ -269,8 +269,8 @@ Void RefreshRank()	{
 
 Text TimeToText(Integer _score, Boolean _useMS)	{
 	// Dirty as hell, I would rather use TL but it crashes the scripts so...
-	declare hours = _score / 60000 * 60;
-	declare minutes = _score / 60000;
+	declare hours = _score / (60000 * 60);
+	declare minutes = _score / 60000 - hours * 60;
 	declare seconds = _score / 1000 - minutes * 60;
 	declare ms = (_score - seconds * 1000 - minutes * 60000) / 10;
 	
@@ -377,7 +377,7 @@ main() {
 	log("the menu is loading...");
 
 	declare CurMapInfosTask = DataFileMgr.Map_GetGameList("", False);
-	declare CurFoldersTask = DataFileMgr.Map_GetGameList("Converted\\TM2UF Platform", False);
+	declare CurFoldersTask = DataFileMgr.Map_GetGameList("PlatformTest", False);
 	sleep(100);
 	wait(!CurFoldersTask.IsProcessing);
 	
