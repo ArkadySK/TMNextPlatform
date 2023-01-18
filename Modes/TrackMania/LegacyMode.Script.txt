@@ -337,9 +337,12 @@ main()	{
 """;
 }
 
+Void SaveRecordGhost(CGhost _recordGhost)	{
+	DataFileMgr.Replay_Save("PlatformRecords\\AutoSave"^Map.MapInfo.MapName^".Replay.Gbx", Map, _recordGhost);
+}
 
 CGhost GetRecordGhost()	{
-	declare MapGhost = ScoreMgr.Map_GetRecordGhost(NullId, Map.MapInfo.MapUid, "");
+	declare MapGhost = DataFileMgr.Replay_Load("PlatformRecords\\AutoSave"^Map.MapInfo.MapName^".Replay.Gbx");
 	wait(MapGhost.HasSucceeded);
 		
 	if(MapGhost.Ghost!=Null)	{
@@ -349,7 +352,7 @@ CGhost GetRecordGhost()	{
 }
 
 Integer GetMapRecord(CGhost _recordGhost)	{
-	if(S_IsPlatform == True)	{
+	if(S_IsPlatform == True || _recordGhost == Null)	{
 		if (_recordGhost == Null)
 			return -1;
 		return _recordGhost.Result.NbRespawns;
@@ -534,7 +537,8 @@ foreach (Event in PendingEvents) {
 				CurGhost.Result.NbRespawns = G_MapRecord;
 				log(CurGhost.Result);
 			
-				ScoreMgr.Map_SetNewRecord_v2(NullId, Map.MapInfo.MapUid, "", "", CurGhost);
+				//ScoreMgr.Map_SetNewRecord_v2(NullId, Map.MapInfo.MapUid, "", "", CurGhost);
+				SaveRecordGhost(CurGhost);
 				DataFileMgr.Ghost_Release(CurGhost.Id);	
 				
 			}	
