@@ -338,15 +338,19 @@ main()	{
 }
 
 Void SaveRecordGhost(CGhost _recordGhost)	{
-	DataFileMgr.Replay_Save("PlatformRecords\\AutoSave"^Map.MapInfo.MapName^".Replay.Gbx", Map, _recordGhost);
+	DataFileMgr.Replay_Save("PlatformRecords\\AutoSave"^Map.MapInfo.Name^".Replay.Gbx", Map, _recordGhost);
 }
 
 CGhost GetRecordGhost()	{
-	declare MapGhost = DataFileMgr.Replay_Load("PlatformRecords\\AutoSave"^Map.MapInfo.MapName^".Replay.Gbx");
-	wait(MapGhost.HasSucceeded);
-		
-	if(MapGhost.Ghost!=Null)	{
-		return MapGhost.Ghost;
+	GhostMgr.Ghost_RemoveAll();
+	declare MapGhosts = DataFileMgr.Replay_Load("PlatformRecords\\AutoSave"^Map.MapInfo.Name^".Replay.Gbx");
+	wait(MapGhosts.HasSucceeded);
+	
+	declare MapGhost = MapGhosts.Ghosts[0];
+	
+	if(MapGhost!=Null)	{
+		GhostMgr.Ghost_Add(MapGhost, False);
+		return MapGhost;
 	}
 	return Null;
 }
@@ -487,6 +491,7 @@ if (IsFinished && Player != Null) {
 		}
 		else
 			UnspawnPlayer(GetPlayer(Player.Login));
+		G_RecordGhost = GetRecordGhost();
 		IsFinished = False;
 	}
 	
