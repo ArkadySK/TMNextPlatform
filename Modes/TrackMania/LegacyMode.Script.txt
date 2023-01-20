@@ -344,11 +344,12 @@ Void SaveRecordGhost(CGhost _recordGhost)	{
 CGhost GetRecordGhost()	{
 	GhostMgr.Ghost_RemoveAll();
 	declare MapGhosts = DataFileMgr.Replay_Load("PlatformRecords\\AutoSave"^Map.MapInfo.Name^".Replay.Gbx");
-	wait(MapGhosts.HasSucceeded);
+	MB_Sleep(2000);
+	if(!MapGhosts.HasSucceeded)
+		return Null;
 	
 	declare MapGhost = MapGhosts.Ghosts[0];
-	
-	if(MapGhost!=Null)	{
+		if(MapGhost!=Null)	{
 		GhostMgr.Ghost_Add(MapGhost, False);
 		return MapGhost;
 	}
