@@ -9,6 +9,14 @@
 
 #Setting S_IsPlatform True
 
+declare CUILayer G_ChronoLayer;	
+declare CUILayer G_CPLayer;
+declare CUILayer G_GameplayLayer;
+declare CUILayer G_PauseMenuLayer;
+
+declare CGhost G_RecordGhost;
+declare Integer G_MapRecord;
+
 
 Text PauseMenu()	{
 	return """<manialink version="3">
@@ -337,13 +345,16 @@ main()	{
 """;
 }
 
+
 Void SaveRecordGhost(CGhost _recordGhost)	{
 	DataFileMgr.Replay_Save("PlatformRecords\\AutoSave"^Map.MapInfo.Name^".Replay.Gbx", Map, _recordGhost);
 }
 
+
 CGhost GetRecordGhost()	{
 	GhostMgr.Ghost_RemoveAll();
 	declare MapGhosts = DataFileMgr.Replay_Load("PlatformRecords\\AutoSave"^Map.MapInfo.Name^".Replay.Gbx");
+	//wait(MapGhosts.IsProcessing);
 	MB_Sleep(2000);
 	if(!MapGhosts.HasSucceeded)
 		return Null;
@@ -356,6 +367,7 @@ CGhost GetRecordGhost()	{
 	return Null;
 }
 
+
 Integer GetMapRecord(CGhost _recordGhost)	{
 	if(S_IsPlatform == True || _recordGhost == Null)	{
 		if (_recordGhost == Null)
@@ -366,13 +378,42 @@ Integer GetMapRecord(CGhost _recordGhost)	{
 	return ScoreMgr.Map_GetRecord(NullId, Map.MapInfo.MapUid, "");
 }
 
-declare CUILayer G_ChronoLayer;	
-declare CUILayer G_CPLayer;
-declare CUILayer G_GameplayLayer;
-declare CUILayer G_PauseMenuLayer;
 
-declare CGhost G_RecordGhost;
-declare Integer G_MapRecord;
+Void FinishRace(CSmPlayer _Player)	{
+	
+	Player_SetCurRaceAsPrevRace(_Player);
+// In platform gamemode:
+	if(S_IsPlatform)	{
+		// If NbRespawnsRequested is worse 
+		if(_Player.Score.NbRespawnsRequested > G_MapRecord && G_MapRecord != -1)
+			return;	
+				 
+		declare CurGhost = Ghost_RetrieveFromPlayer(_Player);
+		G_MapRecord = _Player.Score.NbRespawnsRequested;
+		wait(CurGhost != Null);
+		// Fixes NbRespawns in the saved replay
+		CurGhost.Result.NbRespawns = G_MapRecord;
+		SaveRecordGhost(CurGhost);
+		DataFileMgr.Ghost_Release(CurGhost.Id);
+	}
+	// In race gamemode:
+	else	{
+		// If time is worse
+		if(_Player.EndTime > G_MapRecord && G_MapRecord != -1)
+			return;
+			
+		declare CurGhost = Ghost_RetrieveFromPlayer(_Player);		
+		G_MapRecord = _Player.EndTime;
+		wait(CurGhost != Null);	
+		ScoreMgr.Map_SetNewRecord_v2(NullId, Map.MapInfo.MapUid, "", "", CurGhost);
+		DataFileMgr.Ghost_Release(CurGhost.Id);
+	}
+	
+	Player_SetCurRaceAsBestRace(_Player);
+	Player_ClearRaceWaypointTimes(_Player);
+	Player_SetFinishTime(_Player, _Player.EndTime);
+}
+
 
 ***MB_Private_StartServer***
 ***
@@ -493,6 +534,7 @@ if (IsFinished && Player != Null) {
 		else
 			UnspawnPlayer(GetPlayer(Player.Login));
 		G_RecordGhost = GetRecordGhost();
+		//Ghost_AddWithOffset(G_RecordGhost, 2700);
 		IsFinished = False;
 	}
 	
@@ -528,30 +570,8 @@ foreach (Event in PendingEvents) {
 			declare Integer TimeToUnspawn for Event.Player;	
 			TimeToUnspawn = Now + 2000;
 			
-			Player_SetCurRaceAsPrevRace(Event.Player);
-
-			if(Event.Player.Score.NbRespawnsRequested <= G_MapRecord || G_MapRecord == -1)	{			 
-				declare CurGhost = Ghost_RetrieveFromPlayer(Event.Player);
-				log("PB #1! = " ^Event.Player.Score.NbRespawnsRequested);
-				Player_SetCurRaceAsBestRace(Event.Player);
-				Player_ClearRaceWaypointTimes(Event.Player);
-				Player_SetFinishTime(Event.Player, Event.Player.EndTime);	
-				EndRaceSequence("Improvement!", Event.Player);
-
-				G_MapRecord = Event.Player.Score.NbRespawnsRequested;
-				wait(CurGhost != Null);	
-				CurGhost.Result.NbRespawns = G_MapRecord;
-				log(CurGhost.Result);
-			
-				//ScoreMgr.Map_SetNewRecord_v2(NullId, Map.MapInfo.MapUid, "", "", CurGhost);
-				SaveRecordGhost(CurGhost);
-				DataFileMgr.Ghost_Release(CurGhost.Id);	
-				
-			}	
-			else	{
-				EndRaceSequence("Finished", Event.Player);
-			}
-			
+			FinishRace(Event.Player);
+			EndRaceSequence("", Event.Player);
 			IsFinished = True;
 				
 		}
