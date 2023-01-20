@@ -360,7 +360,7 @@ CGhost GetRecordGhost()	{
 	
 	declare MapGhost = MapGhosts.Ghosts[0];
 		if(MapGhost!=Null)	{
-		GhostMgr.Ghost_Add(MapGhost, False);
+		GhostMgr.Ghost_Add(MapGhost, Flase);
 		return MapGhost;
 	}
 	return Null;
@@ -426,6 +426,15 @@ Void EndRaceSequence(Text _text, CPlayer _Player)	{
 	Player_UI.ScoreTableVisibility = CUIConfig::EVisibility::ForcedVisible;
 	Player_UI.UISequence = CUIConfig::EUISequence::Finish;
 	Player_UI.BigMessage = _text;
+}
+
+Void AfterRace()	{
+	declare UI = UIManager.GetUI(Players[0]);
+	declare OutroGhost = GetRecordGhost();
+	Ghost_Add(OutroGhost, False, 2700);
+	UI.UISequence = CUIConfig::EUISequence::EndRound;
+	UI.Spectator_SetForcedTarget_Ghost(OutroGhost.Id);
+	UI.SpectatorForceCameraType = 0;
 }
 	
 ***Match_InitMap***
@@ -496,9 +505,9 @@ if (IsFinished && Player != Null) {
 			log("why restart");
 		}
 		else
-			UnspawnPlayer(GetPlayer(Player.Login));
+			UnspawnPlayer(Players[0]);
 		G_RecordGhost = GetRecordGhost();
-		//Ghost_AddWithOffset(G_RecordGhost, 2700);
+		AfterRace();
 		IsFinished = False;
 	}
 	
