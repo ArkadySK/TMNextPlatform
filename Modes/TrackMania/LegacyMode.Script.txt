@@ -360,7 +360,7 @@ CGhost GetRecordGhost()	{
 	
 	declare MapGhost = MapGhosts.Ghosts[0];
 		if(MapGhost!=Null)	{
-		GhostMgr.Ghost_Add(MapGhost, Flase);
+		GhostMgr.Ghost_Add(MapGhost, True);
 		return MapGhost;
 	}
 	return Null;
@@ -441,6 +441,7 @@ Void AfterRace()	{
 ***
 PreLoadUI();
 
+Ghost_RemoveAll();
 G_RecordGhost = GetRecordGhost();
 G_MapRecord = GetMapRecord(G_RecordGhost);
 
