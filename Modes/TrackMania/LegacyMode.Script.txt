@@ -318,6 +318,7 @@ Text TimeToTextMP(Integer _Time)	{
 
 main()	{
 	Audio.PlaySoundEvent(CAudioManager::ELibSound::Checkpoint, 0, 1.);
+	
 	declare Time = {{{_WaypointTime}}};
 	declare Time2 = {{{_AnotherTime}}};
 	
@@ -359,7 +360,8 @@ CGhost GetRecordGhost()	{
 		return Null;
 	
 	declare MapGhost = MapGhosts.Ghosts[0];
-		if(MapGhost!=Null)	{
+	MapGhost.Nickname = "Personal Best: ";
+	if(MapGhost!=Null)	{
 		GhostMgr.Ghost_Add(MapGhost, True);
 		return MapGhost;
 	}
@@ -378,34 +380,32 @@ Integer GetMapRecord(CGhost _recordGhost)	{
 }
 
 
-Void FinishRace(CSmPlayer _Player)	{
+Void FinishRace(CSmPlayer _Player, CGhost _OutroGhost)	{
 	
 	Player_SetCurRaceAsPrevRace(_Player);
 // In platform gamemode:
 	if(S_IsPlatform)	{
 		// If NbRespawnsRequested is worse 
 		if(_Player.Score.NbRespawnsRequested > G_MapRecord && G_MapRecord != -1)
-			return;	
-				 
-		declare CurGhost = Ghost_RetrieveFromPlayer(_Player);
+			return;
+			
 		G_MapRecord = _Player.Score.NbRespawnsRequested;
-		wait(CurGhost != Null);
+		wait(_OutroGhost != Null);
 		// Fixes NbRespawns in the saved replay
-		CurGhost.Result.NbRespawns = G_MapRecord;
-		SaveRecordGhost(CurGhost);
-		DataFileMgr.Ghost_Release(CurGhost.Id);
+		_OutroGhost.Result.NbRespawns = G_MapRecord;
+		SaveRecordGhost(_OutroGhost);
+		G_RecordGhost = _OutroGhost;
 	}
 	// In race gamemode:
 	else	{
 		// If time is worse
 		if(_Player.EndTime > G_MapRecord && G_MapRecord != -1)
 			return;
-			
-		declare CurGhost = Ghost_RetrieveFromPlayer(_Player);		
+					
 		G_MapRecord = _Player.EndTime;
-		wait(CurGhost != Null);	
-		ScoreMgr.Map_SetNewRecord_v2(NullId, Map.MapInfo.MapUid, "", "", CurGhost);
-		DataFileMgr.Ghost_Release(CurGhost.Id);
+		wait(_OutroGhost != Null);	
+		ScoreMgr.Map_SetNewRecord_v2(NullId, Map.MapInfo.MapUid, "", "", _OutroGhost);
+		G_RecordGhost = _OutroGhost;
 	}
 	
 	Player_SetCurRaceAsBestRace(_Player);
@@ -428,12 +428,19 @@ Void EndRaceSequence(Text _text, CPlayer _Player)	{
 	Player_UI.BigMessage = _text;
 }
 
-Void AfterRace()	{
+
+Void AfterRace(CGhost _OutroGhost)	{
 	declare UI = UIManager.GetUI(Players[0]);
-	declare OutroGhost = GetRecordGhost();
-	Ghost_Add(OutroGhost, False, 2700);
 	UI.UISequence = CUIConfig::EUISequence::EndRound;
-	UI.Spectator_SetForcedTarget_Ghost(OutroGhost.Id);
+	UnspawnPlayer(Players[0]);
+	
+	MB_Sleep(1000);
+	log("entering after race sequence");
+	wait(_OutroGhost != Null);
+	Ghost_Add(_OutroGhost, False, 0);
+	MB_Sleep(1000);
+	UI.Spectator_SetForcedTarget_Ghost(_OutroGhost.Id);
+	MB_Sleep(1000);
 	UI.SpectatorForceCameraType = 0;
 }
 	
@@ -445,7 +452,7 @@ Ghost_RemoveAll();
 G_RecordGhost = GetRecordGhost();
 G_MapRecord = GetMapRecord(G_RecordGhost);
 
-log("loaded map record: " ^G_MapRecord ^ ", PB Ghost info: " ^ G_RecordGhost);
+log("loaded map record: " ^G_MapRecord);
 
 Scores_ClearAll();
 if(S_IsPlatform)
@@ -507,8 +514,6 @@ if (IsFinished && Player != Null) {
 		}
 		else
 			UnspawnPlayer(Players[0]);
-		G_RecordGhost = GetRecordGhost();
-		AfterRace();
 		IsFinished = False;
 	}
 	
@@ -523,6 +528,7 @@ foreach (Event in PendingEvents) {
 	
 	// Waypoint
 	if (Event.Type == CSmModeEvent::EType::OnPlayerTriggersWaypoint) {
+		
 		declare Integer PrevPlayer_Score_NbRespawnsRequested for Event.Player;
 		declare Integer cpindex for Event.Player;
 		
@@ -544,13 +550,20 @@ foreach (Event in PendingEvents) {
 			declare Integer TimeToUnspawn for Event.Player;	
 			TimeToUnspawn = Now + 2000;
 			
-			FinishRace(Event.Player);
+			declare OutroGhost = Ghost_RetrieveFromPlayer(Event.Player);
+			wait(OutroGhost != Null);
+			OutroGhost.Nickname = "Last Race: " ^ Event.Player.Name;
+			
+			FinishRace(Event.Player, OutroGhost);
 			EndRaceSequence("", Event.Player);
 			IsFinished = True;
-				
+			MB_Sleep(2700);
+			AfterRace(OutroGhost);
+			DataFileMgr.Ghost_Release(OutroGhost.Id);
+
 		}
 	}
 }
 ***
-Void do_nothink()	{
+Void DoNothing()	{
 }
