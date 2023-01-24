@@ -296,9 +296,9 @@ main()	{
 
 Text UpdateCheckPointUI(Integer _WaypointTime, Integer _AnotherTime)	{
 return """<manialink version="3">
-<frame z-index="-10">
-	<label halign="center" style="TextRaceChrono" textsize="4" pos="0 20" id="cas" text=""/>
-	<label halign="center" style="TextRaceChrono" textsize="4" pos="0 15" id="cas2" text=""/>
+<frame z-index="-10" pos="0 28">
+	<label halign="center" style="TextRaceChrono" textsize="4" pos="0 6" id="cas"/>
+	<label halign="center" style="TextRaceChrono" textsize="4" pos="0 0" id="cas2"/>
 </frame>
 <script><!--
 
