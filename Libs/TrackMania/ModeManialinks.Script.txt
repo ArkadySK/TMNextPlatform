@@ -270,7 +270,7 @@ Text DrawChronoUI(Boolean _IsPlatform)	{
         while(True)	{
             (Page.GetFirstChild("speedLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Speed * 36 / 10));
             (Page.GetFirstChild("distLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Distance));
-            if({{{S_IsPlatform}}})
+            if({{{_IsPlatform}}})
                 (Page.GetFirstChild("nbRespawnsLabel") as CMlLabel).SetText(""^Player.Score.NbRespawnsRequested);
             else
                 (Page.GetFirstChild("timeLabel") as CMlLabel).SetText(TimeToTextMP(Player.CurrentRaceTime));
