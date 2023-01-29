@@ -26,25 +26,25 @@ Void SaveRecordGhost(CGhost _recordGhost)	{
 }
 
 
-CGhost GetRecordGhost()	{
-	GhostMgr.Ghost_RemoveAll();
+Void RefreshRecordGhost()	{
+	if (G_RecordGhost != Null)
+	GhostMgr.Ghost_Remove(G_RecordGhost.Id);
 	declare MapGhosts = DataFileMgr.Replay_Load("PlatformRecords\\AutoSave"^Map.MapInfo.Name^".Replay.Gbx");
 	//wait(MapGhosts.IsProcessing);
 	MB_Sleep(2000);
 	if(!MapGhosts.HasSucceeded)
-		return Null;
+		return;
 	
 	declare MapGhost = MapGhosts.Ghosts[0];
 	MapGhost.Nickname = "Personal Best: ";
 	if(MapGhost!=Null)	{
-		GhostMgr.Ghost_Add(MapGhost, True);
-		return MapGhost;
+		GhostMgr.Ghost_Add(MapGhost, True, 0);
+		G_RecordGhost = MapGhost;
 	}
-	return Null;
 }
 
 
-Integer GetMapRecord(CGhost _recordGhost)	{
+Integer GetRecordFromGhost(CGhost _recordGhost)	{
 	if(S_IsPlatform == True || _recordGhost == Null)	{
 		if (_recordGhost == Null)
 			return -1;
@@ -109,15 +109,16 @@ Void AfterRace(CGhost _OutroGhost)	{
 	IsReadyToUnspawn = False;
 	declare UI = UIManager.GetUI(Players[0]);
 	UI.UISequence = CUIConfig::EUISequence::EndRound;
-	//UnspawnPlayer(Players[0]);
-	StartTime = Now;
-	MB_Sleep(1000);
+	UI.ForceSpectator = True;
+	UnspawnPlayer(Players[0]);
 	log("entering after race sequence");
+	
+	//Ghost_Add(_OutroGhost, False, 100);
 	Ghost_Add(_OutroGhost, False, 0);
-	MB_Sleep(1000);
+	MB_Sleep(100);
+	log(_OutroGhost);
 	UI.Spectator_SetForcedTarget_Ghost(_OutroGhost.Id);
 	UI.SpectatorForceCameraType = 1;
-	MB_Sleep(5000);
 }
 	
 ***Match_InitMap***
@@ -125,8 +126,8 @@ Void AfterRace(CGhost _OutroGhost)	{
 PreLoadUI();
 
 Ghost_RemoveAll();
-G_RecordGhost = GetRecordGhost();
-G_MapRecord = GetMapRecord(G_RecordGhost);
+RefreshRecordGhost();
+G_MapRecord = GetRecordFromGhost(G_RecordGhost);
 
 log("loaded map record: " ^G_MapRecord);
 
@@ -244,7 +245,7 @@ foreach (Event in PendingEvents) {
 			AfterRace(OutroGhost);
 			DataFileMgr.Ghost_Release(OutroGhost.Id);
 			DataFileMgr.Ghost_Release(LastGhost.Id);	
-			G_RecordGhost = GetRecordGhost();
+			RefreshRecordGhost();
 		}
 	}
 }
