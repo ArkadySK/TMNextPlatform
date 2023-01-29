@@ -382,6 +382,7 @@ Integer GetMapRecord(CGhost _recordGhost)	{
 
 Void FinishRace(CSmPlayer _Player, CGhost _OutroGhost)	{
 	
+	
 	Player_SetCurRaceAsPrevRace(_Player);
 // In platform gamemode:
 	if(S_IsPlatform)	{
@@ -394,7 +395,6 @@ Void FinishRace(CSmPlayer _Player, CGhost _OutroGhost)	{
 		// Fixes NbRespawns in the saved replay
 		_OutroGhost.Result.NbRespawns = G_MapRecord;
 		SaveRecordGhost(_OutroGhost);
-		G_RecordGhost = _OutroGhost;
 	}
 	// In race gamemode:
 	else	{
@@ -405,7 +405,6 @@ Void FinishRace(CSmPlayer _Player, CGhost _OutroGhost)	{
 		G_MapRecord = _Player.EndTime;
 		wait(_OutroGhost != Null);	
 		ScoreMgr.Map_SetNewRecord_v2(NullId, Map.MapInfo.MapUid, "", "", _OutroGhost);
-		G_RecordGhost = _OutroGhost;
 	}
 	
 	Player_SetCurRaceAsBestRace(_Player);
@@ -546,21 +545,24 @@ foreach (Event in PendingEvents) {
 		if (Event.IsFinish) {
 			PassOn(Event);
 			
+			EndRaceSequence("", Event.Player);
 			declare Boolean IsFinished for Event.Player;
 			declare Integer TimeToUnspawn for Event.Player;	
 			TimeToUnspawn = Now + 2000;
 			
 			declare OutroGhost = Ghost_RetrieveFromPlayer(Event.Player);
-			wait(OutroGhost != Null);
+			declare LastGhost = Ghost_RetrieveFromPlayer(Event.Player);
+			wait(OutroGhost != Null && LastGhost != Null);
 			OutroGhost.Nickname = "Last Race: " ^ Event.Player.Name;
+			log(OutroGhost.Nickname);
 			
-			FinishRace(Event.Player, OutroGhost);
-			EndRaceSequence("", Event.Player);
+			FinishRace(Event.Player, LastGhost);
 			IsFinished = True;
 			MB_Sleep(2700);
 			AfterRace(OutroGhost);
 			DataFileMgr.Ghost_Release(OutroGhost.Id);
-
+			DataFileMgr.Ghost_Release(LastGhost.Id);	
+			G_RecordGhost = GetRecordGhost();
 		}
 	}
 }
