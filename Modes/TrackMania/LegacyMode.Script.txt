@@ -6,6 +6,9 @@
 #Include "TextLib" as TextLib
 #Include "MathLib" as MathLib
 
+#Include "Libs/TrackMania/ModeManialinks.Script.txt" as ModeManialinks
+
+
 #Setting S_IsPlatform True
 
 declare CUILayer G_ChronoLayer;	
@@ -151,10 +154,10 @@ foreach(Player in Players)  {
 	Player_UI.UILayers.add(G_CPLayer); 
 	Player_UI.UILayers.add(G_GameplayLayer);
 	Player_UI.UILayers.add(G_PauseMenuLayer);
-
-  	G_ChronoLayer.ManialinkPage = DrawChronoUI();
-	G_GameplayLayer.ManialinkPage = DrawGameplayTextUI();
-	G_PauseMenuLayer.ManialinkPage = PauseMenu();
+	
+	G_ChronoLayer.ManialinkPage = ModeManialinks::DrawChronoUI(S_IsPlatform);
+	G_GameplayLayer.ManialinkPage = ModeManialinks::DrawGameplayTextUI();
+	G_PauseMenuLayer.ManialinkPage = ModeManialinks::PauseMenu();
 
 	G_PauseMenuLayer.Type = CUILayer::EUILayerType::InGameMenu;
 
@@ -218,7 +221,7 @@ foreach (Event in PendingEvents) {
 		else
 			BestCPTime = -1;
 		
-  		G_CPLayer.ManialinkPage = UpdateCheckPointUI(Event.WaypointTime, BestCPTime);
+  		G_CPLayer.ManialinkPage = ModeManialinks::UpdateCheckPointUI(Event.WaypointTime, BestCPTime);
 		declare Player_UI = UIManager.GetUI(Event.Player);
 
 		if (Event.IsFinish) {
