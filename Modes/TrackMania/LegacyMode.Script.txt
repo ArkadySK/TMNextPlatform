@@ -17,6 +17,7 @@ declare CUILayer G_GameplayLayer;
 declare CUILayer G_PauseMenuLayer;
 
 declare CGhost G_RecordGhost;
+declare CGhost G_OutroGhost;
 declare Integer G_MapRecord;
 
 
@@ -184,29 +185,10 @@ declare Boolean IsReadyToUnspawn for Player;
 
 declare Player_UI = UIManager.GetUI(Player);
 if(Player.StartTime == Now)	{
+	RefreshRecordGhost();
 	IsFinished = False;
 	cpindex = 0;	
 	Player_UI.BigMessage = "";
-}
-
-
-if (IsFinished && Player != Null) {
-	
-	if(TimeToUnspawn < Now)	{
-		if(Player.StartTime >= Now)	{
-			log("why restart");
-			IsReadyToUnspawn = True;
-			IsFinished = False;
-		}
-	}
-	if(IsReadyToUnspawn)	{
-		UnspawnPlayer(Player);
-		IsFinished = False;
-	}	
-	
-	if(Player.Score != Null) {
-		assert(Player.Score.Id != NullId);
-	}
 }
 
 
@@ -237,20 +219,16 @@ foreach (Event in PendingEvents) {
 			declare Integer TimeToUnspawn for Event.Player;	
 			TimeToUnspawn = Now + 2000;
 			
-			declare OutroGhost = Ghost_RetrieveFromPlayer(Event.Player);
+			G_OutroGhost = Ghost_RetrieveFromPlayer(Event.Player);
 			declare LastGhost = Ghost_RetrieveFromPlayer(Event.Player);
-			wait(OutroGhost != Null && LastGhost != Null);
-			OutroGhost.Nickname = "Last Race: " ^ Event.Player.Name;
-			log(OutroGhost.Nickname);
-			
-			FinishRace(Event.Player, LastGhost);		
-			
-			AfterRace(OutroGhost);
-			IsFinished = True;
-			MB_Sleep(2700);	
-			RefreshRecordGhost();
-			
-			DataFileMgr.Ghost_Release(LastGhost.Id);
+			wait(G_OutroGhost != Null && LastGhost != Null);
+			G_OutroGhost.Nickname = "Last Race: " ^ Event.Player.Name;
+						
+			FinishRace(Event.Player, LastGhost);	
+			IsFinished = True;	
+			MB_Sleep(2700);
+			Ghost_RemoveAll();
+			AfterRace(G_OutroGhost);
 		}
 	}
 }
