@@ -429,18 +429,20 @@ Void EndRaceSequence(Text _text, CPlayer _Player)	{
 
 
 Void AfterRace(CGhost _OutroGhost)	{
+	
+	declare Boolean IsReadyToUnspawn for Players[0];
+	IsReadyToUnspawn = False;
 	declare UI = UIManager.GetUI(Players[0]);
 	UI.UISequence = CUIConfig::EUISequence::EndRound;
-	UnspawnPlayer(Players[0]);
-	
+	//UnspawnPlayer(Players[0]);
+	StartTime = Now;
 	MB_Sleep(1000);
 	log("entering after race sequence");
-	wait(_OutroGhost != Null);
 	Ghost_Add(_OutroGhost, False, 0);
 	MB_Sleep(1000);
 	UI.Spectator_SetForcedTarget_Ghost(_OutroGhost.Id);
-	MB_Sleep(1000);
-	UI.SpectatorForceCameraType = 0;
+	UI.SpectatorForceCameraType = 1;
+	MB_Sleep(5000);
 }
 	
 ***Match_InitMap***
@@ -496,6 +498,7 @@ declare Boolean IsFinished for Player;
 declare Integer NbRespawnsRecord for Player;
 declare Integer TimeToUnspawn for Player;
 declare Integer cpindex for Player;
+declare Boolean IsReadyToUnspawn for Player;
 
 declare Player_UI = UIManager.GetUI(Player);
 if(Player.StartTime == Now)	{
@@ -510,9 +513,13 @@ if (IsFinished && Player != Null) {
 	if(TimeToUnspawn < Now)	{
 		if(Player.StartTime >= Now)	{
 			log("why restart");
+			IsReadyToUnspawn = True;
 		}
 		else
-			UnspawnPlayer(Players[0]);
+			
+			if(IsReadyToUnspawn)
+				UnspawnPlayer(Player);
+			
 		IsFinished = False;
 	}
 	
