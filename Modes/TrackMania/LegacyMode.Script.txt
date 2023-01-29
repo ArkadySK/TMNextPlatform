@@ -31,7 +31,7 @@ Void RefreshRecordGhost()	{
 	GhostMgr.Ghost_Remove(G_RecordGhost.Id);
 	declare MapGhosts = DataFileMgr.Replay_Load("PlatformRecords\\AutoSave"^Map.MapInfo.Name^".Replay.Gbx");
 	//wait(MapGhosts.IsProcessing);
-	MB_Sleep(2000);
+	MB_Sleep(1000);
 	if(!MapGhosts.HasSucceeded)
 		return;
 	
@@ -55,9 +55,8 @@ Integer GetRecordFromGhost(CGhost _recordGhost)	{
 }
 
 
+// Saves ghosts if improvement
 Void FinishRace(CSmPlayer _Player, CGhost _OutroGhost)	{
-	
-	
 	Player_SetCurRaceAsPrevRace(_Player);
 // In platform gamemode:
 	if(S_IsPlatform)	{
@@ -102,23 +101,25 @@ Void EndRaceSequence(Text _text, CPlayer _Player)	{
 	Player_UI.BigMessage = _text;
 }
 
-
+//Shows after race sequence
 Void AfterRace(CGhost _OutroGhost)	{
 	
 	declare Boolean IsReadyToUnspawn for Players[0];
 	IsReadyToUnspawn = False;
 	declare UI = UIManager.GetUI(Players[0]);
 	UI.UISequence = CUIConfig::EUISequence::EndRound;
-	UI.ForceSpectator = True;
-	UnspawnPlayer(Players[0]);
-	log("entering after race sequence");
+	//UI.ForceSpectator = True;
+	UI.Spectator_SetAutoTarget_All();
+	//UnspawnPlayer(Players[0]);
 	
+	log("entering after race sequence");
+	StartTime = Now + 2700;
 	//Ghost_Add(_OutroGhost, False, 100);
-	Ghost_Add(_OutroGhost, False, 0);
 	MB_Sleep(100);
-	log(_OutroGhost);
+	log(Ghost_IsReplayOver(_OutroGhost.Id));
 	UI.Spectator_SetForcedTarget_Ghost(_OutroGhost.Id);
-	UI.SpectatorForceCameraType = 1;
+	Ghost_Add(_OutroGhost, False);
+	UI.SpectatorForceCameraType = 0;	
 }
 	
 ***Match_InitMap***
@@ -126,7 +127,6 @@ Void AfterRace(CGhost _OutroGhost)	{
 PreLoadUI();
 
 Ghost_RemoveAll();
-RefreshRecordGhost();
 G_MapRecord = GetRecordFromGhost(G_RecordGhost);
 
 log("loaded map record: " ^G_MapRecord);
@@ -165,6 +165,12 @@ foreach(Player in Players)  {
 }
 ***
 
+***Match_Start***
+***
+log("A");
+RefreshRecordGhost();
+***
+
 ***Match_PlayLoop***
 ***
 
@@ -190,16 +196,14 @@ if (IsFinished && Player != Null) {
 		if(Player.StartTime >= Now)	{
 			log("why restart");
 			IsReadyToUnspawn = True;
+			IsFinished = False;
 		}
-		else
-			
-			if(IsReadyToUnspawn)
-				UnspawnPlayer(Player);
-			
-		IsFinished = False;
 	}
+	if(IsReadyToUnspawn)	{
+		UnspawnPlayer(Player);
+		IsFinished = False;
+	}	
 	
-		
 	if(Player.Score != Null) {
 		assert(Player.Score.Id != NullId);
 	}
@@ -239,13 +243,14 @@ foreach (Event in PendingEvents) {
 			OutroGhost.Nickname = "Last Race: " ^ Event.Player.Name;
 			log(OutroGhost.Nickname);
 			
-			FinishRace(Event.Player, LastGhost);
-			IsFinished = True;
-			MB_Sleep(2700);
+			FinishRace(Event.Player, LastGhost);		
+			
 			AfterRace(OutroGhost);
-			DataFileMgr.Ghost_Release(OutroGhost.Id);
-			DataFileMgr.Ghost_Release(LastGhost.Id);	
+			IsFinished = True;
+			MB_Sleep(2700);	
 			RefreshRecordGhost();
+			
+			DataFileMgr.Ghost_Release(LastGhost.Id);
 		}
 	}
 }
