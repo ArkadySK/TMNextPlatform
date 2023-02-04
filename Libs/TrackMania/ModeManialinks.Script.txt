@@ -346,3 +346,445 @@ Text UpdateCheckPointUI(Integer _WaypointTime, Integer _AnotherTime)	{
     </manialink>
     """;
     }
+
+
+Text DrawAfterRaceUI(Boolean _IsPlatform, Integer _CurScore, Integer _BestScore)	{
+	return """
+	<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<manialink version="3">
+<stylesheet>
+		<style class="med" pos="-156 76.5" z-index="1" size="11 11"/>
+		<style id="ButtonImprove ButtonQuit ButtonSaveReplay ButtonOpponents ButtonPausePlay ButtonRefresh" style="CardButtonMediumL" sizen="40 12" halign="center" valign="center"/>
+		<style class="AfterRaceButtonText" textcolor="FFFFFFE7" sizen="60 12" textfont="Gotham/Gotham-Medium" halign="center" valign="center2" textsize="4"/>
+		</stylesheet>	
+
+<frame id="SaveReplayFrame" z-index="20" scale="1.2" pos="0 0" hidden="1">
+		<quad pos="0 -4" size="120 32" bgcolor="4B4B4BFF" halign="center" opacity=".8" id="SaveReplayBg" valign="center"/>
+		<quad bluramount="0.5" pos="0 0" z-index="-5" size="120 40" id="blur_" style="Bgs1" substyle="BgEmpty" halign="center" valign="center"/>
+		<quad pos="0 20" size="120 8" bgcolor="FFFFFFFF" halign="center" opacity=".75"/>
+		<label pos="0 15.5" z-index="1" size="115 9" id="SaveReplayTitle" translate="1" halign="center" textsize="4" style="TextValueMediumSm" textfont="Gotham/Gotham-Bold" text="Save Replay" valign="center"/>
+		
+		<label pos="0 -14" z-index="1" size="50 7" text="Save" id="SaveReplaySave" translate="1" halign="center" valign="center" scriptevents="1" textcolor="FFFFFFE7"  focusareacolor2="B2B2B2FF" focusareacolor1="2E2E2ECB" textfont="Gotham/Gotham-Medium" textsize="3.5" opacity=".8"/>
+		<quad pos="52 20" z-index="10" size="8 8" style="Icons64x64_1" substyle="Close" id="SaveReplayClose" scriptevents="1"/>
+		<entry pos="-55 -2.5" z-index="2" size="110 7" default="MapAuthor(Time).Replay.Gbx" halign="left" scriptevents="1" textfont="Gotham/Gotham-Book" textsize="3" valign="center2" id="ReplayUrl"/>
+		<label pos="-55 1" z-index="1" size="110 5" text="File" id="SaveReplayText" translate="1" halign="left" textfont="BiryaniDemiBold" textsize="3.5" valign="bottom"/>
+	</frame>
+	
+	<frame id="NewRecordFrame" z-index="20" scale="1.2" pos="0 160" hidden="1">
+		<quad pos="0 26" size="80 71" bgcolor="4B4B4BFF" halign="center" opacity=".8" id="MessageBg"/>
+		<quad bluramount="0.5" pos="0 -5" z-index="-5" size="80 80" id="blur_" style="Bgs1" substyle="BgEmpty" halign="center" valign="center"/>
+		<quad z-index="5" size="45 45" halign="center" valign="center" pos="0 1" id="Medal2" image="file://Media/Images/Medal/BlackMedal.dds"/>
+		<quad z-index="-4" size="60 42.5" halign="center" pos="0 25" style="Bgs1" substyle="BgDialogBlur"/>
+		
+		<quad pos="0 35" size="80 9" bgcolor="FFFFFFFF" halign="center" opacity=".75"/>
+		<label pos="0 30.5" z-index="1" size="100 5" id="MessageTitle" translate="1" halign="center" valign="center" textsize="5" style="TextValueMediumSm" textfont="Gotham/Gotham-Bold"/>
+		<frame hidden="1">
+		<quad z-index="-4" size="60 6" halign="center" pos="0 -26" style="Bgs1" substyle="BgDialogBlur"/>	
+		<quad pos="24 -26" z-index="1" size="6 6" style="BgRaceScore2" substyle="Podium"/>
+		<label pos="23 -29" z-index="1" size="16 6" text="???" id="PositionLabel" translate="1" halign="right" valign="center2"  textfont="BiryaniDemiBold" textsize="4" opacity=".8" focusareacolor2="2E2E2ECB"/>
+		<label pos="-28 -29" z-index="1" size="16 6" text="0 SP" id="SPLabel" translate="1" halign="left" valign="center2"  textfont="BiryaniDemiBold" textsize="3" opacity=".8" focusareacolor2="2E2E2ECB" textcolor="6CFF00FF"/>
+		</frame>
+		<label pos="0 -38" z-index="1" size="35 7" text="OK" id="MessageClose" translate="1" halign="center" valign="center" scriptevents="1" textcolor="FFFFFFE7"  focusareacolor2="B2B2B2FF" focusareacolor1="2E2E2ECB" textfont="Gotham/Gotham-Medium" textsize="3" opacity=".8"/>
+		<label pos="0 -8" z-index="1" size="58 9" text="You set a new personal record!" id="MessageText" translate="1" halign="center" textfont="Gotham/Gotham-Bold" textsize="2.5" autonewline="1"/>
+		<label pos="-29 -24" z-index="1" size="30 5" text="Best time :" id="MessageTimeText" translate="1" textfont="Gotham/Gotham-Book" textsize="2.5" valign="bottom"/>
+		<label pos="29 -24" z-index="1" size="25 5" text="None" id="AfterRaceRecordLabel2" translate="1" halign="right" textfont="BiryaniDemiBold" textsize="3" valign="bottom"/>
+	</frame>
+	
+	<frame id="MedalInfo" pos="0 80">
+		<quad size="320 18" bgcolor="000000FF" halign="center" valign="center" z-index="-1" id="medalsbg" pos="0 2" scriptevents="1"/>
+		
+		<frame id="CurTime">
+		
+		
+		</frame>
+		
+		<label  size="50 8" text="_map name" halign="right" valign="center2" textsize="4" pos="150 -2.5" id="MapNameAfterRace"/>
+		<label  size="80 8" text="_author" halign="right" valign="center2" textsize="3" pos="150 4" id="MapAuthorAfterRace" translate="1"/>
+		
+		<quad  size="25 25" halign="center" valign="center" pos="0 -3" id="MedalImg" style="MedalsBig" substyle="MedalSlot"/>
+	</frame>	
+
+
+	<frame id="ControlButtons" pos="0 -80">
+		<quad size="320 18" bgcolor="000000FF" halign="center" valign="center" z-index="-1" id="buttonsbg" scriptevents="1" pos="0 -2"/>
+		
+		<label text="Improve" translate="1" id="ButtonImprove" style="CardButtonMediumL" scriptevents="1"/>
+
+		<label size="0" halign="center" text="Save Replay" substyle="Replay" pos="112 0" textsize="4" valign="center" id="ButtonSaveReplay" style="CardButtonSmallXXL"/>
+		<quad size="12 12" pos="42 0" scriptevents="1" />
+
+		<label pos="-120 0" text="Quit" translate="1" id="ButtonQuit" scriptevents="1"/>
+
+		<quad pos="-60 0" id="ButtonRefresh" size="12 12" scriptevents="1" style="Icons64x64_1" substyle="ClipRewind"/>
+
+		<quad pos="-42 0" id="ButtonPausePlay" size="12 12" scriptevents="1" style="Icons64x64_1" substyle="ClipPause"/>
+	</frame>
+		<script><!--
+
+#Include "TextLib" as TextLib
+#Include "ColorLib" as ColorLib
+#Include "MathLib" as MathLib
+
+
+declare Integer i;
+declare CMlFrame NewRecordDialog;
+declare CMlFrame SaveReplayDialog;
+
+
+declare Integer Map_ObjectiveAuthor;
+declare Integer Map_ObjectiveGold;
+declare Integer Map_ObjectiveSilver;
+declare Integer Map_ObjectiveBronze;
+
+
+Text TimeToTextWithMilli(Integer _Time) {
+    return TextLib::TimeToText(_Time, True)^TextLib::SubText(""^_Time, TextLib::Length(""^_Time)-1, 1);
+}
+
+Text GetRecordTypeText(Integer _Record)	{
+	declare recordtext = "???";
+	declare metadata Text GameMode for Map;
+	if(GameMode == "Platform" || GameMode == "Stunts")	
+		recordtext = ""^_Record;
+	else
+		recordtext = TimeToTextWithMilli(_Record);
+	return recordtext;
+}
+
+Text GetPositionText(Integer _PositionInteger)	{
+	declare posi = _PositionInteger;
+	declare PositionExtraTexts = [".", "st", "nd", "rd"];
+	if (posi < 1) return "???";
+	
+	if(posi>3)
+		return TextLib::Compose("%1th", ""^_PositionInteger);
+	else
+		return posi^PositionExtraTexts[posi];
+	return "";
+}
+
+Void SetMapMedals(Integer _count)	{
+	declare MedalQuad = (Page.GetFirstChild("MedalImg") as CMlQuad);
+	switch( _count)	{
+		case default:
+			MedalQuad.SubStyle = "MedalSlot";
+		case 1:
+			MedalQuad.SubStyle = "MedalBronze";
+		case 2:
+			MedalQuad.SubStyle = "MedalSilver";
+		case 3:
+			MedalQuad.SubStyle = "MedalGold";
+		case 4:
+			MedalQuad.SubStyle = "MedalNadeo";
+	}
+}
+
+Void HoverAfterRaceButton(Integer _i)	{
+	declare Buttons = ["ButtonImprove", "ButtonSaveReplay", "ButtonQuit", /*"ButtonOpponents", "ButtonRefresh", "ButtonPausePlay"*/];
+	declare Text color;
+	
+	if(_i!=-1)	{
+		//select the item
+		declare SelectedId = Buttons[_i];
+		declare SelItem = (Page.GetFirstChild(SelectedId) as CMlLabel); //oznaci vybrane
+		SelItem.Focus();
+	}
+}
+
+Void Right()	{
+	if(!NewRecordDialog.Visible && !SaveReplayDialog.Visible)	{
+		if(i<2)
+			i += 1;
+		else
+			i=0;
+		HoverAfterRaceButton(i);
+	}
+	else
+		HoverAfterRaceButton(-1);
+}
+
+Void Left()	{
+	if(!NewRecordDialog.Visible && !SaveReplayDialog.Visible)	{
+		if(i>0)
+			i -= 1;
+		else
+			i=2;
+		HoverAfterRaceButton(i);
+	}
+	else
+		HoverAfterRaceButton(-1);
+}
+
+***OnKeyNav***
+***
+	if (!NewRecordDialog.Visible && !SaveReplayDialog.Visible)	{
+		if(Event.MenuNavAction == CMlScriptEvent::EMenuNavAction::Left)
+			Left();
+		if(Event.MenuNavAction == CMlScriptEvent::EMenuNavAction::Right)
+			Right();
+		if(Event.MenuNavAction == CMlScriptEvent::EMenuNavAction::Select)
+			SelectAfterRaceButton(i);
+	}
+	if (NewRecordDialog.Visible){
+		if(Event.MenuNavAction == CMlScriptEvent::EMenuNavAction::Select || Event.MenuNavAction == CMlScriptEvent::EMenuNavAction::Cancel)	{
+			HideNewRecordDialog();
+		}
+	}
+	if (SaveReplayDialog.Visible)	{
+	declare SaveButton = (Page.GetFirstChild("SaveReplaySave") as CMlLabel);
+	declare ReplayUrlEntry = (Page.GetFirstChild("ReplayUrl") as CMlEntry);
+
+		if(Event.MenuNavAction == CMlScriptEvent::EMenuNavAction::Up || Event.MenuNavAction == CMlScriptEvent::EMenuNavAction::Down)	{
+			if(!SaveButton.IsFocused)
+				SaveButton.Focus();
+			else
+				ReplayUrlEntry.Focus();
+		}
+		if(Event.MenuNavAction == CMlScriptEvent::EMenuNavAction::Select)	{
+			
+			if(!SaveButton.IsFocused)
+				SaveButton.Focus();
+			else	{
+				SaveReplay();
+				HideSaveReplayDialog();
+			}
+		}
+		if(Event.MenuNavAction == CMlScriptEvent::EMenuNavAction::Cancel)	
+			HideSaveReplayDialog();
+	}
+
+***
+Boolean IsBetter(Integer _UserRecord, Integer _OldRecord)	{
+	Boolean _PlatformMode = {{{_IsPlatform}}}; 
+	if(_PlatformMode == "Platform")	{
+		if(_UserRecord <= _OldRecord)
+			IsRecordBetter = True; 
+	}
+	else
+		if(_UserRecord < _OldRecord)
+			IsRecordBetter = True;
+
+	return IsRecordBetter;
+}
+
+
+Integer GetMapMedals(Integer _RecordTime)	{
+	declare UserRecord = _RecordTime;	
+	 
+	declare Integer NbMedals;
+	if(IsBetter(UserRecord, Map_ObjectiveBronze))	{
+		NbMedals = 1;
+		if(IsBetter(UserRecord, Map_ObjectiveSilver))	{
+			NbMedals = 2;
+			if(IsBetter(UserRecord, Map_ObjectiveGold))	{
+				NbMedals = 3;
+				if(IsBetter(UserRecord, Map_ObjectiveAuthor) && Map_ObjectiveAuthor != Map_ObjectiveGold)	{
+					NbMedals = 4;
+				}
+			}
+		}
+	}
+	if(UserRecord==-1)
+		NbMedals = 0;
+	
+	return NbMedals;
+}
+
+Void ShowSaveReplayDialog(Text _MapName)	{
+	declare netread Integer CurTime for UI; 
+	SaveReplayDialog.Show();
+	declare ReplayUrlEntry = (Page.GetFirstChild("ReplayUrl") as CMlEntry); 
+	ReplayUrlEntry.Value = _MapName^"_"^LocalUser.Login^"("^GetRecordTypeText(CurTime)^")";
+	ReplayUrlEntry.Focus();
+}
+
+Void NewRecordDialog(Integer _MedalCount, Integer _PrevMedalCount, Integer _UserRecord, Text _ScContext)	{
+
+	declare netread Integer Net_PositionInteger for UI;
+	declare PositionText =  GetPositionText(Net_PositionInteger);
+	declare netread Integer Net_SPInteger for UI;
+	
+	(Page.GetFirstChild("PositionLabel") as CMlLabel).SetText(PositionText);
+	(Page.GetFirstChild("SPLabel") as CMlLabel).SetText(Net_SPInteger^" SP");
+	NewRecordDialog.Show();
+	
+	declare WonMedalCount = _MedalCount - _PrevMedalCount;
+	
+	declare Text MessageTitle;
+	switch ( _MedalCount)	{
+		case 1: MessageTitle = "Finished";
+		case 2: MessageTitle = "Well done!";
+		case 3: MessageTitle = "Impressive!!";
+		case 4: MessageTitle = "Awesome!!!";	
+	}
+	(Page.GetFirstChild("MessageTitle") as CMlLabel).SetText(MessageTitle);
+	if(WonMedalCount>1)
+		(Page.GetFirstChild("MessageText") as CMlLabel).SetText(TextLib::Compose("You won %1 medals!", ""^WonMedalCount));
+	else	{
+		if(WonMedalCount==1)
+		(Page.GetFirstChild("MessageText") as CMlLabel).SetText("You won 1 medal!");
+		else
+		(Page.GetFirstChild("MessageText") as CMlLabel).SetText("You set a new personal record!");
+	}
+	(Page.GetFirstChild("MessageClose") as CMlLabel).Focus();
+	AnimMgr.Add(NewRecordDialog, "<frame pos='0 10' />", 350, CAnimManager::EAnimManagerEasing::SineIn);
+}
+
+Void HideSaveReplayDialog()	{
+	AnimMgr.Add(SaveReplayDialog, "<frame pos='0 180' />", 250, CAnimManager::EAnimManagerEasing::SineIn);	
+	AnimMgr.Add(SaveReplayDialog, "<frame hidden='1'/>", 350, CAnimManager::EAnimManagerEasing::SineIn);	
+}
+
+Void SelectAfterRaceButton(Integer _i)	{
+	declare persistent Boolean RestartMap for LocalUser;
+	declare netwrite Boolean ShowOpponents for UI;
+	switch (_i) {
+		case 0: {
+			StartTime = Now;
+		}
+		case 1: {
+			ShowSaveReplayDialog(Map.MapInfo.Name);
+		}
+		case 2: {
+			UIState = "QuitAfterRace";
+			ShowInGameMenu();
+		}
+		case 3:{
+			UIState = "InGame";
+			ShowOpponents = True;
+		}
+		case 4:{
+			RestartMap0 = True;
+			UIState = "RefreshAfterRace";	
+		}
+		case 5:{
+			if(UIState != "PauseAfterRace")	{
+				UIState = "PauseAfterRace";
+				ShowInGameMenu();
+			}
+			else {
+				UIState = "AfterRace";	
+				CloseInGameMenu(CMlScriptIngame::EInGameMenuResult::Resume);
+			}
+		}
+	}	
+
+}
+
+Void HideNewRecordDialog()	{
+	AnimMgr.Add(NewRecordDialog, "<frame pos='0 180'/>", 250, CAnimManager::EAnimManagerEasing::SineIn);	
+	AnimMgr.Add(NewRecordDialog, "<frame hidden='1'/>", 350, CAnimManager::EAnimManagerEasing::SineIn);	
+	Audio.PlaySoundEvent("file://media/TMUF/Audio/MenuValid2.wav", 1.0, 0);	
+	HoverAfterRaceButton(0);
+}
+
+Void SaveReplay()	{
+	
+	HoverAfterRaceButton(-1);
+	declare netwrite Text Net_SaveReplayUrl for UI;
+	SaveReplayUrl = (Page.GetFirstChild("ReplayUrl") as CMlEntry).Value;
+	log("Saving replay...");
+	HideNewRecordDialog();
+}
+
+Void PreLoad()	{
+	declare netwrite Text Net_SaveReplayUrl for UI; 
+	SaveReplayUrl = "";
+	EnableMenuNavigationInputs = False;
+
+	SaveReplayDialog = (Page.GetFirstChild("SaveReplayFrame") as CMlFrame);
+	NewRecordDialog = (Page.GetFirstChild("NewRecordFrame") as CMlFrame);
+
+}
+
+main()	{	
+	PreLoad();
+	declare AfterRaceButtons = ["ButtonImprove", "ButtonSaveReplay", "ButtonQuit"/*, "ButtonOpponents", "ButtonRefresh", "ButtonPausePlay"*/];
+
+	//declare Map_ <=> Map.MapInfo;
+	
+	declare metadata Integer ObjectiveAuthor for Map;
+	declare metadata Integer ObjectiveGold for Map;
+	declare metadata Integer ObjectiveSilver for Map;
+	declare metadata Integer ObjectiveBronze for Map;
+	
+	(Page.GetFirstChild("MapNameAfterRace") as CMlLabel).SetText(""^Map.MapInfo.Name);
+	(Page.GetFirstChild("MapAuthorAfterRace") as CMlLabel).SetText(""^Map.MapInfo.AuthorNickName);
+	
+	if ({{{_IsPlatform}}}) {
+		Map_ObjectiveAuthor = ObjectiveAuthor;
+		Map_ObjectiveGold = ObjectiveGold;
+		Map_ObjectiveSilver = ObjectiveSilver;		
+		Map_ObjectiveBronze = ObjectiveBronze;
+
+		if(Map_ObjectiveAuthor == Map_ObjectiveGold)
+			Author_.Hide();
+	}
+	
+	declare Integer UserRecordTemp;
+	UserRecordTemp = {{{_CurScore}}};
+	declare Integer BestScore = {{{_BestScore}}};
+
+	Page.GetFirstChild("FrameInGame").Visible = False;
+	Page.GetFirstChild("FrameAfterRace").Visible = True;
+	sleep(10);
+	declare MedalCount = GetMapMedals(UserRecordTemp);
+	if(BestScore != UserRecordTemp)	{
+		log("BestScore: "^BestScore ^ "UserRecordTemp" ^ UserRecordTemp);
+		declare OldMedalCount = GetMapMedals(BestScore);
+		OldUserRecord = UserRecordTemp;
+		NewRecordDialog(MedalCount, OldMedalCount, UserRecordTemp, ScContext);
+	}
+	else
+		HoverAfterRaceButton(i);
+	SetMapMedals(MedalCount);
+	//(Page.GetFirstChild("AfterRaceCurLabel") as CMlLabel).SetText(GetRecordTypeText(UserRecordTemp));
+
+	sleep(200);
+	EnableMenuNavigationInputs = True;
+
+	while(True)	{	
+		VsechnoVole_.Visible = ShowMedals;
+		foreach (Event in PendingEvents) {
+
+			if (Event.Type == CMlScriptEvent::Type::MenuNavigation) {
+				+++OnKeyNav+++
+			}
+			if (Event.Type == CMlScriptEvent::Type::KeyPress) {
+				if(Event.KeyName=="NumpadMultiply")
+					log("dont hide ui unless you want to experience some nasty bugs. thanks");
+			}
+			if (Event.Type ==  CMlScriptEvent::Type::MouseOver) {
+				if(!SaveReplayDialog.Visible && !NewRecordDialog.Visible)	{
+					if(AfterRaceButtons.exists(Event.ControlId) )	{
+						i = AfterRaceButtons.keyof(Event.ControlId);
+						HoverAfterRaceButton(i)	;
+					}
+				}
+				else	
+					HoverAfterRaceButton(-1);
+			}
+
+			if (Event.Type ==  CMlScriptEvent::Type::MouseClick) {
+				if(Event.ControlId == "MessageClose" || Event.ControlId == "SaveReplayClose")	{
+					HideNewRecordDialog();
+					HideSaveReplayDialog();
+				}
+				if(Event.ControlId == "SaveReplaySave")	{
+					SaveReplay();
+					HideSaveReplayDialog();
+				}
+				if(AfterRaceButtons.exists(Event.ControlId))	{
+					SelectAfterRaceButton(i);
+				}
+			}
+		}
+		yield;
+	}	
+}
+--></script>
+
+</manialink>
+	
+	""";
+}
