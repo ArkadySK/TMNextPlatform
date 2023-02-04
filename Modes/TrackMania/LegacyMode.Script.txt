@@ -16,6 +16,7 @@ declare CUILayer G_CPLayer;
 declare CUILayer G_GameplayLayer;
 declare CUILayer G_PauseMenuLayer;
 declare CUILayer G_OpponentScoresLayer;
+declare CUILayer G_AfterRaceLayer;
 
 declare CGhost G_RecordGhost;
 declare CGhost G_OutroGhost;
@@ -121,7 +122,8 @@ Void AfterRace(CGhost _OutroGhost)	{
 	log(Ghost_IsReplayOver(_OutroGhost.Id));
 	UI.Spectator_SetForcedTarget_Ghost(_OutroGhost.Id);
 	Ghost_Add(_OutroGhost, False);
-	UI.SpectatorForceCameraType = 0;	
+	UI.SpectatorForceCameraType = 0;
+	G_AfterRaceLayer.ManialinkPage = ModeManialinks::DrawAfterRaceUI(S_IsPlatform, _OutroGhost.Result.NbRespawns, G_MapRecord);
 }
 	
 ***Match_InitMap***
@@ -146,6 +148,7 @@ G_CPLayer = UIManager.UILayerCreate();
 G_GameplayLayer = UIManager.UILayerCreate();
 G_PauseMenuLayer = UIManager.UILayerCreate();
 G_OpponentScoresLayer = UIManager.UILayerCreate();
+G_AfterRaceLayer = UIManager.UILayerCreate();
 
 foreach(Player in Players)  {
 	declare Integer NbRespawnsRecord for Player;
@@ -160,10 +163,12 @@ foreach(Player in Players)  {
 	Player_UI.UILayers.add(G_GameplayLayer);
 	Player_UI.UILayers.add(G_PauseMenuLayer);
 	Player_UI.UILayers.add(G_OpponentScoresLayer);
+	Player_UI.UILayers.add(G_AfterRaceLayer);
 	
 	G_ChronoLayer.ManialinkPage = ModeManialinks::DrawChronoUI(S_IsPlatform);
 	G_GameplayLayer.ManialinkPage = ModeManialinks::DrawGameplayTextUI();
 	G_PauseMenuLayer.ManialinkPage = ModeManialinks::PauseMenu();
+
 	if(G_MapRecord != -1)
 		G_OpponentScoresLayer.ManialinkPage = ModeManialinks::DrawOpponentScoresUI(""^G_MapRecord);
 	else
@@ -190,6 +195,8 @@ if(Player.StartTime == Now)	{
 	IsFinished = False;
 	cpindex = 0;	
 	Player_UI.BigMessage = "";
+	log("start!");
+	G_AfterRaceLayer.ManialinkPage = "";
 }
 
 
