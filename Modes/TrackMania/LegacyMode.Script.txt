@@ -127,8 +127,9 @@ Void AfterRace(CGhost _OutroGhost)	{
 ***Match_InitMap***
 ***
 PreLoadUI();
-
 Ghost_RemoveAll();
+
+RefreshRecordGhost();
 G_MapRecord = GetRecordFromGhost(G_RecordGhost);
 
 log("loaded map record: " ^G_MapRecord);
@@ -173,12 +174,6 @@ foreach(Player in Players)  {
 }
 ***
 
-***Match_Start***
-***
-log("A");
-RefreshRecordGhost();
-***
-
 ***Match_PlayLoop***
 ***
 
@@ -192,7 +187,6 @@ declare Boolean IsReadyToUnspawn for Player;
 
 declare Player_UI = UIManager.GetUI(Player);
 if(Player.StartTime == Now)	{
-	RefreshRecordGhost();
 	IsFinished = False;
 	cpindex = 0;	
 	Player_UI.BigMessage = "";
