@@ -350,76 +350,63 @@ Text UpdateCheckPointUI(Integer _WaypointTime, Integer _AnotherTime)	{
 
 Text DrawAfterRaceUI(Boolean _IsPlatform, Integer _CurScore, Integer _BestScore)	{
 	return """
-	<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <manialink version="3">
 <stylesheet>
-		<style class="med" pos="-156 76.5" z-index="1" size="11 11"/>
-		<style id="ButtonImprove ButtonQuit ButtonSaveReplay ButtonOpponents ButtonPausePlay ButtonRefresh" style="CardButtonMediumL" sizen="40 12" halign="center" valign="center"/>
-		<style class="AfterRaceButtonText" textcolor="FFFFFFE7" sizen="60 12" textfont="Gotham/Gotham-Medium" halign="center" valign="center2" textsize="4"/>
-		</stylesheet>	
+	<style class="med" pos="-156 76.5" z-index="1" size="11 11"/>
+	<style id="ButtonImprove ButtonQuit ButtonSaveReplay ButtonOpponents ButtonPausePlay ButtonRefresh" style="CardButtonMediumL" sizen="40 12" halign="center" valign="center"/>
+	<style class="AfterRaceButtonText" textcolor="FFFFFFE7" sizen="60 12" textfont="Gotham/Gotham-Medium" halign="center" valign="center2" textsize="4"/>
+</stylesheet>	
 
 <frame id="SaveReplayFrame" z-index="20" scale="1.2" pos="0 0" hidden="1">
-		<quad pos="0 -4" size="120 32" bgcolor="4B4B4BFF" halign="center" opacity=".8" id="SaveReplayBg" valign="center"/>
-		<quad bluramount="0.5" pos="0 0" z-index="-5" size="120 40" id="blur_" style="Bgs1" substyle="BgEmpty" halign="center" valign="center"/>
-		<quad pos="0 20" size="120 8" bgcolor="FFFFFFFF" halign="center" opacity=".75"/>
-		<label pos="0 15.5" z-index="1" size="115 9" id="SaveReplayTitle" translate="1" halign="center" textsize="4" style="TextValueMediumSm" textfont="Gotham/Gotham-Bold" text="Save Replay" valign="center"/>
-		
-		<label pos="0 -14" z-index="1" size="50 7" text="Save" id="SaveReplaySave" translate="1" halign="center" valign="center" scriptevents="1" textcolor="FFFFFFE7"  focusareacolor2="B2B2B2FF" focusareacolor1="2E2E2ECB" textfont="Gotham/Gotham-Medium" textsize="3.5" opacity=".8"/>
-		<quad pos="52 20" z-index="10" size="8 8" style="Icons64x64_1" substyle="Close" id="SaveReplayClose" scriptevents="1"/>
-		<entry pos="-55 -2.5" z-index="2" size="110 7" default="MapAuthor(Time).Replay.Gbx" halign="left" scriptevents="1" textfont="Gotham/Gotham-Book" textsize="3" valign="center2" id="ReplayUrl"/>
-		<label pos="-55 1" z-index="1" size="110 5" text="File" id="SaveReplayText" translate="1" halign="left" textfont="BiryaniDemiBold" textsize="3.5" valign="bottom"/>
-	</frame>
+	<quad pos="0 -4" size="120 32" bgcolor="4B4B4BFF" halign="center" opacity=".8" id="SaveReplayBg" valign="center"/>
+	<quad bluramount="0.5" pos="0 0" z-index="-5" size="120 40" id="blur_" style="Bgs1" substyle="BgEmpty" halign="center" valign="center"/>
+	<quad pos="0 20" size="120 8" bgcolor="FFFFFFFF" halign="center" opacity=".75"/>
+	<label pos="0 15.5" z-index="1" size="115 9" id="SaveReplayTitle" translate="1" halign="center" textsize="4" style="TextValueMediumSm" textfont="Gotham/Gotham-Bold" text="Save Replay" valign="center"/>
 	
-	<frame id="NewRecordFrame" z-index="20" scale="1.2" pos="0 160" hidden="1">
-		<quad pos="0 26" size="80 71" bgcolor="4B4B4BFF" halign="center" opacity=".8" id="MessageBg"/>
-		<quad bluramount="0.5" pos="0 -5" z-index="-5" size="80 80" id="blur_" style="Bgs1" substyle="BgEmpty" halign="center" valign="center"/>
-		<quad z-index="5" size="45 45" halign="center" valign="center" pos="0 1" id="Medal2" image="file://Media/Images/Medal/BlackMedal.dds"/>
-		<quad z-index="-4" size="60 42.5" halign="center" pos="0 25" style="Bgs1" substyle="BgDialogBlur"/>
-		
-		<quad pos="0 35" size="80 9" bgcolor="FFFFFFFF" halign="center" opacity=".75"/>
-		<label pos="0 30.5" z-index="1" size="100 5" id="MessageTitle" translate="1" halign="center" valign="center" textsize="5" style="TextValueMediumSm" textfont="Gotham/Gotham-Bold"/>
-		<frame hidden="1">
-		<quad z-index="-4" size="60 6" halign="center" pos="0 -26" style="Bgs1" substyle="BgDialogBlur"/>	
-		<quad pos="24 -26" z-index="1" size="6 6" style="BgRaceScore2" substyle="Podium"/>
-		<label pos="23 -29" z-index="1" size="16 6" text="???" id="PositionLabel" translate="1" halign="right" valign="center2"  textfont="BiryaniDemiBold" textsize="4" opacity=".8" focusareacolor2="2E2E2ECB"/>
-		<label pos="-28 -29" z-index="1" size="16 6" text="0 SP" id="SPLabel" translate="1" halign="left" valign="center2"  textfont="BiryaniDemiBold" textsize="3" opacity=".8" focusareacolor2="2E2E2ECB" textcolor="6CFF00FF"/>
-		</frame>
-		<label pos="0 -38" z-index="1" size="35 7" text="OK" id="MessageClose" translate="1" halign="center" valign="center" scriptevents="1" textcolor="FFFFFFE7"  focusareacolor2="B2B2B2FF" focusareacolor1="2E2E2ECB" textfont="Gotham/Gotham-Medium" textsize="3" opacity=".8"/>
-		<label pos="0 -8" z-index="1" size="58 9" text="You set a new personal record!" id="MessageText" translate="1" halign="center" textfont="Gotham/Gotham-Bold" textsize="2.5" autonewline="1"/>
-		<label pos="-29 -24" z-index="1" size="30 5" text="Best time :" id="MessageTimeText" translate="1" textfont="Gotham/Gotham-Book" textsize="2.5" valign="bottom"/>
-		<label pos="29 -24" z-index="1" size="25 5" text="None" id="AfterRaceRecordLabel2" translate="1" halign="right" textfont="BiryaniDemiBold" textsize="3" valign="bottom"/>
-	</frame>
+	<label pos="0 -14" z-index="1" size="50 7" text="Save" id="SaveReplaySave" translate="1" halign="center" valign="center" scriptevents="1" textcolor="FFFFFFE7"  focusareacolor2="B2B2B2FF" focusareacolor1="2E2E2ECB" textfont="Gotham/Gotham-Medium" textsize="3.5" opacity=".8"/>
+	<quad pos="52 20" z-index="10" size="8 8" style="Icons64x64_1" substyle="Close" id="SaveReplayClose" scriptevents="1"/>
+	<entry pos="-55 -2.5" z-index="2" size="110 7" default="MapAuthor(Time).Replay.Gbx" halign="left" scriptevents="1" textfont="Gotham/Gotham-Book" textsize="3" valign="center2" id="ReplayUrl"/>
+	<label pos="-55 1" z-index="1" size="110 5" text="File" id="SaveReplayText" translate="1" halign="left" textfont="BiryaniDemiBold" textsize="3.5" valign="bottom"/>
+</frame>
+
+<frame id="NewRecordFrame" z-index="20" scale="1.2" pos="0 160" hidden="1">
+	<quad pos="0 26" size="80 71" bgcolor="4B4B4BFF" halign="center" opacity=".8" id="MessageBg"/>
+	<quad bluramount="0.5" pos="0 -5" z-index="-5" size="80 80" id="blur_" style="Bgs1" substyle="BgEmpty" halign="center" valign="center"/>
+	<quad z-index="5" size="45 45" halign="center" valign="center" pos="0 1" id="Medal2" image="file://Media/Images/Medal/BlackMedal.dds"/>
+	<quad z-index="-4" size="60 42.5" halign="center" pos="0 25" style="Bgs1" substyle="BgDialogBlur"/>
 	
-	<frame id="MedalInfo" pos="0 80">
-		<quad size="320 18" bgcolor="000000FF" halign="center" valign="center" z-index="-1" id="medalsbg" pos="0 2" scriptevents="1"/>
-		
-		<frame id="CurTime">
-		
-		
-		</frame>
-		
-		<label  size="50 8" text="_map name" halign="right" valign="center2" textsize="4" pos="150 -2.5" id="MapNameAfterRace"/>
-		<label  size="80 8" text="_author" halign="right" valign="center2" textsize="3" pos="150 4" id="MapAuthorAfterRace" translate="1"/>
-		
-		<quad  size="25 25" halign="center" valign="center" pos="0 -3" id="MedalImg" style="MedalsBig" substyle="MedalSlot"/>
-	</frame>	
-
-
-	<frame id="ControlButtons" pos="0 -80">
-		<quad size="320 18" bgcolor="000000FF" halign="center" valign="center" z-index="-1" id="buttonsbg" scriptevents="1" pos="0 -2"/>
-		
-		<label text="Improve" translate="1" id="ButtonImprove" style="CardButtonMediumL" scriptevents="1"/>
-
-		<label size="0" halign="center" text="Save Replay" substyle="Replay" pos="112 0" textsize="4" valign="center" id="ButtonSaveReplay" style="CardButtonSmallXXL"/>
-		<quad size="12 12" pos="42 0" scriptevents="1" />
-
-		<label pos="-120 0" text="Quit" translate="1" id="ButtonQuit" scriptevents="1"/>
-
-		<quad pos="-60 0" id="ButtonRefresh" size="12 12" scriptevents="1" style="Icons64x64_1" substyle="ClipRewind"/>
-
-		<quad pos="-42 0" id="ButtonPausePlay" size="12 12" scriptevents="1" style="Icons64x64_1" substyle="ClipPause"/>
+	<quad pos="0 35" size="80 9" bgcolor="FFFFFFFF" halign="center" opacity=".75"/>
+	<label pos="0 30.5" z-index="1" size="100 5" id="MessageTitle" translate="1" halign="center" valign="center" textsize="5" style="TextValueMediumSm" textfont="Gotham/Gotham-Bold"/>
+	<frame hidden="1">
+	<quad z-index="-4" size="60 6" halign="center" pos="0 -26" style="Bgs1" substyle="BgDialogBlur"/>	
+	<quad pos="24 -26" z-index="1" size="6 6" style="BgRaceScore2" substyle="Podium"/>
+	<label pos="23 -29" z-index="1" size="16 6" text="???" id="PositionLabel" translate="1" halign="right" valign="center2"  textfont="BiryaniDemiBold" textsize="4" opacity=".8" focusareacolor2="2E2E2ECB"/>
+	<label pos="-28 -29" z-index="1" size="16 6" text="0 SP" id="SPLabel" translate="1" halign="left" valign="center2"  textfont="BiryaniDemiBold" textsize="3" opacity=".8" focusareacolor2="2E2E2ECB" textcolor="6CFF00FF"/>
 	</frame>
-		<script><!--
+	<label pos="0 -38" z-index="1" size="35 7" text="OK" id="MessageClose" translate="1" halign="center" valign="center" scriptevents="1" textcolor="FFFFFFE7"  focusareacolor2="B2B2B2FF" focusareacolor1="2E2E2ECB" textfont="Gotham/Gotham-Medium" textsize="3" opacity=".8"/>
+	<label pos="0 -8" z-index="1" size="58 9" text="You set a new personal record!" id="MessageText" translate="1" halign="center" textfont="Gotham/Gotham-Bold" textsize="2.5" autonewline="1"/>
+	<label pos="-29 -24" z-index="1" size="30 5" text="Best time :" id="MessageTimeText" translate="1" textfont="Gotham/Gotham-Book" textsize="2.5" valign="bottom"/>
+	<label pos="29 -24" z-index="1" size="25 5" text="None" id="AfterRaceRecordLabel2" translate="1" halign="right" textfont="BiryaniDemiBold" textsize="3" valign="bottom"/>
+</frame>
+
+<frame id="MedalInfo" pos="0 80" z-index="80">
+	<quad size="320 18" bgcolor="000000FF" halign="center" valign="center" z-index="-1" id="medalsbg" pos="0 2" scriptevents="1"/>
+	<label size="50 8" text="_map name" halign="right" valign="center2" textsize="4" pos="150 -2.5" id="MapNameAfterRace"/>
+	<label size="80 8" text="_author" halign="right" valign="center2" textsize="3" pos="150 4" id="MapAuthorAfterRace" translate="1"/>
+	<quad  size="25 25" halign="center" valign="center" pos="0 -3" id="MedalImg" style="MedalsBig" substyle="MedalSlot"/>
+</frame>	
+
+
+<frame id="ControlButtons" pos="0 -80" z-index="80">
+	<quad size="320 18" bgcolor="000000FF" halign="center" valign="center" z-index="-1" id="buttonsbg" scriptevents="1" pos="0 -2"/>
+	<label text="Improve" translate="1" id="ButtonImprove" style="CardButtonMediumL" scriptevents="1"/>
+	<label size="0" halign="center" text="Save Replay" substyle="Replay" pos="112 0" textsize="4" valign="center" id="ButtonSaveReplay" style="CardButtonSmallXXL"/>
+	<label pos="-120 0" text="Quit" translate="1" id="ButtonQuit" scriptevents="1"/>
+	<quad pos="-60 0" id="ButtonRefresh" size="12 12" scriptevents="1" style="Icons64x64_1" substyle="ClipRewind"/>
+	<quad pos="-42 0" id="ButtonPausePlay" size="12 12" scriptevents="1" style="Icons64x64_1" substyle="ClipPause"/>
+</frame>
+<script><!--
 
 #Include "TextLib" as TextLib
 #Include "ColorLib" as ColorLib
@@ -466,21 +453,21 @@ Text GetPositionText(Integer _PositionInteger)	{
 Void SetMapMedals(Integer _count)	{
 	declare MedalQuad = (Page.GetFirstChild("MedalImg") as CMlQuad);
 	switch( _count)	{
-		case default:
-			MedalQuad.SubStyle = "MedalSlot";
 		case 1:
-			MedalQuad.SubStyle = "MedalBronze";
+			MedalQuad.Substyle = "MedalBronze";
 		case 2:
-			MedalQuad.SubStyle = "MedalSilver";
+			MedalQuad.Substyle = "MedalSilver";
 		case 3:
-			MedalQuad.SubStyle = "MedalGold";
+			MedalQuad.Substyle = "MedalGold";
 		case 4:
-			MedalQuad.SubStyle = "MedalNadeo";
+			MedalQuad.Substyle = "MedalNadeo";
+		default:
+			MedalQuad.Substyle = "MedalSlot";
 	}
 }
 
 Void HoverAfterRaceButton(Integer _i)	{
-	declare Buttons = ["ButtonImprove", "ButtonSaveReplay", "ButtonQuit", /*"ButtonOpponents", "ButtonRefresh", "ButtonPausePlay"*/];
+	declare Buttons = ["ButtonImprove", "ButtonSaveReplay", "ButtonQuit"/*, "ButtonOpponents", "ButtonRefresh", "ButtonPausePlay"*/];
 	declare Text color;
 	
 	if(_i!=-1)	{
@@ -555,16 +542,16 @@ Void Left()	{
 
 ***
 Boolean IsBetter(Integer _UserRecord, Integer _OldRecord)	{
-	Boolean _PlatformMode = {{{_IsPlatform}}}; 
-	if(_PlatformMode == "Platform")	{
+	declare Boolean _PlatformMode = {{{_IsPlatform}}}; 
+	if(_PlatformMode)	{
 		if(_UserRecord <= _OldRecord)
-			IsRecordBetter = True; 
+			return True;
 	}
 	else
 		if(_UserRecord < _OldRecord)
-			IsRecordBetter = True;
+			return True;
 
-	return IsRecordBetter;
+	return False;
 }
 
 
@@ -598,7 +585,7 @@ Void ShowSaveReplayDialog(Text _MapName)	{
 	ReplayUrlEntry.Focus();
 }
 
-Void NewRecordDialog(Integer _MedalCount, Integer _PrevMedalCount, Integer _UserRecord, Text _ScContext)	{
+Void NewRecordDialog(Integer _MedalCount, Integer _PrevMedalCount, Integer _UserRecord)	{
 
 	declare netread Integer Net_PositionInteger for UI;
 	declare PositionText =  GetPositionText(Net_PositionInteger);
@@ -607,6 +594,7 @@ Void NewRecordDialog(Integer _MedalCount, Integer _PrevMedalCount, Integer _User
 	(Page.GetFirstChild("PositionLabel") as CMlLabel).SetText(PositionText);
 	(Page.GetFirstChild("SPLabel") as CMlLabel).SetText(Net_SPInteger^" SP");
 	NewRecordDialog.Show();
+	Audio.PlaySoundEvent(CAudioManager::ELibSound::ShowDialog, 0, 1.);
 	
 	declare WonMedalCount = _MedalCount - _PrevMedalCount;
 	
@@ -636,26 +624,24 @@ Void HideSaveReplayDialog()	{
 }
 
 Void SelectAfterRaceButton(Integer _i)	{
-	declare persistent Boolean RestartMap for LocalUser;
-	declare netwrite Boolean ShowOpponents for UI;
+	//declare persistent Boolean RestartMap for LocalUser;
+	//declare netwrite Boolean ShowOpponents for UI;
 	switch (_i) {
 		case 0: {
-			StartTime = Now;
+			ShowInGameMenu();
+			//Mode.StartTime = Now;
 		}
 		case 1: {
 			ShowSaveReplayDialog(Map.MapInfo.Name);
 		}
 		case 2: {
-			UIState = "QuitAfterRace";
 			ShowInGameMenu();
 		}
-		case 3:{
-			UIState = "InGame";
+		/*case 3:{
 			ShowOpponents = True;
 		}
 		case 4:{
-			RestartMap0 = True;
-			UIState = "RefreshAfterRace";	
+			RestartMap0 = True;	
 		}
 		case 5:{
 			if(UIState != "PauseAfterRace")	{
@@ -666,7 +652,7 @@ Void SelectAfterRaceButton(Integer _i)	{
 				UIState = "AfterRace";	
 				CloseInGameMenu(CMlScriptIngame::EInGameMenuResult::Resume);
 			}
-		}
+		}*/
 	}	
 
 }
@@ -674,7 +660,7 @@ Void SelectAfterRaceButton(Integer _i)	{
 Void HideNewRecordDialog()	{
 	AnimMgr.Add(NewRecordDialog, "<frame pos='0 180'/>", 250, CAnimManager::EAnimManagerEasing::SineIn);	
 	AnimMgr.Add(NewRecordDialog, "<frame hidden='1'/>", 350, CAnimManager::EAnimManagerEasing::SineIn);	
-	Audio.PlaySoundEvent("file://media/TMUF/Audio/MenuValid2.wav", 1.0, 0);	
+	Audio.PlaySoundEvent(CAudioManager::ELibSound::HideDialog, 0, 1.);
 	HoverAfterRaceButton(0);
 }
 
@@ -682,14 +668,14 @@ Void SaveReplay()	{
 	
 	HoverAfterRaceButton(-1);
 	declare netwrite Text Net_SaveReplayUrl for UI;
-	SaveReplayUrl = (Page.GetFirstChild("ReplayUrl") as CMlEntry).Value;
+	Net_SaveReplayUrl = (Page.GetFirstChild("ReplayUrl") as CMlEntry).Value;
 	log("Saving replay...");
 	HideNewRecordDialog();
 }
 
 Void PreLoad()	{
 	declare netwrite Text Net_SaveReplayUrl for UI; 
-	SaveReplayUrl = "";
+	Net_SaveReplayUrl = "";
 	EnableMenuNavigationInputs = False;
 
 	SaveReplayDialog = (Page.GetFirstChild("SaveReplayFrame") as CMlFrame);
@@ -716,24 +702,18 @@ main()	{
 		Map_ObjectiveGold = ObjectiveGold;
 		Map_ObjectiveSilver = ObjectiveSilver;		
 		Map_ObjectiveBronze = ObjectiveBronze;
-
-		if(Map_ObjectiveAuthor == Map_ObjectiveGold)
-			Author_.Hide();
 	}
 	
 	declare Integer UserRecordTemp;
 	UserRecordTemp = {{{_CurScore}}};
 	declare Integer BestScore = {{{_BestScore}}};
 
-	Page.GetFirstChild("FrameInGame").Visible = False;
-	Page.GetFirstChild("FrameAfterRace").Visible = True;
 	sleep(10);
 	declare MedalCount = GetMapMedals(UserRecordTemp);
 	if(BestScore != UserRecordTemp)	{
 		log("BestScore: "^BestScore ^ "UserRecordTemp" ^ UserRecordTemp);
 		declare OldMedalCount = GetMapMedals(BestScore);
-		OldUserRecord = UserRecordTemp;
-		NewRecordDialog(MedalCount, OldMedalCount, UserRecordTemp, ScContext);
+		NewRecordDialog(MedalCount, OldMedalCount, UserRecordTemp);
 	}
 	else
 		HoverAfterRaceButton(i);
@@ -744,7 +724,6 @@ main()	{
 	EnableMenuNavigationInputs = True;
 
 	while(True)	{	
-		VsechnoVole_.Visible = ShowMedals;
 		foreach (Event in PendingEvents) {
 
 			if (Event.Type == CMlScriptEvent::Type::MenuNavigation) {
