@@ -1,3 +1,16 @@
+Text DrawOpponentScoresUI(Text _PB)	{
+	return """
+<manialink version="3">
+<frame id="FramePB" pos="-160 80">
+	<quad pos="0 -1" z-index="2" size="8 8" style="BgRaceScore2" substyle="ScoreLink"/>
+	<label pos="9 -5" z-index="2" size="32 10" text="{{{Users[0].Name}}}" valign="center2" textsize="2" translate="1"/>
+	<quad size="54 8" style="Bgs1" substyle="BgDialogBlur" pos="0 -1"/>
+	<label text="{{{_PB}}}" pos="47 -5" size="10 8" valign="center" textsize="2" halign="center"/>
+</frame>
+</manialink>
+	""";
+}
+
 /// PAUSE MENUS
 Text PauseMenu()	{
 	return """<manialink version="3">
