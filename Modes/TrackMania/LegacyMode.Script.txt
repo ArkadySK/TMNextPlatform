@@ -164,6 +164,7 @@ foreach(Player in Players)  {
  	declare Player_UI = UIManager.GetUI(Player);
 	Player_UI.UILayers.add(G_ChronoLayer); 
 	Player_UI.UILayers.add(G_CPLayer); 
+	Player_UI.UILayers.add(G_GameplayLayer); 
 	Player_UI.UILayers.add(G_PauseMenuLayer);
 	Player_UI.UILayers.add(G_OpponentScoresLayer);
 	Player_UI.UILayers.add(G_AfterRaceLayer);
