@@ -61,6 +61,7 @@ Integer GetRecordFromGhost(CGhost _recordGhost)	{
 // Saves ghosts if improvement
 Void FinishRace(CSmPlayer _Player, CGhost _OutroGhost)	{
 	Player_SetCurRaceAsPrevRace(_Player);
+	G_AfterRaceLayer.ManialinkPage = ModeManialinks::DrawAfterRaceUI(S_IsPlatform, _Player.Score.NbRespawnsRequested, G_MapRecord);
 // In platform gamemode:
 	if(S_IsPlatform)	{
 		// If NbRespawnsRequested is worse 
@@ -133,7 +134,6 @@ Void AfterRace(CGhost _OutroGhost)	{
 	UI.Spectator_SetForcedTarget_Ghost(_OutroGhost.Id);
 	Ghost_Add(_OutroGhost, False);
 	UI.SpectatorForceCameraType = 0;
-	G_AfterRaceLayer.ManialinkPage = ModeManialinks::DrawAfterRaceUI(S_IsPlatform, _OutroGhost.Result.NbRespawns, G_MapRecord);
 }
 	
 ***Match_InitMap***

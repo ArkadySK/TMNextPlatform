@@ -367,7 +367,7 @@ Text DrawAfterRaceUI(Boolean _IsPlatform, Integer _CurScore, Integer _BestScore)
 <stylesheet>
 	<style class="med" pos="-156 76.5" z-index="1" size="11 11"/>
 	<style id="ButtonImprove ButtonQuit ButtonSaveReplay ButtonOpponents ButtonPausePlay ButtonRefresh" style="CardButtonMediumL" sizen="40 12" halign="center" valign="center"/>
-	<style class="AfterRaceButtonText" textcolor="FFFFFFE7" sizen="60 12" textfont="Gotham/Gotham-Medium" halign="center" valign="center2" textsize="4"/>
+	<style class="AfterRaceButtonText" textcolor="FFFFFFE7" sizen="60 12" halign="center" valign="center2" textsize="4"/>
 </stylesheet>	
 
 <frame id="SaveReplayFrame" z-index="20" scale="1.2" pos="0 0" hidden="1">
@@ -382,24 +382,23 @@ Text DrawAfterRaceUI(Boolean _IsPlatform, Integer _CurScore, Integer _BestScore)
 	<label pos="-55 1" z-index="1" size="110 5" text="File" id="SaveReplayText" translate="1" halign="left" textfont="BiryaniDemiBold" textsize="3.5" valign="bottom"/>
 </frame>
 
-<frame id="NewRecordFrame" z-index="20" scale="1.2" pos="0 160" hidden="1">
-	<quad pos="0 26" size="80 71" bgcolor="4B4B4BFF" halign="center" opacity=".8" id="MessageBg"/>
-	<quad bluramount="0.5" pos="0 -5" z-index="-5" size="80 80" id="blur_" style="Bgs1" substyle="BgEmpty" halign="center" valign="center"/>
-	<quad z-index="5" size="45 45" halign="center" valign="center" pos="0 1" id="Medal2" style="MedalsBig" substyle="MedalSlot"/>
-	<quad z-index="-4" size="60 42.5" halign="center" pos="0 25" style="Bgs1" substyle="BgDialogBlur"/>
-	
-	<quad pos="0 35" size="80 9" bgcolor="FFFFFFFF" halign="center" opacity=".75"/>
-	<label pos="0 30.5" z-index="1" size="100 5" id="MessageTitle" translate="1" halign="center" valign="center" textsize="5"/>
-	<frame hidden="1">
-	<quad z-index="-4" size="60 6" halign="center" pos="0 -26" style="Bgs1" substyle="BgDialogBlur"/>	
-	<quad pos="24 -26" z-index="1" size="6 6" style="BgRaceScore2" substyle="Podium"/>
-	<label pos="23 -29" z-index="1" size="16 6" text="???" id="PositionLabel" translate="1" halign="right" valign="center2"  textfont="BiryaniDemiBold" textsize="4" opacity=".8" focusareacolor2="2E2E2ECB"/>
-	<label pos="-28 -29" z-index="1" size="16 6" text="0 SP" id="SPLabel" translate="1" halign="left" valign="center2"  textfont="BiryaniDemiBold" textsize="3" opacity=".8" focusareacolor2="2E2E2ECB" textcolor="6CFF00FF"/>
-	</frame>
-	<label pos="0 -38" z-index="1" size="35 7" text="OK" id="MessageClose" translate="1" halign="center" valign="center" scriptevents="1" textcolor="FFFFFFE7"  focusareacolor2="B2B2B2FF" focusareacolor1="2E2E2ECB" textfont="Gotham/Gotham-Medium" textsize="3" opacity=".8"/>
-	<label pos="0 -8" z-index="1" size="58 9" text="You set a new personal record!" id="MessageText" translate="1" halign="center"  textsize="2.5" autonewline="1"/>
-	<label pos="-29 -24" z-index="1" size="30 5" text="Best time :" id="MessageTimeText" translate="1" textfont="Gotham/Gotham-Book" textsize="2.5" valign="bottom"/>
-	<label pos="29 -24" z-index="1" size="25 5" text="None" id="AfterRaceRecordLabel2" translate="1" halign="right" textfont="BiryaniDemiBold" textsize="3" valign="bottom"/>
+<frame id="NewRecordFrame" z-index="20" hidden="1" pos="0 160">
+<quad bluramount="0.9" pos="0 -5" z-index="-5" id="MessageBg" size="80 80" style="Bgs1" substyle="BgDialogBlur" halign="center" valign="center"/>
+<quad z-index="5" size="30 30" halign="center" valign="center" pos="0 9" id="Medal2" style="MedalsBig" substyle="MedalSlot"/>
+<quad z-index="-4" size="60 42.5" halign="center" pos="0 25" style="Bgs1" substyle="BgDialogBlur"/>
+
+
+<label pos="0 30.5" style="TextButtonNav" z-index="1" size="100 5" id="MessageTitle" translate="1" halign="center" valign="center" textsize="3" text="Awesome!!!"/>
+<frame>
+<quad z-index="-4" size="60 6" halign="center" pos="0 -26" style="Bgs1" substyle="BgDialogBlur"/>	
+<quad pos="24 -26" z-index="1" size="6 6" style="BgRaceScore2" substyle="Podium"/>
+<label pos="23 -29" z-index="1" size="16 6" text="???" id="PositionLabel" translate="1" halign="right" valign="center2" textsize="3" opacity=".8" focusareacolor2="2E2E2ECB"/>
+<label pos="-28 -29" z-index="1" size="16 6" text="0 SP" id="SPLabel" translate="1" halign="left" valign="center2" textsize="2" opacity=".8" focusareacolor2="2E2E2ECB" textcolor="6CFF00FF"/>
+</frame>
+<label pos="0 -38" z-index="1" size="35 7" text="OK" id="MessageClose" translate="1" halign="center" valign="center" scriptevents="1"  textsize="3" opacity=".8" style="CardButtonMediumS"/>
+<label pos="0 -8" z-index="1" size="58 9" text="You set a new personal record!" id="MessageText" translate="1" halign="center"  textsize="2.5" autonewline="1"/>
+<label pos="-29 -24" z-index="1" size="30 5" text="Best time :" id="MessageTimeText" translate="1" textsize="2" valign="bottom"/>
+<label pos="29 -24" z-index="1" size="25 5" text="{{{_CurScore}}}" id="AfterRaceRecordLabel2" translate="1" halign="right" textsize="2" valign="bottom"/>
 </frame>
 
 <frame id="MedalInfo" pos="0 80" z-index="80">
@@ -570,6 +569,13 @@ Boolean IsBetter(Integer _UserRecord, Integer _OldRecord)	{
 
 
 Integer GetMapMedals(Integer _RecordTime)	{
+	if(Map_ObjectiveAuthor <= 0 && Map_ObjectiveGold <= 0) {
+		Map_ObjectiveAuthor = 0;
+		Map_ObjectiveGold = 0;
+		Map_ObjectiveSilver = 3;
+		Map_ObjectiveBronze = 10;
+	}
+
 	declare UserRecord = _RecordTime;	
 	 
 	declare Integer NbMedals;
@@ -731,7 +737,7 @@ main()	{
 
 	sleep(10);
 	declare MedalCount = GetMapMedals(UserRecordTemp);
-	if(BestScore != UserRecordTemp)	{
+	if(IsBetter(UserRecordTemp, BestScore))	{
 		log("BestScore: "^BestScore ^ "UserRecordTemp" ^ UserRecordTemp);
 		declare OldMedalCount = GetMapMedals(BestScore);
 		NewRecordDialog(MedalCount, OldMedalCount, UserRecordTemp);
