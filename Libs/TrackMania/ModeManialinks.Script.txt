@@ -146,6 +146,7 @@ Text PauseMenu()	{
 					}
 					case "buttonExit":	{	
 						Audio.ClearAllDelayedSoundsEvents();
+						Audio.PlaySoundEvent(CAudioManager::ELibSound::HideDialog, 0, 1.);
 						CloseInGameMenu(CMlScriptIngame::EInGameMenuResult::Quit);
 						}
 					}
@@ -591,6 +592,7 @@ Integer GetMapMedals(Integer _RecordTime)	{
 }
 
 Void ShowSaveReplayDialog(Text _MapName)	{
+	Audio.PlaySoundEvent(CAudioManager::ELibSound::ShowDialog, 0, 1.);
 	declare netread Integer CurTime for UI; 
 	SaveReplayDialog.Show();
 	declare ReplayUrlEntry = (Page.GetFirstChild("ReplayUrl") as CMlEntry); 
@@ -632,8 +634,8 @@ Void NewRecordDialog(Integer _MedalCount, Integer _PrevMedalCount, Integer _User
 }
 
 Void HideSaveReplayDialog()	{
-	AnimMgr.Add(SaveReplayDialog, "<frame pos='0 180' />", 250, CAnimManager::EAnimManagerEasing::SineIn);	
-	AnimMgr.Add(SaveReplayDialog, "<frame hidden='1'/>", 350, CAnimManager::EAnimManagerEasing::SineIn);	
+	SaveReplayDialog.Hide();
+	Audio.PlaySoundEvent(CAudioManager::ELibSound::HideDialog, 0, 1.);
 }
 
 Void SelectAfterRaceButton(Integer _i)	{
@@ -644,11 +646,13 @@ Void SelectAfterRaceButton(Integer _i)	{
 		case 0: {
 			Net_RestartRequested = True;
 			EnableMenuNavigationInputs = False;
+			Audio.PlaySoundEvent(CAudioManager::ELibSound::HideDialog, 0, 1.);
 		}
 		case 1: {
 			ShowSaveReplayDialog(Map.MapInfo.Name);
 		}
 		case 2: {
+			Audio.PlaySoundEvent(CAudioManager::ELibSound::HideDialog, 0, 1.);
 			EnableMenuNavigationInputs = False;
 			Net_QuitRequested = True;
 		}
@@ -686,6 +690,7 @@ Void SaveReplay()	{
 	declare netwrite Text Net_SaveReplayUrl for UI;
 	Net_SaveReplayUrl = (Page.GetFirstChild("ReplayUrl") as CMlEntry).Value;
 	log("Saving replay...");
+	Audio.PlaySoundEvent(CAudioManager::ELibSound::Valid, 0, 1.);
 	HideNewRecordDialog();
 }
 
