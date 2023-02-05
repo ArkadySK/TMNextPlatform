@@ -7,6 +7,15 @@ Text DrawOpponentScoresUI(Text _PB)	{
 	<quad size="54 6" style="Bgs1" substyle="NavButton" pos="0 -2" scriptevents="1" opacity=".8"/>
 	<label text="{{{_PB}}}" pos="47 -5" size="10 8" valign="center" textsize="2" halign="center" z-index="2" style="TextRaceChrono"/>
 </frame>
+<script><!--
+main()	{
+
+	declare netwrite Boolean Net_QuitRequested for UI;
+	declare netwrite Boolean Net_RestartRequested for UI;
+	Net_QuitRequested = False;
+	Net_RestartRequested = False;
+}
+--></script>
 </manialink>
 	""";
 }
@@ -104,7 +113,8 @@ Text PauseMenu()	{
 		ButtonNames = ["buttonResume", "buttonExit", "ButtonMapInfo", /*"ButtonOpponents",*/ "ButtonRestartMap"];
 				
 		maxi = ButtonNames.count - 1;
-		declare netwrite Boolean RestartMap for UI;
+		declare netwrite Boolean Net_RestartRequested for UI;
+		declare netwrite Boolean Net_ShowOpponents for UI;
 		
 		declare Text UIState for LocalUser;
 		UIState = "InGame";
@@ -123,11 +133,12 @@ Text PauseMenu()	{
 						ResumePlay();
 					}
 					case "ButtonRestartMap":	{
-						RestartMap = True;
+						Net_RestartRequested = True;
 						ResumePlay();
 					}
 					case "ButtonOpponents":	{
 						ResumePlay();
+						Net_ShowOpponents = True;
 					}
 					case "ButtonMapInfo":	{
 						ShowCurChallengeCard();
@@ -632,18 +643,21 @@ Void SelectAfterRaceButton(Integer _i)	{
 	switch (_i) {
 		case 0: {
 			Net_RestartRequested = True;
+			EnableMenuNavigationInputs = False;
 		}
 		case 1: {
 			ShowSaveReplayDialog(Map.MapInfo.Name);
 		}
 		case 2: {
+			EnableMenuNavigationInputs = False;
 			Net_QuitRequested = True;
 		}
 		/*case 3:{
-			ShowOpponents = True;
+			Net_ShowOpponents = True;
+			EnableMenuNavigationInputs = False;
 		}
 		case 4:{
-			RestartMap0 = True;	
+			RestartMap0 = True;
 		}
 		case 5:{
 			if(UIState != "PauseAfterRace")	{

@@ -89,6 +89,14 @@ Void FinishRace(CSmPlayer _Player, CGhost _OutroGhost)	{
 	Player_SetFinishTime(_Player, _Player.EndTime);
 }
 
+Void ReloadUI()	{
+	G_OpponentScoresLayer.ManialinkPage = "";	
+	if(G_MapRecord != -1)
+		G_OpponentScoresLayer.ManialinkPage = ModeManialinks::DrawOpponentScoresUI(""^G_MapRecord);
+	else
+		G_OpponentScoresLayer.ManialinkPage = ModeManialinks::DrawOpponentScoresUI("???");
+}
+
 Void PreLoadUI()	{
 	UseClans = False;
 	UseLaunchedCheckpoints = False;
@@ -96,6 +104,12 @@ Void PreLoadUI()	{
 	UIManager.UIAll.ScoreTableVisibility = CUIConfig::EVisibility::Normal;
 }
 
+Void Restart()	{
+	G_AfterRaceLayer.ManialinkPage = "";
+	ReloadUI();
+	MB_Sleep(100);
+	UnspawnPlayer(Players[0]);
+}
 
 Void EndRaceSequence(Text _text, CPlayer _Player)	{
 	declare Player_UI = UIManager.GetUI(_Player);
@@ -106,17 +120,13 @@ Void EndRaceSequence(Text _text, CPlayer _Player)	{
 
 //Shows after race sequence
 Void AfterRace(CGhost _OutroGhost)	{
-	
-	declare Boolean IsReadyToUnspawn for Players[0];
-	IsReadyToUnspawn = False;
 	declare UI = UIManager.GetUI(Players[0]);
 	UI.UISequence = CUIConfig::EUISequence::EndRound;
 	//UI.ForceSpectator = True;
 	UI.Spectator_SetAutoTarget_All();
-	//UnspawnPlayer(Players[0]);
 	
 	log("entering after race sequence");
-	StartTime = Now + 2700;
+	StartTime = Now;
 	//Ghost_Add(_OutroGhost, False, 100);
 	MB_Sleep(100);
 	log(Ghost_IsReplayOver(_OutroGhost.Id));
@@ -151,16 +161,9 @@ G_OpponentScoresLayer = UIManager.UILayerCreate();
 G_AfterRaceLayer = UIManager.UILayerCreate();
 
 foreach(Player in Players)  {
-	declare Integer NbRespawnsRecord for Player;
-	
-	//	Scores.all.NbRespawnsRequested = 999;
-	
-	NbRespawnsRecord = 999;
-
  	declare Player_UI = UIManager.GetUI(Player);
 	Player_UI.UILayers.add(G_ChronoLayer); 
 	Player_UI.UILayers.add(G_CPLayer); 
-	Player_UI.UILayers.add(G_GameplayLayer);
 	Player_UI.UILayers.add(G_PauseMenuLayer);
 	Player_UI.UILayers.add(G_OpponentScoresLayer);
 	Player_UI.UILayers.add(G_AfterRaceLayer);
@@ -168,11 +171,7 @@ foreach(Player in Players)  {
 	G_ChronoLayer.ManialinkPage = ModeManialinks::DrawChronoUI(S_IsPlatform);
 	G_GameplayLayer.ManialinkPage = ModeManialinks::DrawGameplayTextUI();
 	G_PauseMenuLayer.ManialinkPage = ModeManialinks::PauseMenu();
-
-	if(G_MapRecord != -1)
-		G_OpponentScoresLayer.ManialinkPage = ModeManialinks::DrawOpponentScoresUI(""^G_MapRecord);
-	else
-		G_OpponentScoresLayer.ManialinkPage = ModeManialinks::DrawOpponentScoresUI("???");
+	ReloadUI();
 
 	G_PauseMenuLayer.Type = CUILayer::EUILayerType::InGameMenu;
 
@@ -185,30 +184,24 @@ foreach(Player in Players)  {
 declare Player <=> Players[0];
 	
 declare Boolean IsFinished for Player;
-declare Integer NbRespawnsRecord for Player;
-declare Integer TimeToUnspawn for Player;
 declare Integer cpindex for Player;
-declare Boolean IsReadyToUnspawn for Player;
 
 declare UI = UIManager.GetUI(Player);
 declare netread Boolean Net_RestartRequested for UI;
 declare netread Boolean Net_QuitRequested for UI;
 
-declare Player_UI = UIManager.GetUI(Player);
-
 if(Net_RestartRequested)	{
-	StartTime = Now + 2700;
-	G_AfterRaceLayer.ManialinkPage = "";
+	Restart();
 }
 
-if(Net_QuitRequested)
-	break;
+if(Net_QuitRequested)	{
+	MB_StopServer();
+}
 
-if(Player.StartTime <= Now && G_AfterRaceLayer.ManialinkPage != "")	{
+if(Player.StartTime == Now /*&& G_AfterRaceLayer.ManialinkPage != ""*/)	{
 	IsFinished = False;
 	cpindex = 0;	
-	Player_UI.BigMessage = "";
-	log("start!");
+	UI.BigMessage = "";
 	G_AfterRaceLayer.ManialinkPage = "";
 }
 
@@ -229,16 +222,13 @@ foreach (Event in PendingEvents) {
 		else
 			BestCPTime = -1;
 		
-  		G_CPLayer.ManialinkPage = ModeManialinks::UpdateCheckPointUI(Event.WaypointTime, BestCPTime);
-		declare Player_UI = UIManager.GetUI(Event.Player);
+  	G_CPLayer.ManialinkPage = ModeManialinks::UpdateCheckPointUI(Event.WaypointTime, BestCPTime);
 
 		if (Event.IsFinish) {
 			PassOn(Event);
 			
 			EndRaceSequence("", Event.Player);
 			declare Boolean IsFinished for Event.Player;
-			declare Integer TimeToUnspawn for Event.Player;	
-			TimeToUnspawn = Now + 2000;
 			
 			G_OutroGhost = Ghost_RetrieveFromPlayer(Event.Player);
 			G_OutroGhost.Result.NbRespawns = Event.Player.Score.NbRespawnsRequested;
