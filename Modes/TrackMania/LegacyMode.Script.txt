@@ -190,8 +190,21 @@ declare Integer TimeToUnspawn for Player;
 declare Integer cpindex for Player;
 declare Boolean IsReadyToUnspawn for Player;
 
+declare UI = UIManager.GetUI(Player);
+declare netread Boolean Net_RestartRequested for UI;
+declare netread Boolean Net_QuitRequested for UI;
+
 declare Player_UI = UIManager.GetUI(Player);
-if(Player.StartTime == Now)	{
+
+if(Net_RestartRequested)	{
+	StartTime = Now + 2700;
+	G_AfterRaceLayer.ManialinkPage = "";
+}
+
+if(Net_QuitRequested)
+	break;
+
+if(Player.StartTime <= Now && G_AfterRaceLayer.ManialinkPage != "")	{
 	IsFinished = False;
 	cpindex = 0;	
 	Player_UI.BigMessage = "";
@@ -228,6 +241,7 @@ foreach (Event in PendingEvents) {
 			TimeToUnspawn = Now + 2000;
 			
 			G_OutroGhost = Ghost_RetrieveFromPlayer(Event.Player);
+			G_OutroGhost.Result.NbRespawns = Event.Player.Score.NbRespawnsRequested;
 			declare LastGhost = Ghost_RetrieveFromPlayer(Event.Player);
 			wait(G_OutroGhost != Null && LastGhost != Null);
 			G_OutroGhost.Nickname = "Last Race: " ^ Event.Player.Name;
