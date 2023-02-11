@@ -248,14 +248,19 @@ Void SetObjectives(Integer _Author, Integer _Gold, Integer _Silver, Integer _Bro
 	Map.ObjectiveTextGold 	= """{{{ObjectiveGold}}} respawns""";
 	Map.ObjectiveTextSilver = """{{{ObjectiveSilver}}} respawns""";
 	Map.ObjectiveTextBronze = """{{{ObjectiveBronze}}} respawns""";
+
+	Map.TMObjective_AuthorTime = ObjectiveAuthor;
+	Map.TMObjective_GoldTime = ObjectiveGold;
+	Map.TMObjective_SilverTime = ObjectiveSilver;
+	Map.TMObjective_BronzeTime = ObjectiveBronze;
 }
 
 
 Void SetDefaultObjectives(Integer _AuthorRespawns)
 {
-	
+	//original TMUF / TM2C counting was: 0 + _AuthorRespawns + _AuthorRespawns/10
 	SetObjectives(_AuthorRespawns,
-	1 + _AuthorRespawns + _AuthorRespawns/10, //original TMUF / TM2C counting was: 0 + _AuthorRespawns + _AuthorRespawns/10
+	1 + _AuthorRespawns + _AuthorRespawns/10, 
 	2 + _AuthorRespawns + _AuthorRespawns/5,
 	3 + _AuthorRespawns + _AuthorRespawns/2);
 }
