@@ -10,6 +10,18 @@ Text DrawOpponentScoresUI(Text _PB)	{
 <script><!--
 main()	{
 
+	declare metadata Integer ObjectiveAuthor for Map;
+	declare metadata Integer ObjectiveGold for Map;
+	declare metadata Integer ObjectiveSilver for Map;
+	declare metadata Integer ObjectiveBronze for Map;
+	
+	log("MAP OBJECTIVES: ");
+	log("ObjectiveAuthor: " ^ ObjectiveAuthor);
+	log("ObjectiveGold: " ^ ObjectiveGold);
+	log("ObjectiveSilver: " ^ ObjectiveSilver);
+	log("ObjectiveBronze: " ^ ObjectiveBronze);
+	log("");
+
 	declare netwrite Boolean Net_QuitRequested for UI;
 	declare netwrite Boolean Net_RestartRequested for UI;
 	Net_QuitRequested = False;
@@ -555,6 +567,9 @@ Void Left()	{
 
 ***
 Boolean IsBetter(Integer _UserRecord, Integer _OldRecord)	{
+	if(_OldRecord == -1)
+		return True;
+
 	declare Boolean _PlatformMode = {{{_IsPlatform}}}; 
 	if(_PlatformMode)	{
 		if(_UserRecord <= _OldRecord)
@@ -663,21 +678,11 @@ Void SelectAfterRaceButton(Integer _i)	{
 			Net_QuitRequested = True;
 		}
 		/*case 3:{
-			Net_ShowOpponents = True;
 			EnableMenuNavigationInputs = False;
+			Net_ShowOpponents = True;
 		}
 		case 4:{
 			RestartMap0 = True;
-		}
-		case 5:{
-			if(UIState != "PauseAfterRace")	{
-				UIState = "PauseAfterRace";
-				ShowInGameMenu();
-			}
-			else {
-				UIState = "AfterRace";	
-				CloseInGameMenu(CMlScriptIngame::EInGameMenuResult::Resume);
-			}
 		}*/
 	}	
 
