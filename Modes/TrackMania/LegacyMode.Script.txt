@@ -119,6 +119,17 @@ Void EndRaceSequence(Text _text, CPlayer _Player)	{
 	Player_UI.BigMessage = _text;
 }
 
+Void UpdateCpTimes(CSmPlayer Player, Integer WaypointTime)	{
+	declare Integer CpIndex for Player;
+	CpIndex += 1;
+	declare BestCPTime = -1;
+	if (G_RecordGhost != Null)
+		if(G_RecordGhost.Result.Checkpoints.count > CpIndex)
+			BestCPTime = G_RecordGhost.Result.Checkpoints[CpIndex-1];
+			
+	G_CPLayer.ManialinkPage = ModeManialinks::UpdateCheckPointUI(WaypointTime, BestCPTime);
+}
+
 //Shows after race sequence
 Void AfterRace(CGhost _OutroGhost)	{
 	declare UI = UIManager.GetUI(Players[0]);
@@ -185,7 +196,7 @@ foreach(Player in Players)  {
 declare Player <=> Players[0];
 	
 declare Boolean IsFinished for Player;
-declare Integer cpindex for Player;
+declare Integer CpIndex for Player;
 
 declare UI = UIManager.GetUI(Player);
 declare netread Boolean Net_RestartRequested for UI;
@@ -201,7 +212,7 @@ if(Net_QuitRequested)	{
 
 if(Player.StartTime == Now /*&& G_AfterRaceLayer.ManialinkPage != ""*/)	{
 	IsFinished = False;
-	cpindex = 0;	
+	CpIndex = 0;	
 	UI.BigMessage = "";
 	G_AfterRaceLayer.ManialinkPage = "";
 }
@@ -213,18 +224,9 @@ foreach (Event in PendingEvents) {
 	if (Event.Type == CSmModeEvent::EType::OnPlayerTriggersWaypoint) {
 		
 		declare Integer PrevPlayer_Score_NbRespawnsRequested for Event.Player;
-		declare Integer cpindex for Event.Player;
-		
-		cpindex += 1;
-		declare BestCPTime = -1;
-		
-		if(Event.Player.Score.BestRaceTimes.count > cpindex)
-			BestCPTime = Event.Player.Score.BestRaceTimes[cpindex-1];
-		else
-			BestCPTime = -1;
-		
-  	G_CPLayer.ManialinkPage = ModeManialinks::UpdateCheckPointUI(Event.WaypointTime, BestCPTime);
 
+		UpdateCpTimes(Event.Player, Event.WaypointTime);
+		
 		if (Event.IsFinish) {
 			PassOn(Event);
 			
