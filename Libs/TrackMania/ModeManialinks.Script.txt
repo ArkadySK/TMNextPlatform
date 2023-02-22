@@ -22,6 +22,8 @@ main()	{
 	log("ObjectiveBronze: " ^ ObjectiveBronze);
 	log("");
 
+	if(UI == Null) return;
+
 	declare netwrite Boolean Net_QuitRequested for UI;
 	declare netwrite Boolean Net_RestartRequested for UI;
 	Net_QuitRequested = False;
@@ -118,7 +120,6 @@ Text PauseMenu()	{
 	}
 		
 	main()	{		
-		declare Boolean Escape = False;
 		i = 0; //index
 		declare TimerRequest = Now - 10000;
 		declare LatestClick = "";
@@ -128,10 +129,6 @@ Text PauseMenu()	{
 		declare netwrite Boolean Net_RestartRequested for UI;
 		declare netwrite Boolean Net_ShowOpponents for UI;
 		
-		declare Text UIState for LocalUser;
-		UIState = "InGame";
-		
-		
 		wait(Players.count != 0);
 		declare netwrite Boolean ShowOpponents for UI;
 	
@@ -139,7 +136,6 @@ Text PauseMenu()	{
 	
 		while(True) {
 			if(LatestClick!="")	{
-				UIState = "InGame";
 				switch(LatestClick)	{
 					case "buttonResume":	{
 						ResumePlay();
@@ -300,6 +296,7 @@ Text DrawChronoUI(Boolean _IsPlatform)	{
             (Page.GetFirstChild("timeLabel") as CMlLabel).Show();
             
         while(True)	{
+			if(Player == Null)	continue;
             (Page.GetFirstChild("speedLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Speed * 36 / 10));
             (Page.GetFirstChild("distLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Distance));
             if({{{_IsPlatform}}})
