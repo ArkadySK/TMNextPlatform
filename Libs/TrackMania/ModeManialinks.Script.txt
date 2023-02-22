@@ -383,15 +383,16 @@ Text DrawAfterRaceUI(Boolean _IsPlatform, Integer _CurScore, Integer _BestScore)
 </stylesheet>	
 
 <frame id="SaveReplayFrame" z-index="20" scale="1.2" pos="0 0" hidden="1">
-	<quad pos="0 -4" size="120 32" bgcolor="4B4B4BFF" halign="center" opacity=".8" id="SaveReplayBg" valign="center"/>
-	<quad bluramount="0.5" pos="0 0" z-index="-5" size="120 40" id="blur_" style="Bgs1" substyle="BgEmpty" halign="center" valign="center"/>
-	<quad pos="0 20" size="120 8" bgcolor="FFFFFFFF" halign="center" opacity=".75"/>
-	<label pos="0 15.5" z-index="1" size="115 9" id="SaveReplayTitle" translate="1" halign="center" textsize="4" style="TextValueMediumSm" text="Save Replay" valign="center"/>
+	<label pos="0 18" z-index="0" size="119 7" text="Save Replay" style="TextButtonNav" translate="1" halign="center" textsize="2.5" valign="center"/>
+	<quad pos="0 13" z-index="-9" size="120 35" style="Bgs1InRace" substyle="BgCardProperty" halign="center" valign="top"/>	
+	<quad pos="0 22.5" z-index="-4" size="120 10" style="Bgs1InRace" substyle="BgTitle" halign="center"/>	
+	<quad pos="0 27" z-index="-3" size="126.4 8" halign="center" style="Bgs1" substyle="BgGlow2"/>	
 	
-	<label pos="0 -14" z-index="1" size="50 7" text="Save" id="SaveReplaySave" translate="1" halign="center" valign="center" scriptevents="1" textcolor="FFFFFFE7"  focusareacolor2="B2B2B2FF" focusareacolor1="2E2E2ECB" textfont="Gotham/Gotham-Medium" textsize="3.5" opacity=".8"/>
-	<quad pos="52 20" z-index="10" size="8 8" style="Icons64x64_1" substyle="Close" id="SaveReplayClose" scriptevents="1"/>
-	<entry pos="-55 -2.5" z-index="2" size="110 7" default="MapAuthor(Time).Replay.Gbx" halign="left" scriptevents="1" textfont="Gotham/Gotham-Book" textsize="3" valign="center2" id="ReplayUrl"/>
-	<label pos="-55 1" z-index="1" size="110 5" text="File" id="SaveReplayText" translate="1" halign="left" textfont="BiryaniDemiBold" textsize="3.5" valign="bottom"/>
+	<entry pos="-55" z-index="10" size="110 7" default="MapAuthor(Time).Replay.Gbx" halign="left" scriptevents="1" textfont="Gotham/Gotham-Book" textsize="3" valign="center2" id="ReplayUrl"/>
+	<quad z-index="2" size="110 7" halign="center" scriptevents="1" valign="center2" bgcolor="A9A9A9FF" opacity="0.5"/>
+	<label pos="-55 4" z-index="1" size="110 5" text="File" id="SaveReplayText" translate="1" halign="left" textfont="BiryaniDemiBold" textsize="2" valign="bottom"/>
+	<label id="SaveReplaySave" text="Save" posn="-30 -14" translate="1" valign="center2" z-index="2" textsize="4" scriptevents="1" halign="center"  style="CardButtonMediumL" scale="1.1"/>		
+	<label text="Close" textsize="4" translate="1" id="SaveReplayClose" scriptevents="1" z-index="10" halign="center" valign="center2" focusareacolor1="DD4646CF" pos="30 -14" style="CardButtonMediumL" scale="1.1"/>
 </frame>
 
 <frame id="NewRecordFrame" z-index="20" hidden="1" pos="0 160">
