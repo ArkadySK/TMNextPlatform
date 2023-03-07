@@ -228,7 +228,10 @@ Text DrawGameplayTextUI()	{
         declare Player <=> GetOwner();
     
         while(True)	{
-            if(Player == Null) continue;
+            if(Player == Null) {
+				yield;
+				continue;
+			}
             declare Boolean IsFreeWheel = Player.HandicapNoGasDuration > 0 && Player.HandicapNoGasDuration < 1600;
             declare Boolean IsTurbo2 = Player.EngineTurboRatio > 1.;
             if(IsFreeWheel)
@@ -296,7 +299,10 @@ Text DrawChronoUI(Boolean _IsPlatform)	{
             (Page.GetFirstChild("timeLabel") as CMlLabel).Show();
             
         while(True)	{
-			if(Player == Null)	continue;
+			if(Player == Null) {
+				yield;
+				continue;
+			}
             (Page.GetFirstChild("speedLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Speed * 36 / 10));
             (Page.GetFirstChild("distLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Distance));
             if({{{_IsPlatform}}})
