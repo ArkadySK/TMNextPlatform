@@ -443,6 +443,7 @@ Text DrawAfterRaceUI(Boolean _IsPlatform, Integer _CurScore, Integer _BestScore)
 declare Integer i;
 declare CMlFrame NewRecordDialog;
 declare CMlFrame SaveReplayDialog;
+declare CMlFrame ControlButtons;
 
 
 declare Integer Map_ObjectiveAuthor;
@@ -458,7 +459,7 @@ Text TimeToTextWithMilli(Integer _Time) {
 Text GetRecordTypeText(Integer _Record)	{
 	declare recordtext = "???";
 	declare metadata Text GameMode for Map;
-	if(GameMode == "Platform" || GameMode == "Stunts")	
+	if({{{_IsPlatform}}})	
 		recordtext = ""^_Record;
 	else
 		recordtext = TimeToTextWithMilli(_Record);
@@ -620,11 +621,12 @@ Void ShowSaveReplayDialog(Text _MapName)	{
 	Audio.PlaySoundEvent(CAudioManager::ELibSound::ShowDialog, 0, 1.);
 	SaveReplayDialog.Show();
 	declare ReplayUrlEntry = (Page.GetFirstChild("ReplayUrl") as CMlEntry); 
-	ReplayUrlEntry.Value = _MapName^"_"^LocalUser.Login^"("^GetRecordTypeText({{{_CurScore}}})^")";
+	ReplayUrlEntry.Value = _MapName^"_"^LocalUser.Name^"("^GetRecordTypeText({{{_CurScore}}})^")";
 	ReplayUrlEntry.Focus();
 }
 
 Void NewRecordDialog(Integer _MedalCount, Integer _PrevMedalCount, Integer _UserRecord)	{
+	ControlButtons.Hide();
 
 	declare netread Integer Net_PositionInteger for UI;
 	declare PositionText =  GetPositionText(Net_PositionInteger);
@@ -698,6 +700,7 @@ Void HideNewRecordDialog()	{
 	AnimMgr.Add(NewRecordDialog, "<frame hidden='1'/>", 350, CAnimManager::EAnimManagerEasing::SineIn);	
 	Audio.PlaySoundEvent(CAudioManager::ELibSound::HideDialog, 0, 1.);
 	HoverAfterRaceButton(0);
+	ControlButtons.Show();
 }
 
 Void SaveReplay()	{
@@ -717,6 +720,7 @@ Void PreLoad()	{
 
 	SaveReplayDialog = (Page.GetFirstChild("SaveReplayFrame") as CMlFrame);
 	NewRecordDialog = (Page.GetFirstChild("NewRecordFrame") as CMlFrame);
+	ControlButtons = (Page.GetFirstChild("ControlButtons") as CMlFrame);
 
 }
 
