@@ -430,8 +430,8 @@ Text DrawAfterRaceUI(Boolean _IsPlatform, Integer _CurScore, Integer _BestScore)
 	<label text="Improve" translate="1" id="ButtonImprove" style="CardButtonMediumL" scriptevents="1"/>
 	<label halign="center" text="Save Replay" substyle="Replay" pos="112 0" textsize="4" valign="center" id="ButtonSaveReplay" style="CardButtonSmallXXL" scriptevents="1" />
 	<label pos="-120 0" text="Quit" translate="1" id="ButtonQuit" scriptevents="1"/>
-	<quad pos="-60 0" id="ButtonRefresh" size="12 12" scriptevents="1" style="Icons64x64_1" substyle="ClipRewind"/>
-	<quad pos="-42 0" id="ButtonPausePlay" size="12 12" scriptevents="1" style="Icons64x64_1" substyle="ClipPause"/>
+	<quad hidden="1" pos="-60 0" id="ButtonRefresh" size="12 12" scriptevents="1" style="Icons64x64_1" substyle="ClipRewind"/>
+	<quad hidden="1" pos="-42 0" id="ButtonPausePlay" size="12 12" scriptevents="1" style="Icons64x64_1" substyle="ClipPause"/>
 </frame>
 <script><!--
 
