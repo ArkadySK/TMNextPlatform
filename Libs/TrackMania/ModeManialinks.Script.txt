@@ -618,10 +618,9 @@ Integer GetMapMedals(Integer _RecordTime)	{
 
 Void ShowSaveReplayDialog(Text _MapName)	{
 	Audio.PlaySoundEvent(CAudioManager::ELibSound::ShowDialog, 0, 1.);
-	declare netread Integer CurTime for UI; 
 	SaveReplayDialog.Show();
 	declare ReplayUrlEntry = (Page.GetFirstChild("ReplayUrl") as CMlEntry); 
-	ReplayUrlEntry.Value = _MapName^"_"^LocalUser.Login^"("^GetRecordTypeText(CurTime)^")";
+	ReplayUrlEntry.Value = _MapName^"_"^LocalUser.Login^"("^GetRecordTypeText({{{_CurScore}}})^")";
 	ReplayUrlEntry.Focus();
 }
 
@@ -660,6 +659,8 @@ Void NewRecordDialog(Integer _MedalCount, Integer _PrevMedalCount, Integer _User
 
 Void HideSaveReplayDialog()	{
 	SaveReplayDialog.Hide();
+	declare netwrite Text Net_SaveReplayUrl for UI;
+	Net_SaveReplayUrl = "";
 	Audio.PlaySoundEvent(CAudioManager::ELibSound::HideDialog, 0, 1.);
 }
 
@@ -704,9 +705,9 @@ Void SaveReplay()	{
 	HoverAfterRaceButton(-1);
 	declare netwrite Text Net_SaveReplayUrl for UI;
 	Net_SaveReplayUrl = (Page.GetFirstChild("ReplayUrl") as CMlEntry).Value;
-	log("Saving replay...");
+	log("Saving replay..." ^ Net_SaveReplayUrl);
 	Audio.PlaySoundEvent(CAudioManager::ELibSound::Valid, 0, 1.);
-	HideNewRecordDialog();
+	HideSaveReplayDialog();
 }
 
 Void PreLoad()	{

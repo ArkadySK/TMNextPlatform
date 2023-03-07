@@ -201,6 +201,8 @@ declare Integer CpIndex for Player;
 declare UI = UIManager.GetUI(Player);
 declare netread Boolean Net_RestartRequested for UI;
 declare netread Boolean Net_QuitRequested for UI;
+declare netread Text Net_SaveReplayUrl for UI;
+declare Text Net_PrevSaveReplayUrl for UI;
 
 if(Net_RestartRequested)	{
 	Restart();
@@ -208,6 +210,12 @@ if(Net_RestartRequested)	{
 
 if(Net_QuitRequested)	{
 	MB_StopServer();
+}
+
+if(Net_SaveReplayUrl != Net_PrevSaveReplayUrl)	{
+	Net_PrevSaveReplayUrl = Net_SaveReplayUrl;
+	if(Net_SaveReplayUrl != "")
+		DataFileMgr.Replay_Save(Net_SaveReplayUrl, Map, G_OutroGhost);
 }
 
 if(Player.StartTime == Now /*&& G_AfterRaceLayer.ManialinkPage != ""*/)	{
