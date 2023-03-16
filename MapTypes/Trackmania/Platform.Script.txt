@@ -261,8 +261,8 @@ Void SetDefaultObjectives(Integer _AuthorRespawns)
 	//original TMUF / TM2C counting was: 0 + _AuthorRespawns + _AuthorRespawns/10
 	SetObjectives(_AuthorRespawns,
 	1 + _AuthorRespawns + _AuthorRespawns/10, 
-	2 + _AuthorRespawns + _AuthorRespawns/5,
-	3 + _AuthorRespawns + _AuthorRespawns/2);
+	3 + _AuthorRespawns + _AuthorRespawns/5,
+	10 + _AuthorRespawns + _AuthorRespawns/2);
 }
 
 
@@ -460,8 +460,8 @@ Void EditObjectives()
 	//   Objectives:
  	//		Author:  0  respawns
 	//		Gold:	 1  respawns  
-	//		Bronze:	 2  respawns  
-	//		Silver:	 3  respawns
+	//		Bronze:	 3  respawns  
+	//		Silver:	 10  respawns
 	//   Auto | Ok | Cancel
 
 	declare metadata Integer ObjectiveAuthor 	for Map;
