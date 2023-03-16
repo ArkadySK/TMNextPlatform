@@ -7,167 +7,14 @@
 #Include "TextLib" as TextLib
 #Include "Libs/Nadeo/ModeLibs/Legacy/MapType.Script.txt"
 
+#Include "Libs/TrackMania/ModeManialinks.Script.txt" as ModeManialinks
+
+
 #Const SupportedTasks "Validation"
 
 declare Integer G_NbRespawns;
 declare Integer G_CpCount;
 declare CAnchorData[] G_PassedCpAnchors;
-
-Text DrawGameplayTextUI()	{
-return """<manialink version="3">
-
-<label id="boosterLabel" text="" translate="1" textemboss="1" halign="center" textsize="4" pos="0 60"/>
-
-<script><!--
-
-CSmPlayer GetOwner() {
-    wait(GUIPlayer != Null || InputPlayer != Null);
-	if (GUIPlayer != Null) return GUIPlayer;
-    return InputPlayer;
-}
-
-Void SetBoosterLabelText(Text _Text)	{
-	(Page.GetFirstChild("boosterLabel") as CMlLabel).SetText(_Text);
-}
-
-main()	{
-	declare Player <=> GetOwner();
-
-	while(True)	{
-		if(Player == Null) continue;
-		declare Boolean IsFreeWheel = Player.HandicapNoGasDuration > 0 && Player.HandicapNoGasDuration < 1600;
-		declare Boolean IsTurbo2 = Player.EngineTurboRatio > 1.;
-		if(IsFreeWheel)
-			SetBoosterLabelText("Free wheeling!");
-		else if(IsTurbo2)
-			SetBoosterLabelText("Turbo 200%");
-		else
-			SetBoosterLabelText("");
-		yield;
-	}	
-}
---></script>
-</manialink>
-""";
-}
-
-Text DrawChronoUI(Integer _G_NbRespawns)	{
-	return """
-	<manialink version="3">
-		<label id="G_NbRespawnsLabel" halign="center" style="TextRaceChrono" textsize="8" pos="0 -80" text="{{{_G_NbRespawns}}}"/>
-	</manialink>
-	""";
-}
-
-Text DrawSpeedUI()	{
-return """<manialink version="3">
-
-<frame pos="158 -80" id="SpeedFrame">
-<label id="speedLabel" halign="right" style="TextRaceChrono" textsize="8" pos="0 0" text="0"/>
-
-<label id="distLabel" halign="right" style="TextRaceChrono" textsize="2" pos="-6 4" text="0"/>
-<label halign="right" textsize="1" pos="0 3" text="m"/>
-</frame>
-
-<script><!--
-
-#Include "TextLib" as TextLib
-#Include "MathLib" as MathLib
-
-CSmPlayer GetOwner() {
-    wait(GUIPlayer != Null || InputPlayer != Null);
-		if (GUIPlayer != Null) return GUIPlayer;
-    return InputPlayer;
-}
-
-Text TimeToTextMP(Integer _Time)	{
-	declare Text temp = TextLib::TimeToText(_Time, True);
-	if(_Time < 0)	{
-		temp = TextLib::SubString(temp, 2, 7);
-		return "-" ^ temp;
-	}
-	if(_Time < 600000)	{
-		temp = TextLib::SubString(temp, 1, 7);
-		return temp;
-	}
-	return temp;
-}
-
-main()	{
-	declare Player <=> GetOwner();
-	while(True)	{
-		
-
-		if(Player == Null) {
-			sleep(100);
-			continue;
-		}	
-		(Page.GetFirstChild("speedLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Speed * 36 / 10));
-		(Page.GetFirstChild("distLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Distance));
-		yield;
-	}
-}
-
---></script>
-</manialink>
-""";
-}
-
-// --------------------------------------- //
-/** Update checkpoint difference UI
- *
- *
- */
- Text UpdateCheckPointUI(Integer _WaypointTime, Integer _AnotherTime)	{
-	return """<manialink version="3">
-	<frame z-index="-10">
-		<label halign="center" style="TextRaceChrono" textsize="4" pos="0 20" id="cas" text=""/>
-		<label halign="center" style="TextRaceChrono" textsize="4" pos="0 15" id="cas2" text=""/>
-	</frame>
-	<script><!--
-	
-	#Include "TextLib" as TextLib
-	Text TimeToTextMP(Integer _Time)	{
-		declare Text temp = TextLib::TimeToText(_Time, True);
-		if(_Time < 0)	{
-			temp = TextLib::SubString(temp, 2, 7);
-			return "-" ^ temp;
-		}
-		if(_Time < 600000)	{
-			temp = TextLib::SubString(temp, 1, 7);
-			return temp;
-		}
-		return temp;
-	}
-
-	main()	{
-		Audio.PlaySoundEvent(CAudioManager::ELibSound::Checkpoint, 0, 1.);
-		declare Time = {{{_WaypointTime}}};
-		declare Time2 = {{{_AnotherTime}}};
-		
-		(Page.GetFirstChild("cas") as CMlLabel).SetText(TimeToTextMP(Time));
-		
-		if(Time2 == -1)	
-			(Page.GetFirstChild("cas2") as CMlLabel).Hide();
-	
-		declare diff = Time - Time2;
-		declare Text style;
-		if(diff < 0)
-			style = "$00F";
-		else
-			style = "$F00+";	
-		(Page.GetFirstChild("cas2") as CMlLabel).SetText("" ^ style ^ TimeToTextMP(diff));
-		sleep(1500);
-		(Page.GetFirstChild("cas") as CMlLabel).Hide();
-		(Page.GetFirstChild("cas2") as CMlLabel).Hide();
-	}
-	
-	
-	--></script>
-	</manialink>
-	""";
-	}
-
 
 /////////////////////////////////////
 // Validate
@@ -175,7 +22,6 @@ main()	{
 declare Ident[Text] G_Vehicles;
 
 declare CUILayer G_LayerChrono;
-declare CUILayer G_LayerSpeedAndDist;
 declare CUILayer G_LayerCheckpoint;
 declare CUILayer G_LayerGameplay;
 
@@ -198,19 +44,15 @@ Void SetupUi()  // for CTmRules
 	UIManager.UIAll.OverlayHideConsumables = True;
 	UIManager.UIAll.OverlayHideRoundScores = True;
 	UIManager.UIAll.OverlayHideCountdown = True;
-	//UiRaceChrono = CTmMode::ETmRaceChronoBehaviour::Hidden;
 		
 	G_LayerChrono = UIManager.UILayerCreate();
-	G_LayerSpeedAndDist = UIManager.UILayerCreate();
 	G_LayerCheckpoint = UIManager.UILayerCreate();
 	G_LayerGameplay = UIManager.UILayerCreate();
 
-	G_LayerSpeedAndDist.ManialinkPage = DrawSpeedUI();
-	G_LayerChrono.ManialinkPage = DrawChronoUI(0);
-	G_LayerGameplay.ManialinkPage = DrawGameplayTextUI();
+	G_LayerChrono.ManialinkPage = ModeManialinks::DrawChronoUI(True);
+	G_LayerGameplay.ManialinkPage = ModeManialinks::DrawGameplayTextUI();
 	
 	UIManager.UIAll.UILayers.add(G_LayerChrono);
-	UIManager.UIAll.UILayers.add(G_LayerSpeedAndDist);
 	UIManager.UIAll.UILayers.add(G_LayerCheckpoint);
 	UIManager.UIAll.UILayers.add(G_LayerGameplay);
 }
@@ -221,11 +63,12 @@ Void SetupRules()	{
 	Mode.UseLaunchedCheckpoints = False;
 }
 
-Void CleanupUi(CSmMode _Rules)  // for CTmRules
+Void CleanupUi(CSmMode _Rules)  // for CSmRules
 {
 	_Rules.UIManager.ResetAll();
 	G_LayerChrono = Null;
-	G_LayerSpeedAndDist = Null;
+	G_LayerCheckpoint = Null;
+	G_LayerGameplay = Null;
 }
 
 
@@ -345,7 +188,6 @@ Void RestartRace(CSmPlayer _Player)	{
 	Mode.UIManager.UIAll.UISequence = CUIConfig::EUISequence::Playing;
 	G_PassedCpAnchors.clear();
 	G_NbRespawns = 0;
-	G_LayerChrono.ManialinkPage = DrawChronoUI(G_NbRespawns);
 }
 
 Void DoValidate(Boolean IsTest) {	
@@ -396,7 +238,6 @@ Void DoValidate(Boolean IsTest) {
 			// check the checkpoints
 			if(Event.Type == CSmModeEvent::EType::OnPlayerRequestRespawn)	{
 				G_NbRespawns += 1;
-				G_LayerChrono.ManialinkPage = DrawChronoUI(G_NbRespawns);
 			}
 			if(Event.Type == CSmModeEvent::EType::OnPlayerTriggersWaypoint && !IsTest)	{
 				declare CurAnchor <=> FindAnchorByPosition(Event.Landmark.Position);
@@ -414,7 +255,7 @@ Void DoValidate(Boolean IsTest) {
 					CurCP_BestTime = Event.Player.Score.BestRaceTimes[G_PassedCpAnchors.count-1];
 				else
 					CurCP_BestTime = -1;
-				G_LayerCheckpoint.ManialinkPage = UpdateCheckPointUI(Event.WaypointTime, CurCP_BestTime);
+				G_LayerCheckpoint.ManialinkPage =  = ModeManialinks::UpdateCheckPointUI(Event.WaypointTime, CurCP_BestTime);
 
 				//when player passes all the checkpoints and gets into finish
 				if(G_PassedCpAnchors.count > G_CpCount)	{
