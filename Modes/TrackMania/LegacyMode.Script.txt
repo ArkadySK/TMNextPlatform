@@ -61,41 +61,48 @@ Integer GetRecordFromGhost(CGhost _recordGhost)	{
 // Saves ghosts if improvement
 Void FinishRace(CSmPlayer _Player, CGhost _OutroGhost)	{
 	Player_SetCurRaceAsPrevRace(_Player);
-	G_AfterRaceLayer.ManialinkPage = ModeManialinks::DrawAfterRaceUI(S_IsPlatform, _Player.Score.NbRespawnsRequested, G_MapRecord);
+	declare IsBetter = True;
+	
 // In platform gamemode:
 	if(S_IsPlatform)	{
 		// If NbRespawns is worse, ignore record: 
 		if(_Player.Score.NbRespawnsRequested > G_MapRecord && G_MapRecord != -1)
-			return;
+			IsBetter = False;
+			
 		// Check for time improvement when nbRespawns is equal:	
 		if(_Player.Score.NbRespawnsRequested == G_MapRecord && G_MapRecord != -1 && G_RecordGhost != Null)	{
 			wait(_OutroGhost != Null);
 			if(_OutroGhost.Result.Time > G_RecordGhost.Result.Time)	{
-				return;
+				IsBetter = False;
 			}	
 		}	
 		
-		G_MapRecord = _Player.Score.NbRespawnsRequested;
-		wait(_OutroGhost != Null);
-		// Fixes NbRespawns in the saved replay
-		_OutroGhost.Result.NbRespawns = G_MapRecord;
-		SaveRecordGhost(_OutroGhost);
-		G_RecordGhost = _OutroGhost;
+		if(IsBetter)	{
+			G_MapRecord = _Player.Score.NbRespawnsRequested;
+			wait(_OutroGhost != Null);
+			// Fixes NbRespawns in the saved replay
+			_OutroGhost.Result.NbRespawns = G_MapRecord;
+			SaveRecordGhost(_OutroGhost);
+			G_RecordGhost = _OutroGhost;
+		}
 	}
 	// In race gamemode:
 	else	{
 		// If time is worse
 		if(_Player.EndTime > G_MapRecord && G_MapRecord != -1)
-			return;
-					
-		G_MapRecord = _Player.EndTime;
-		wait(_OutroGhost != Null);	
-		ScoreMgr.Map_SetNewRecord_v2(NullId, Map.MapInfo.MapUid, "", "", _OutroGhost);
+			IsBetter = False;
+		else	{
+			G_MapRecord = _Player.EndTime;
+			wait(_OutroGhost != Null);	
+			ScoreMgr.Map_SetNewRecord_v2(NullId, Map.MapInfo.MapUid, "", "", _OutroGhost);
+		}			
 	}
 	
 	Player_SetCurRaceAsBestRace(_Player);
 	Player_ClearRaceWaypointTimes(_Player);
 	Player_SetFinishTime(_Player, _Player.EndTime);
+	
+	G_AfterRaceLayer.ManialinkPage = ModeManialinks::DrawAfterRaceUI(S_IsPlatform, _Player.Score.NbRespawnsRequested, G_MapRecord, IsBetter);
 }
 
 Void ReloadUI()	{

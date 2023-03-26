@@ -375,7 +375,7 @@ Text UpdateCheckPointUI(Integer _WaypointTime, Integer _AnotherTime)	{
     }
 
 
-Text DrawAfterRaceUI(Boolean _IsPlatform, Integer _CurScore, Integer _BestScore)	{
+Text DrawAfterRaceUI(Boolean _IsPlatform, Integer _CurScore, Integer _BestScore, Boolean _IsBetter)	{
 	return """
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <manialink version="3">
@@ -575,8 +575,7 @@ Boolean IsBetter(Integer _UserRecord, Integer _OldRecord)	{
 	if(_OldRecord == -1)
 		return True;
 
-	declare Boolean _PlatformMode = {{{_IsPlatform}}}; 
-	if(_PlatformMode)	{
+	if({{{_IsPlatform}}})	{
 		if(_UserRecord <= _OldRecord)
 			return True;
 	}
@@ -751,7 +750,7 @@ main()	{
 
 	sleep(10);
 	declare MedalCount = GetMapMedals(UserRecordTemp);
-	if(IsBetter(UserRecordTemp, BestScore))	{
+	if({{{_IsBetter}}})	{
 		log("BestScore: "^BestScore ^ "UserRecordTemp" ^ UserRecordTemp);
 		declare OldMedalCount = GetMapMedals(BestScore);
 		NewRecordDialog(MedalCount, OldMedalCount, UserRecordTemp);
