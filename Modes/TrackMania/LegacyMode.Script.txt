@@ -64,15 +64,23 @@ Void FinishRace(CSmPlayer _Player, CGhost _OutroGhost)	{
 	G_AfterRaceLayer.ManialinkPage = ModeManialinks::DrawAfterRaceUI(S_IsPlatform, _Player.Score.NbRespawnsRequested, G_MapRecord);
 // In platform gamemode:
 	if(S_IsPlatform)	{
-		// If NbRespawnsRequested is worse 
+		// If NbRespawns is worse, ignore record: 
 		if(_Player.Score.NbRespawnsRequested > G_MapRecord && G_MapRecord != -1)
 			return;
-			
+		// Check for time improvement when nbRespawns is equal:	
+		if(_Player.Score.NbRespawnsRequested == G_MapRecord && G_MapRecord != -1 && G_RecordGhost != Null)	{
+			wait(_OutroGhost != Null);
+			if(_OutroGhost.Result.Time > G_RecordGhost.Result.Time)	{
+				return;
+			}	
+		}	
+		
 		G_MapRecord = _Player.Score.NbRespawnsRequested;
 		wait(_OutroGhost != Null);
 		// Fixes NbRespawns in the saved replay
 		_OutroGhost.Result.NbRespawns = G_MapRecord;
 		SaveRecordGhost(_OutroGhost);
+		G_RecordGhost = _OutroGhost;
 	}
 	// In race gamemode:
 	else	{
@@ -98,18 +106,41 @@ Void ReloadUI()	{
 		G_OpponentScoresLayer.ManialinkPage = ModeManialinks::DrawOpponentScoresUI("???");
 }
 
-Void PreLoadUI()	{
+Void InitialUILoad()	{
 	UseClans = False;
 	UseLaunchedCheckpoints = False;
 	UIManager.UIAll.ScoreTableOnlyManialink = True;
 	UIManager.UIAll.ScoreTableVisibility = CUIConfig::EVisibility::Normal;
+
+	G_ChronoLayer = UIManager.UILayerCreate();
+	G_CPLayer = UIManager.UILayerCreate();
+	G_GameplayLayer = UIManager.UILayerCreate();
+	G_PauseMenuLayer = UIManager.UILayerCreate();
+	G_OpponentScoresLayer = UIManager.UILayerCreate();
+	G_AfterRaceLayer = UIManager.UILayerCreate();
+
+	declare Player_UI = UIManager.GetUI(Players[0]);
+	Player_UI.UILayers.add(G_ChronoLayer); 
+	Player_UI.UILayers.add(G_CPLayer); 
+	Player_UI.UILayers.add(G_GameplayLayer); 
+	Player_UI.UILayers.add(G_PauseMenuLayer);
+	Player_UI.UILayers.add(G_OpponentScoresLayer);
+	Player_UI.UILayers.add(G_AfterRaceLayer);
+
+	G_ChronoLayer.ManialinkPage = ModeManialinks::DrawChronoUI(S_IsPlatform);
+	G_GameplayLayer.ManialinkPage = ModeManialinks::DrawGameplayTextUI();
+	G_PauseMenuLayer.ManialinkPage = ModeManialinks::PauseMenu();
+	G_PauseMenuLayer.Type = CUILayer::EUILayerType::InGameMenu;
 }
 
 Void Restart()	{
 	G_AfterRaceLayer.ManialinkPage = "";
 	ReloadUI();
+	RefreshRecordGhost();
+	G_MapRecord = GetRecordFromGhost(G_RecordGhost);
 	MB_Sleep(100);
 	UnspawnPlayer(Players[0]);
+	ReloadUI();
 }
 
 Void EndRaceSequence(Text _text, CPlayer _Player)	{
@@ -137,57 +168,24 @@ Void AfterRace(CGhost _OutroGhost)	{
 	//UI.ForceSpectator = True;
 	UI.Spectator_SetAutoTarget_All();
 	
-	log("entering after race sequence");
 	StartTime = Now;
-	//Ghost_Add(_OutroGhost, False, 100);
 	MB_Sleep(100);
 	log(Ghost_IsReplayOver(_OutroGhost.Id));
 	UI.Spectator_SetForcedTarget_Ghost(_OutroGhost.Id);
-	Ghost_Add(_OutroGhost, False);
+	//Ghost_Add(_OutroGhost, False);
 	UI.SpectatorForceCameraType = 0;
 }
 	
 ***Match_InitMap***
 ***
-PreLoadUI();
 Ghost_RemoveAll();
-
-RefreshRecordGhost();
-G_MapRecord = GetRecordFromGhost(G_RecordGhost);
-
-log("loaded map record: " ^G_MapRecord);
-
 Scores_ClearAll();
 if(S_IsPlatform)
 	Scores_SetSortCriteria(CSmMode::ESmScoreSortOrder::Respawns);
 else
 	Scores_SetSortCriteria(CSmMode::ESmScoreSortOrder::BestRace);
-
-
-G_ChronoLayer = UIManager.UILayerCreate();
-G_CPLayer = UIManager.UILayerCreate();
-G_GameplayLayer = UIManager.UILayerCreate();
-G_PauseMenuLayer = UIManager.UILayerCreate();
-G_OpponentScoresLayer = UIManager.UILayerCreate();
-G_AfterRaceLayer = UIManager.UILayerCreate();
-
-foreach(Player in Players)  {
- 	declare Player_UI = UIManager.GetUI(Player);
-	Player_UI.UILayers.add(G_ChronoLayer); 
-	Player_UI.UILayers.add(G_CPLayer); 
-	Player_UI.UILayers.add(G_GameplayLayer); 
-	Player_UI.UILayers.add(G_PauseMenuLayer);
-	Player_UI.UILayers.add(G_OpponentScoresLayer);
-	Player_UI.UILayers.add(G_AfterRaceLayer);
-	
-	G_ChronoLayer.ManialinkPage = ModeManialinks::DrawChronoUI(S_IsPlatform);
-	G_GameplayLayer.ManialinkPage = ModeManialinks::DrawGameplayTextUI();
-	G_PauseMenuLayer.ManialinkPage = ModeManialinks::PauseMenu();
-	ReloadUI();
-
-	G_PauseMenuLayer.Type = CUILayer::EUILayerType::InGameMenu;
-
-}
+InitialUILoad();
+Restart();
 ***
 
 ***Match_PlayLoop***
