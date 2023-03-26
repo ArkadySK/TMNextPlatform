@@ -255,7 +255,7 @@ Void DoValidate(Boolean IsTest) {
 					CurCP_BestTime = Event.Player.Score.BestRaceTimes[G_PassedCpAnchors.count-1];
 				else
 					CurCP_BestTime = -1;
-				G_LayerCheckpoint.ManialinkPage =  = ModeManialinks::UpdateCheckPointUI(Event.WaypointTime, CurCP_BestTime);
+				G_LayerCheckpoint.ManialinkPage = ModeManialinks::UpdateCheckPointUI(Event.WaypointTime, CurCP_BestTime);
 
 				//when player passes all the checkpoints and gets into finish
 				if(G_PassedCpAnchors.count > G_CpCount)	{
