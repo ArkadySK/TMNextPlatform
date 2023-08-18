@@ -1,26 +1,48 @@
 Text DrawOpponentScoresUI(Text _PB)	{
 	return """
-<manialink version="3">
-<frame id="FramePB" pos="-160 82">
+	<manialink version="3">
+<stylesheet>
+		<style class="MedalBg" scale="1" size="54 6" style="Bgs1" substyle="NavButton" pos="0 -2" opacity=".7"/>
+</stylesheet>
+		
+<frame id="FrameAuthor" pos="-160 82">
+	<quad pos="0 -1" z-index="2" size="8 8" style="MedalsBig" substyle="MedalNadeo"/>
+	<label pos="9 -5" z-index="2" size="32 10" text="Author Medal" valign="center2" textsize="1.5" translate="1"/>
+	<quad class="MedalBg" scriptevents="1" />
+	<label text="" pos="47 -5" size="10 8" valign="center" textsize="2" halign="center" z-index="2" style="TextRaceChrono" id="AuthorScore"/>
+</frame>
+<frame id="FrameGold" pos="-160 74">
+	<quad pos="0 -1" z-index="2" size="8 8" style="MedalsBig" substyle="MedalGold"/>
+	<label pos="9 -5" z-index="2" size="32 10" text="Gold Medal" valign="center2" textsize="1.5" translate="1"/>
+	<quad class="MedalBg" scriptevents="1" />
+	<label text="" pos="47 -5" size="10 8" valign="center" textsize="2" halign="center" z-index="2" style="TextRaceChrono" id="GoldScore"/>
+</frame>
+<frame id="FrameSilver" pos="-160 66">
+	<quad pos="0 -1" z-index="2" size="8 8"style="MedalsBig" substyle="MedalSilver"/>
+	<label pos="9 -5" z-index="2" size="32 10" text="Silver Medal" valign="center2" textsize="1.5" translate="1"/>
+	<quad class="MedalBg" scriptevents="1" />
+	<label text="" pos="47 -5" size="10 8" valign="center" textsize="2" halign="center" z-index="2" style="TextRaceChrono" id="SilverScore"/>
+</frame>
+<frame id="FrameBronze" pos="-160 58">
+	<quad pos="0 -1" z-index="2" size="8 8" style="MedalsBig" substyle="MedalBronze"/>
+	<label pos="9 -5" z-index="2" size="32 10" text="Bronze Medal" valign="center2" textsize="1.5" translate="1"/>
+	<quad class="MedalBg" scriptevents="1" />
+	<label text="" pos="47 -5" size="10 8" valign="center" textsize="2" halign="center" z-index="2" style="TextRaceChrono" id="BronzeScore"/>
+</frame>
+<frame id="FramePB" pos="-160 50">
 	<quad pos="0 -1" z-index="2" size="8 8" style="BgRaceScore2" substyle="ScoreLink"/>
 	<label pos="9 -5" z-index="2" size="32 10" text="{{{Users[0].Name}}}" valign="center2" textsize="1.5" translate="1"/>
-	<quad size="54 6" style="Bgs1" substyle="NavButton" pos="0 -2" scriptevents="1" opacity=".8"/>
-	<label text="{{{_PB}}}" pos="47 -5" size="10 8" valign="center" textsize="2" halign="center" z-index="2" style="TextRaceChrono"/>
+	<quad class="MedalBg" scriptevents="1" />
+	<label text="{{{_PB}}}" pos="47 -5" size="10 8" valign="center" textsize="2" halign="center" z-index="2" style="TextRaceChrono" id="UserScore"/>
 </frame>
 <script><!--
 main()	{
-
 	declare metadata Integer ObjectiveAuthor for Map;
 	declare metadata Integer ObjectiveGold for Map;
 	declare metadata Integer ObjectiveSilver for Map;
 	declare metadata Integer ObjectiveBronze for Map;
-	
-	log("MAP OBJECTIVES: ");
-	log("ObjectiveAuthor: " ^ ObjectiveAuthor);
-	log("ObjectiveGold: " ^ ObjectiveGold);
-	log("ObjectiveSilver: " ^ ObjectiveSilver);
-	log("ObjectiveBronze: " ^ ObjectiveBronze);
-	log("");
+
+	log("obj silver: " ^ ObjectiveSilver);
 
 	if(UI == Null) return;
 
@@ -28,6 +50,11 @@ main()	{
 	declare netwrite Boolean Net_RestartRequested for UI;
 	Net_QuitRequested = False;
 	Net_RestartRequested = False;
+	
+	(Page.GetFirstChild("AuthorScore") as CMlLabel).SetText(""^ObjectiveAuthor);
+	(Page.GetFirstChild("GoldScore") as CMlLabel).SetText(""^ObjectiveGold);
+	(Page.GetFirstChild("SilverScore") as CMlLabel).SetText(""^ObjectiveSilver);
+	(Page.GetFirstChild("BronzeScore") as CMlLabel).SetText(""^ObjectiveBronze);
 }
 --></script>
 </manialink>
