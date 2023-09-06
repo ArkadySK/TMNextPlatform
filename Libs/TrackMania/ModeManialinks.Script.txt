@@ -65,37 +65,37 @@ main()	{
 Text PauseMenu()	{
 	return """<manialink version="3">
 	<stylesheet>
-		<style id="buttonResume buttonExit ButtonNextMap ButtonRestartMap ButtonOpponents ButtonRankings ButtonMapInfo ButtonShowSkins QUITgame" textcolor="FFFFFFE7" focusareacolor2="2E2E2ECB" focusareacolor1="2E2E2ECB" sizen="55 17" style="CardButtonSmallXXXL" scale="1"/>
-		</stylesheet>
-	<frame z-index="100">
+	<style id="buttonResume buttonExit ButtonNextMap ButtonRestartMap ButtonOpponents ButtonRankings ButtonMapInfo ButtonShowSkins QUITgame" style="CardButtonSmallXXXL" scale="1"/>
+	</stylesheet>
+<frame z-index="100">
+
+	<quad pos="0 -96" z-index="-50" size="320 200" halign="center" valign="bottom" bgcolor="1C1C1C5C" style="Bgs1" substyle="BgGradBottom" scriptevents="1" opacity=".4"/>
 	
-		<quad pos="0 -96" z-index="-50" size="320 200" halign="center" valign="bottom" bgcolor="1C1C1C5C" style="Bgs1" substyle="BgGradBottom" scriptevents="1" opacity=".4"/>
-		
-		<frame id="LockFrame" pos="0 0" z-index="90" hidden="1">
-			<quad pos="0 -1" z-index="1" size="165 30" halign="center" valign="center" id="bg00" style="Bgs1" substyle="BgDialogBlur"/>			
-			<label  z-index="3" size="150 12.8" pos="-75 9.49" translate="1" autonewline="1" id="LockR" text="Locked" textsize="2.5"/>			
-			<label pos="0 -10.5" z-index="2" size="50 8" text="Close" halign="center" translate="1" id="ZamocekZrus" scriptevents="1" valign="center" style="CardButtonMediumXL"/>
-			<quad pos="0 0" z-index="0" size="400 200" halign="center" valign="center" scriptevents="1" style="Bgs1" substyle="BgEmpty"/>
-		</frame>
-	
-		<frame id="HideOpt" z-index="20" pos="0 25" scale="1.2">
-			<frame pos="0 -10" scale=".85" id="menubuttons">	
-				<label pos="0 18" z-index="0" size="119 7" text="Race menu" style="TextButtonNav" translate="1" halign="center" textsize="2.5" valign="center"/>
-				<quad pos="0 -46" z-index="-5" size="120 59" bgcolor="FFFA" style="Bgs1InRace" substyle="BgCardProperty" halign="center" valign="bottom"/>	
-				<quad pos="0 22.5" z-index="-4" size="120 10" bgcolor="FFFA" style="Bgs1InRace" substyle="BgTitle" halign="center"/>	
-				<quad pos="0 27" z-index="-3" size="126.4 8" bgcolor="FFFA" halign="center" style="Bgs1" substyle="BgGlow2"/>	
-				
-				<label id="buttonResume" text="Continue" posn="-30 -38" translate="1" valign="center2" z-index="2" textsize="4" scriptevents="1" halign="center"  style="CardButtonMediumL" scale="1.1"/>	
-					
-				<label id="ButtonRestartMap" text="Restart" pos="0 -13" halign="center" valign="center2" textsize="4" translate="1" scriptevents="1"/>	
-				<label id="ButtonOpponents" hidden="1" text="Select Opponents" pos="0 -6" halign="center" valign="center2" textsize="4" translate="1" scriptevents="1"/>	
-					
-				<label id="ButtonMapInfo" text="Information" pos="0 1" halign="center" valign="center2" textsize="4" translate="1" scriptevents="1"/>	
-				
-				<label text="Leave" textsize="4" translate="1" id="buttonExit" scriptevents="1" z-index="10" halign="center" valign="center2" focusareacolor1="DD4646CF" pos="30 -38" style="CardButtonMediumL" scale="1.1"/>
-			</frame>	
-		</frame>
+	<frame id="LockFrame" pos="0 0" z-index="90" hidden="1">
+		<quad pos="0 -1" z-index="1" size="165 30" halign="center" valign="center" id="bg00" style="Bgs1" substyle="BgDialogBlur"/>			
+		<label  z-index="3" size="150 12.8" pos="-75 9.49" translate="1" autonewline="1" id="LockR" text="Locked" textsize="2.5"/>			
+		<label pos="0 -10.5" z-index="2" size="50 8" text="Close" halign="center" translate="1" id="ZamocekZrus" scriptevents="1" valign="center" style="CardButtonMediumXL"/>
+		<quad pos="0 0" z-index="0" size="400 200" halign="center" valign="center" scriptevents="1" style="Bgs1" substyle="BgEmpty"/>
 	</frame>
+
+	<frame id="HideOpt" z-index="20" pos="0 25" scale="1.2">
+		<frame pos="0 -10" scale=".85" id="menubuttons">	
+			<label pos="0 18" z-index="0" size="119 7" text="Race menu" style="TextButtonNav" translate="1" halign="center" textsize="2.5" valign="center"/>
+			<quad pos="0 23" z-index="-6" size="120 68" bgcolor="FFFA" style="UICommon128_1" substyle="BgDialog" halign="center"/>	
+			<quad pos="0 23" z-index="-4" size="120 10" bgcolor="FFFA" style="UICommon128_1" substyle="BgDialogTitle" halign="center"/>	
+				
+			
+			<label id="buttonResume" text="Continue" posn="-30 -38" translate="1" valign="center2" z-index="2" textsize="4" scriptevents="1" halign="center"  style="CardButtonMediumL" scale="1.1"/>	
+				
+			<label id="ButtonRestartMap" text="Restart" pos="0 -13" halign="center" valign="center2" textsize="4" translate="1" scriptevents="1" z-index="1"/>	
+			<label id="ButtonOpponents" hidden="1" text="Select Opponents" pos="0 -6" halign="center" valign="center2" textsize="4" translate="1" scriptevents="1"/>	
+				
+			<label id="ButtonMapInfo" text="Information" pos="0 1" halign="center" valign="center2" textsize="4" translate="1" scriptevents="1" z-index="1"/>	
+			
+			<label text="Leave" textsize="4" translate="1" id="buttonExit" scriptevents="1" z-index="10" halign="center" valign="center2" focusareacolor1="DD4646CF" pos="30 -38" style="CardButtonMediumL" scale="1.1"/>
+		</frame>	
+	</frame>
+</frame>
 	<script><!--
 	#Include "TextLib" as TextLib
 	#Include "MathLib" as MathLib
@@ -413,11 +413,9 @@ Text DrawAfterRaceUI(Boolean _IsPlatform, Integer _CurScore, Integer _BestScore,
 </stylesheet>	
 
 <frame id="SaveReplayFrame" z-index="20" scale="1.2" pos="0 0" hidden="1">
-	<label pos="0 18" z-index="0" size="119 7" text="Save Replay" style="TextButtonNav" translate="1" halign="center" textsize="2.5" valign="center"/>
-	<quad pos="0 13" z-index="-9" size="120 35" style="Bgs1InRace" substyle="BgCardProperty" halign="center" valign="top"/>	
-	<quad pos="0 22.5" z-index="-4" size="120 10" style="Bgs1InRace" substyle="BgTitle" halign="center"/>	
-	<quad pos="0 27" z-index="-3" size="126.4 8" halign="center" style="Bgs1" substyle="BgGlow2"/>	
-	
+	<label pos="0 18.1" z-index="0" size="119 7" text="Save Replay" style="TextButtonNav" translate="1" halign="center" textsize="2.5" valign="center"/>
+	<quad pos="0 -23" z-index="-9" size="120 46" style="UICommon128_1" substyle="BgDialog" halign="center" valign="bottom"/>	
+	<quad pos="0 23" z-index="-4" size="120 10" style="UICommon128_1" substyle="BgDialogTitle" halign="center"/>	
 	<entry pos="-55" z-index="10" size="110 7" default="MapAuthor(Time).Replay.Gbx" halign="left" scriptevents="1" textfont="Gotham/Gotham-Book" textsize="3" valign="center2" id="ReplayUrl"/>
 	<quad z-index="2" size="110 7" halign="center" scriptevents="1" valign="center2" bgcolor="A9A9A9FF" opacity="0.5"/>
 	<label pos="-55 4" z-index="1" size="110 5" text="File" id="SaveReplayText" translate="1" halign="left" textfont="BiryaniDemiBold" textsize="2" valign="bottom"/>
@@ -426,22 +424,20 @@ Text DrawAfterRaceUI(Boolean _IsPlatform, Integer _CurScore, Integer _BestScore,
 </frame>
 
 <frame id="NewRecordFrame" z-index="20" hidden="1" pos="0 160">
-<quad bluramount="0.9" pos="0 -5" z-index="-5" id="MessageBg" size="80 80" style="Bgs1" substyle="BgDialogBlur" halign="center" valign="center"/>
-<quad z-index="5" size="30 30" halign="center" valign="center" pos="0 9" id="Medal2" style="MedalsBig" substyle="MedalSlot"/>
-<quad z-index="-4" size="60 42.5" halign="center" pos="0 25" style="Bgs1" substyle="BgDialogBlur"/>
-
-
-<label pos="0 30.5" style="TextButtonNav" z-index="1" size="100 5" id="MessageTitle" translate="1" halign="center" valign="center" textsize="3" text="Awesome!!!"/>
-<frame>
-<quad z-index="-4" size="60 6" halign="center" pos="0 -26" style="Bgs1" substyle="BgDialogBlur"/>	
-<quad pos="24 -26" z-index="1" size="6 6" style="BgRaceScore2" substyle="Podium"/>
-<label pos="23 -29" z-index="1" size="16 6" text="???" id="PositionLabel" translate="1" halign="right" valign="center2" textsize="3" opacity=".8" focusareacolor2="2E2E2ECB"/>
-<label pos="-28 -29" z-index="1" size="16 6" text="0 SP" id="SPLabel" translate="1" halign="left" valign="center2" textsize="2" opacity=".8" focusareacolor2="2E2E2ECB" textcolor="6CFF00FF"/>
-</frame>
-<label pos="0 -38" z-index="1" size="35 7" text="OK" id="MessageClose" translate="1" halign="center" valign="center" scriptevents="1"  textsize="3" opacity=".8" style="CardButtonMediumS"/>
-<label pos="0 -8" z-index="1" size="58 9" text="You set a new personal record!" id="MessageText" translate="1" halign="center"  textsize="2.5" autonewline="1"/>
-<label pos="-29 -24" z-index="1" size="30 5" text="Best time :" id="MessageTimeText" translate="1" textsize="2" valign="bottom"/>
-<label pos="29 -24" z-index="1" size="25 5" text="{{{_CurScore}}}" id="AfterRaceRecordLabel2" translate="1" halign="right" textsize="2" valign="bottom"/>
+	<quad bluramount="0.9" pos="0 -5" z-index="-5" id="MessageBg" size="80 80" style="UICommon128_1" substyle="BgDialog" halign="center" valign="center"/>
+	<quad z-index="5" size="30 30" halign="center" valign="center" pos="0 9" id="Medal2" style="MedalsBig" substyle="MedalSlot"/>
+	<quad z-index="-4" size="60 42.5" halign="center" pos="0 25" style="Bgs1" substyle="BgDialogBlur"/>
+	<label pos="0 30.5" style="TextButtonNav" z-index="1" size="100 5" id="MessageTitle" translate="1" halign="center" valign="center" textsize="3" text="Awesome!!!"/>	
+	<frame>
+		<quad z-index="-4" size="60 6" halign="center" pos="0 -26" style="Bgs1" substyle="BgDialogBlur"/>	
+		<quad pos="24 -26" z-index="1" size="6 6" style="BgRaceScore2" substyle="Podium"/>
+		<label pos="23 -29" z-index="1" size="16 6" text="???" id="PositionLabel" translate="1" halign="right" valign="center2" textsize="3" opacity=".8" focusareacolor2="2E2E2ECB"/>
+		<label pos="-28 -29" z-index="1" size="16 6" text="0 SP" id="SPLabel" translate="1" halign="left" valign="center2" textsize="2" opacity=".8" focusareacolor2="2E2E2ECB" textcolor="6CFF00FF"/>
+	</frame>
+	<label pos="0 -38" z-index="1" size="35 7" text="OK" id="MessageClose" translate="1" halign="center" valign="center" scriptevents="1"  textsize="3" opacity=".8" style="CardButtonMediumS"/>
+	<label pos="0 -8" z-index="1" size="58 9" text="You set a new personal record!" id="MessageText" translate="1" halign="center"  textsize="2.5" autonewline="1"/>
+	<label pos="-29 -24" z-index="1" size="30 5" text="Best time :" id="MessageTimeText" translate="1" textsize="2" valign="bottom"/>
+	<label pos="29 -24" z-index="1" size="25 5" text="{{{_CurScore}}}" id="AfterRaceRecordLabel2" translate="1" halign="right" textsize="2" valign="bottom"/>
 </frame>
 
 <frame id="MedalInfo" pos="0 80" z-index="80">
