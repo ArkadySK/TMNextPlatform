@@ -2,7 +2,7 @@ Text DrawOpponentScoresUI(Text _PB)	{
 	return """
 	<manialink version="3">
 <stylesheet>
-		<style class="MedalBg" scale="1" size="54 6" style="Bgs1" substyle="NavButton" pos="0 -2" opacity=".7"/>
+		<style class="MedalBg" scale="1" size="54 6" style="BgCard" substyle="BgCardSystem" pos="0 -2"/>
 </stylesheet>
 		
 <frame id="FrameAuthor" pos="-160 82">
