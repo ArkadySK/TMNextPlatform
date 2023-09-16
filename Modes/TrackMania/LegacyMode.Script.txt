@@ -84,6 +84,9 @@ Void FinishRace(CSmPlayer _Player, CGhost _OutroGhost)	{
 			_OutroGhost.Result.NbRespawns = G_MapRecord;
 			SaveRecordGhost(_OutroGhost);
 			G_RecordGhost = _OutroGhost;
+			
+			declare persistent Boolean Menu_RefreshRecords for Users[0];
+			Menu_RefreshRecords = True;
 		}
 	}
 	// In race gamemode:
@@ -116,8 +119,7 @@ Void ReloadUI()	{
 Void InitialUILoad()	{
 	UseClans = False;
 	UseLaunchedCheckpoints = False;
-	UIManager.UIAll.ScoreTableOnlyManialink = True;
-	UIManager.UIAll.ScoreTableVisibility = CUIConfig::EVisibility::Normal;
+	UIManager.UIAll.ScoreTableVisibility = CUIConfig::EVisibility::ForcedHidden;
 
 	G_ChronoLayer = UIManager.UILayerCreate();
 	G_CPLayer = UIManager.UILayerCreate();
