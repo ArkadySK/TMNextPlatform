@@ -2,38 +2,41 @@ Text DrawOpponentScoresUI(Text _PB)	{
 	return """
 	<manialink version="3">
 <stylesheet>
-		<style class="MedalBg" scale="1" size="54 6" style="BgCard" substyle="BgCardSystem" pos="0 -2"/>
+		<style class="MedalIcon" pos="0 -1" z-index="2" size="8 8" style="MedalsBig"/>
+		<style class="MedalName" pos="9 -5.3" z-index="2" size="32 10" valign="center2" textfont="GameFontSemiBold" textsize="1.5"/>
+		<style class="MedalBg" scale="1" size="58 6" style="UICommon128_1" substyle="BgToolTilted" modulatecolor="222" pos="-4 -2" opacity="0.7"/>
+		<style id="AuthorScore GoldScore SilverScore BronzeScore UserScore" textfont="GameFontRegular" pos="47 -4.7" size="10 8" valign="center" textsize="2" halign="center" z-index="2" style="TextRaceChrono"/>
 </stylesheet>
 		
 <frame id="FrameAuthor" pos="-160 82">
-	<quad pos="0 -1" z-index="2" size="8 8" style="MedalsBig" substyle="MedalNadeo"/>
-	<label pos="9 -5" z-index="2" size="32 10" text="Author Medal" valign="center2" textsize="1.5" translate="1"/>
-	<quad class="MedalBg" scriptevents="1" />
-	<label text="" pos="47 -5" size="10 8" valign="center" textsize="2" halign="center" z-index="2" style="TextRaceChrono" id="AuthorScore"/>
+	<quad class="MedalIcon" substyle="MedalNadeo"/>
+	<label class="MedalName" translate="1" text="Author Medal"/>
+	<quad class="MedalBg" scriptevents="1"/>
+	<label id="AuthorScore"/>
 </frame>
 <frame id="FrameGold" pos="-160 74">
-	<quad pos="0 -1" z-index="2" size="8 8" style="MedalsBig" substyle="MedalGold"/>
-	<label pos="9 -5" z-index="2" size="32 10" text="Gold Medal" valign="center2" textsize="1.5" translate="1"/>
-	<quad class="MedalBg" scriptevents="1" />
-	<label text="" pos="47 -5" size="10 8" valign="center" textsize="2" halign="center" z-index="2" style="TextRaceChrono" id="GoldScore"/>
+	<quad class="MedalIcon"substyle="MedalGold"/>
+	<label class="MedalName" translate="1" text="Gold Medal"/>
+	<quad class="MedalBg" scriptevents="1"/>
+	<label id="GoldScore"/>
 </frame>
 <frame id="FrameSilver" pos="-160 66">
-	<quad pos="0 -1" z-index="2" size="8 8"style="MedalsBig" substyle="MedalSilver"/>
-	<label pos="9 -5" z-index="2" size="32 10" text="Silver Medal" valign="center2" textsize="1.5" translate="1"/>
-	<quad class="MedalBg" scriptevents="1" />
-	<label text="" pos="47 -5" size="10 8" valign="center" textsize="2" halign="center" z-index="2" style="TextRaceChrono" id="SilverScore"/>
+	<quad class="MedalIcon" substyle="MedalSilver"/>
+	<label class="MedalName" translate="1" text="Silver Medal"/>
+	<quad class="MedalBg" scriptevents="1"/>
+	<label id="SilverScore"/>
 </frame>
 <frame id="FrameBronze" pos="-160 58">
-	<quad pos="0 -1" z-index="2" size="8 8" style="MedalsBig" substyle="MedalBronze"/>
-	<label pos="9 -5" z-index="2" size="32 10" text="Bronze Medal" valign="center2" textsize="1.5" translate="1"/>
-	<quad class="MedalBg" scriptevents="1" />
-	<label text="" pos="47 -5" size="10 8" valign="center" textsize="2" halign="center" z-index="2" style="TextRaceChrono" id="BronzeScore"/>
+	<quad class="MedalIcon" substyle="MedalBronze"/>
+	<label class="MedalName" translate="1" text="Bronze Medal"/>
+	<quad class="MedalBg" scriptevents="1"/>
+	<label id="BronzeScore"/>
 </frame>
 <frame id="FramePB" pos="-160 50">
-	<quad pos="0 -1" z-index="2" size="8 8" style="BgRaceScore2" substyle="ScoreLink"/>
-	<label pos="9 -5" z-index="2" size="32 10" text="{{{Users[0].Name}}}" valign="center2" textsize="1.5" translate="1"/>
-	<quad class="MedalBg" scriptevents="1" />
-	<label text="{{{_PB}}}" pos="47 -5" size="10 8" valign="center" textsize="2" halign="center" z-index="2" style="TextRaceChrono" id="UserScore"/>
+	<quad class="MedalIcon" style="BgRaceScore2" substyle="ScoreLink"/>
+	<label class="MedalName" text="{{{Users[0].Name}}}"/>
+	<quad class="MedalBg" scriptevents="1"/>
+	<label text="{{{_PB}}}" id="UserScore"/>
 </frame>
 <script><!--
 main()	{
@@ -80,7 +83,7 @@ Text PauseMenu()	{
 
 	<frame id="HideOpt" z-index="20" pos="0 25" scale="1.2">
 		<frame pos="0 -10" scale=".85" id="menubuttons">	
-			<label pos="0 18" z-index="0" size="119 7" text="Race menu" style="TextButtonNav" translate="1" halign="center" textsize="2.5" valign="center"/>
+			<label pos="0 18" z-index="0" size="119 7" text="Race menu" style="TextTitle3" textfont="GameFontExtraBold" translate="1" halign="center" textsize="2.5" valign="center"/>
 			<quad pos="0 23" z-index="-6" size="120 68" bgcolor="FFFA" style="UICommon128_1" substyle="BgDialog" halign="center"/>	
 			<quad pos="0 23" z-index="-4" size="120 10" bgcolor="FFFA" style="UICommon128_1" substyle="BgDialogTitle" halign="center"/>	
 				
@@ -237,7 +240,7 @@ Text PauseMenu()	{
 Text DrawGameplayTextUI()	{
     return """<manialink version="3">
     
-    <label id="boosterLabel" text="" translate="1" textemboss="1" halign="center" textsize="4" pos="0 60"/>
+    <label id="boosterLabel" text="" translate="1" textemboss="1" halign="center" textfont="GameFontRegular" textsize="4" pos="0 60"/>
     
     <script><!--
     
@@ -253,18 +256,31 @@ Text DrawGameplayTextUI()	{
     
     main()	{
         declare Player <=> GetOwner();
-    
+        declare DisplayedDuration = 1600;
+
         while(True)	{
             if(Player == Null) {
 				yield;
 				continue;
 			}
-            declare Boolean IsFreeWheel = Player.HandicapNoGasDuration > 0 && Player.HandicapNoGasDuration < 1600;
-            declare Boolean IsTurbo2 = Player.EngineTurboRatio > 1.;
+            declare Boolean IsFreeWheel = Player.HandicapNoGasDuration > 0 && Player.HandicapNoGasDuration < DisplayedDuration;
+            declare Boolean IsTurbo = Player.EngineTurboRatio > .5;
+            declare Boolean IsNoGrip = Player.HandicapNoGripDuration > 0 && Player.HandicapNoGripDuration < DisplayedDuration;
+            declare Boolean IsNoSteering = Player.HandicapNoSteeringDuration > 0 && Player.HandicapNoSteeringDuration < DisplayedDuration;
+            declare Boolean IsNoBrakes = Player.HandicapNoBrakesDuration > 0 && Player.HandicapNoBrakesDuration < DisplayedDuration;
+            declare Boolean IsForceGas = Player.HandicapForceGasDuration > 0 && Player.HandicapForceGasDuration < DisplayedDuration;
             if(IsFreeWheel)
                 SetBoosterLabelText("Free wheeling!");
-            else if(IsTurbo2)
-                SetBoosterLabelText("Turbo 200%");
+            else if(IsTurbo)
+                SetBoosterLabelText("Turbo!");
+            else if(IsNoGrip)
+                SetBoosterLabelText("No grip!");
+            else if(IsNoSteering)
+                SetBoosterLabelText("No steering!");
+            else if(IsNoBrakes)
+                SetBoosterLabelText("No brakes!");
+            else if(IsForceGas)
+                SetBoosterLabelText("Forced gas!");
             else
                 SetBoosterLabelText("");
             yield;
@@ -413,10 +429,10 @@ Text DrawAfterRaceUI(Boolean _IsPlatform, Integer _CurScore, Integer _BestScore,
 </stylesheet>	
 
 <frame id="SaveReplayFrame" z-index="20" scale="1.2" pos="0 0" hidden="1">
-	<label pos="0 18.1" z-index="0" size="119 7" text="Save Replay" style="TextButtonNav" translate="1" halign="center" textsize="2.5" valign="center"/>
+	<label pos="0 18.1" z-index="0" size="119 7" text="Save replay" style="TextTitle3" textfont="GameFontExtraBold" translate="1" halign="center" textsize="2.5" valign="center"/>
 	<quad pos="0 -23" z-index="-9" size="120 46" style="UICommon128_1" substyle="BgDialog" halign="center" valign="bottom"/>	
 	<quad pos="0 23" z-index="-4" size="120 10" style="UICommon128_1" substyle="BgDialogTitle" halign="center"/>	
-	<entry pos="-55" z-index="10" size="110 7" default="MapAuthor(Time).Replay.Gbx" halign="left" scriptevents="1" textfont="Gotham/Gotham-Book" textsize="3" valign="center2" id="ReplayUrl"/>
+	<entry pos="-55" z-index="10" size="110 7" default="MapAuthor(Time).Replay.Gbx" halign="left" scriptevents="1" textfont="GameFontRegular" textsize="3" valign="center2" id="ReplayUrl"/>
 	<quad z-index="2" size="110 7" halign="center" scriptevents="1" valign="center2" bgcolor="A9A9A9FF" opacity="0.5"/>
 	<label pos="-55 4" z-index="1" size="110 5" text="File" id="SaveReplayText" translate="1" halign="left" textfont="BiryaniDemiBold" textsize="2" valign="bottom"/>
 	<label id="SaveReplaySave" text="Save" posn="-30 -14" translate="1" valign="center2" z-index="2" textsize="4" scriptevents="1" halign="center"  style="CardButtonMediumL" scale="1.1"/>		
@@ -427,17 +443,17 @@ Text DrawAfterRaceUI(Boolean _IsPlatform, Integer _CurScore, Integer _BestScore,
 	<quad bluramount="0.9" pos="0 -5" z-index="-5" id="MessageBg" size="80 80" style="UICommon128_1" substyle="BgDialog" halign="center" valign="center"/>
 	<quad z-index="5" size="30 30" halign="center" valign="center" pos="0 9" id="Medal2" style="MedalsBig" substyle="MedalSlot"/>
 	<quad z-index="-4" size="60 42.5" halign="center" pos="0 25" style="Bgs1" substyle="BgDialogBlur"/>
-	<label pos="0 30.5" style="TextButtonNav" z-index="1" size="100 5" id="MessageTitle" translate="1" halign="center" valign="center" textsize="3" text="Awesome!!!"/>	
-	<frame>
+	<label pos="0 30.5" style="TextTitle3" textfont="GameFontExtraBold" z-index="1" size="100 5" id="MessageTitle" translate="1" halign="center" valign="center" textsize="3" text="Awesome!!!"/>	
+	<frame id="SPIfo" hidden="1">
 		<quad z-index="-4" size="60 6" halign="center" pos="0 -26" style="Bgs1" substyle="BgDialogBlur"/>	
 		<quad pos="24 -26" z-index="1" size="6 6" style="BgRaceScore2" substyle="Podium"/>
 		<label pos="23 -29" z-index="1" size="16 6" text="???" id="PositionLabel" translate="1" halign="right" valign="center2" textsize="3" opacity=".8" focusareacolor2="2E2E2ECB"/>
 		<label pos="-28 -29" z-index="1" size="16 6" text="0 SP" id="SPLabel" translate="1" halign="left" valign="center2" textsize="2" opacity=".8" focusareacolor2="2E2E2ECB" textcolor="6CFF00FF"/>
 	</frame>
 	<label pos="0 -38" z-index="1" size="35 7" text="OK" id="MessageClose" translate="1" halign="center" valign="center" scriptevents="1"  textsize="3" opacity=".8" style="CardButtonMediumS"/>
-	<label pos="0 -8" z-index="1" size="58 9" text="You set a new personal record!" id="MessageText" translate="1" halign="center"  textsize="2.5" autonewline="1"/>
-	<label pos="-29 -24" z-index="1" size="30 5" text="Best time :" id="MessageTimeText" translate="1" textsize="2" valign="bottom"/>
-	<label pos="29 -24" z-index="1" size="25 5" text="{{{_CurScore}}}" id="AfterRaceRecordLabel2" translate="1" halign="right" textsize="2" valign="bottom"/>
+	<label pos="0 -8" z-index="1" size="58 9" style="TextTitle2" textfont="GameFontRegular" text="You set a new personal record!" id="MessageText" translate="1" halign="center"  textsize="2.5" autonewline="1"/>
+	<label pos="-29 -24" z-index="1" size="30 5" textfont="GameFontRegular" text="Best time :" id="MessageTimeText" translate="1" textsize="2" valign="bottom"/>
+	<label pos="29 -24" z-index="1" size="25 5" textfont="GameFontRegular"text="{{{_CurScore}}}" id="AfterRaceRecordLabel2" translate="1" textemboss="1" halign="right" textsize="2" valign="bottom"/>
 </frame>
 
 <frame id="MedalInfo" pos="0 80" z-index="80">
@@ -451,8 +467,8 @@ Text DrawAfterRaceUI(Boolean _IsPlatform, Integer _CurScore, Integer _BestScore,
 <frame id="ControlButtons" pos="0 -80" z-index="80">
 	<quad size="320 18" bgcolor="000000FF" halign="center" valign="center" z-index="-1" id="buttonsbg" scriptevents="1" pos="0 -2"/>
 	<label text="Improve" translate="1" id="ButtonImprove" style="CardButtonMediumL" scriptevents="1"/>
-	<label halign="center" text="Save Replay" substyle="Replay" pos="112 0" textsize="4" valign="center" id="ButtonSaveReplay" style="CardButtonSmallXXL" scriptevents="1" />
-	<label pos="-120 0" text="Quit" translate="1" id="ButtonQuit" scriptevents="1"/>
+	<label text="Save replay" translate="1" halign="center" substyle="Replay" pos="112 0" textsize="4" valign="center" id="ButtonSaveReplay" style="CardButtonSmallXXL" scriptevents="1"/>
+	<label text="Quit" translate="1" pos="-120 0" id="ButtonQuit" scriptevents="1"/>
 	<quad hidden="1" pos="-60 0" id="ButtonRefresh" size="12 12" scriptevents="1" style="Icons64x64_1" substyle="ClipRewind"/>
 	<quad hidden="1" pos="-42 0" id="ButtonPausePlay" size="12 12" scriptevents="1" style="Icons64x64_1" substyle="ClipPause"/>
 </frame>
@@ -678,7 +694,7 @@ Void NewRecordDialog(Integer _MedalCount, Integer _PrevMedalCount, Integer _User
 		(Page.GetFirstChild("MessageText") as CMlLabel).SetText("You set a new personal record!");
 	}
 	(Page.GetFirstChild("MessageClose") as CMlLabel).Focus();
-	AnimMgr.Add(NewRecordDialog, "<frame pos='0 10' />", 350, CAnimManager::EAnimManagerEasing::SineIn);
+	AnimMgr.Add(NewRecordDialog, "<frame pos='0 10'/>", 350, CAnimManager::EAnimManagerEasing::SineIn);
 }
 
 Void HideSaveReplayDialog()	{
