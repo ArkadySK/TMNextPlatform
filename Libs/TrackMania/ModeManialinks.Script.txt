@@ -70,8 +70,8 @@ Text PauseMenu()	{
 	<stylesheet>
 	<style id="buttonResume buttonExit ButtonNextMap ButtonRestartMap ButtonOpponents ButtonRankings ButtonMapInfo ButtonShowSkins QUITgame" style="CardButtonSmallXXXL" scale="1"/>
 	</stylesheet>
+	
 <frame z-index="100">
-
 	<quad pos="0 -96" z-index="-50" size="320 200" halign="center" valign="bottom" bgcolor="1C1C1C5C" style="Bgs1" substyle="BgGradBottom" scriptevents="1" opacity=".4"/>
 	
 	<frame id="LockFrame" pos="0 0" z-index="90" hidden="1">
@@ -239,9 +239,7 @@ Text PauseMenu()	{
 /// Boost / Freewheel / Special UI
 Text DrawGameplayTextUI()	{
     return """<manialink version="3">
-    
     <label id="boosterLabel" text="" translate="1" textemboss="1" halign="center" textfont="GameFontRegular" textsize="4" pos="0 60"/>
-    
     <script><!--
     
     CSmPlayer GetOwner() {
@@ -297,13 +295,12 @@ Text DrawGameplayTextUI()	{
 /// CHRONO UI - Time / NbRespawns, speed and dist. info 
 Text DrawChronoUI(Boolean _IsPlatform)	{
     return """<manialink version="3">
-    
+
     <label id="nbRespawnsLabel" hidden="1" halign="center" style="TextRaceChrono" textsize="10" pos="0 -78" text="???"/>
     <label id="timeLabel" hidden="1" halign="center" style="TextRaceChrono" textsize="8" pos="0 -80" text="???"/>
     
     <frame pos="158 -80" id="SpeedFrame">
-    <label id="speedLabel" halign="right" style="TextRaceChrono" textsize="8" pos="0 0" text="0"/>
-    
+    <label id="speedLabel" halign="right" style="TextRaceChrono" textsize="8" pos="0 0" text="0"/>  
     <label id="distLabel" halign="right" style="TextRaceChrono" textsize="2" pos="-6 4" text="0"/>
     <label halign="right" textsize="1" pos="0 3" text="m"/>
     </frame>
