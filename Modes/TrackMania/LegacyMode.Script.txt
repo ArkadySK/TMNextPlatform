@@ -1,7 +1,7 @@
 /// Solo mode for Platform gamemode for TMNext
 /// Goal: Least nb of respawns
 ///
-#Extends "Libs/Nadeo/TMxSM/Race/ModeRounds.Script.txt"
+#Extends "Modes/Nadeo/Trackmania/Base/TrackmaniaRoundsBase.Script.txt"
 
 #Include "TextLib" as TextLib
 #Include "MathLib" as MathLib
