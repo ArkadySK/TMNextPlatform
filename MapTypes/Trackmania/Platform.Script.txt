@@ -5,7 +5,7 @@
 #RequireContext CSmMapType
 
 #Include "TextLib" as TextLib
-#Include "Libs/Nadeo/ModeLibs/Legacy/MapType.Script.txt"
+#Include "Libs/Nadeo/CMGame/Modes/Legacy/MapType.Script.txt"
 
 #Include "Libs/TrackMania/ModeManialinks.Script.txt" as ModeManialinks
 
