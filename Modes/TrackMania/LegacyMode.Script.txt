@@ -8,9 +8,12 @@
 
 #Include "Libs/TrackMania/ModeManialinks.Script.txt" as ModeManialinks
 
-
+//S_IsPlatform = True: Platform mode; S_IsPlatform = False: Race mode
 #Setting S_IsPlatform True
+//Enable this setting when you are in local multi or online
 #Setting S_IsInLocalMulti False
+//Show speedometer in race
+#Setting S_ShowSpeed False
 
 declare CUILayer G_ChronoLayer;	
 declare CUILayer G_CPLayer;
@@ -23,13 +26,12 @@ declare CGhost G_RecordGhost;
 declare CGhost G_OutroGhost;
 declare Integer G_MapRecord;
 
-
-
+// Saves ghost to TMNextPlatform/Records/ folder 
 Void SaveRecordGhost(CGhost _recordGhost)	{
-	DataFileMgr.Replay_Save("PlatformRecords\\AutoSave"^Map.MapInfo.Name^".Replay.Gbx", Map, _recordGhost);
+	DataFileMgr.Replay_Save("TMNextPlatform\\Records\\AutoSave"^Map.MapInfo.Name^".Replay.Gbx", Map, _recordGhost);
 }
 
-
+// Refreshes best score ghost
 Void RefreshRecordGhost()	{
 	if (G_RecordGhost != Null)
 	GhostMgr.Ghost_Remove(G_RecordGhost.Id);
@@ -47,7 +49,7 @@ Void RefreshRecordGhost()	{
 	}
 }
 
-
+// Gets time (int) from record ghost
 Integer GetRecordFromGhost(CGhost _recordGhost)	{
 	if(S_IsPlatform == True || _recordGhost == Null)	{
 		if (_recordGhost == Null)
@@ -57,7 +59,6 @@ Integer GetRecordFromGhost(CGhost _recordGhost)	{
 	
 	return ScoreMgr.Map_GetRecord(NullId, Map.MapInfo.MapUid, "");
 }
-
 
 // Saves ghosts if improvement
 Void FinishRace(CSmPlayer _Player, CGhost _OutroGhost)	{
@@ -138,7 +139,10 @@ Void InitialUILoad()	{
 	Player_UI.UILayers.add(G_OpponentScoresLayer);
 	Player_UI.UILayers.add(G_AfterRaceLayer);
 
-	G_ChronoLayer.ManialinkPage = ModeManialinks::DrawChronoUI(S_IsPlatform);
+	declare persistent Boolean Persistent_ShowSpeed for Users[0];
+	declare ShowSpeed = (S_IsInLocalMulti && S_ShowSpeed) || (!S_IsInLocalMulti && Persistent_ShowSpeed);
+
+	G_ChronoLayer.ManialinkPage = ModeManialinks::DrawChronoUI(S_IsPlatform, ShowSpeed);
 	G_GameplayLayer.ManialinkPage = ModeManialinks::DrawGameplayTextUI();
 	G_PauseMenuLayer.ManialinkPage = ModeManialinks::PauseMenu();
 	G_PauseMenuLayer.Type = CUILayer::EUILayerType::InGameMenu;
@@ -182,6 +186,8 @@ Void AfterRace(CGhost _OutroGhost)	{
 	
 	StartTime = Now;
 	MB_Sleep(100);
+	if(_OutroGhost == Null)
+		return;
 	log(Ghost_IsReplayOver(_OutroGhost.Id));
 	UI.Spectator_SetForcedTarget_Ghost(_OutroGhost.Id);
 	//Ghost_Add(_OutroGhost, False);
@@ -252,17 +258,24 @@ foreach (Event in PendingEvents) {
 			EndRaceSequence("", Event.Player);
 			declare Boolean IsFinished for Event.Player;
 			
-			G_OutroGhost = Ghost_RetrieveFromPlayer(Event.Player);
-			G_OutroGhost.Result.NbRespawns = Event.Player.Score.NbRespawnsRequested;
-			declare LastGhost = Ghost_RetrieveFromPlayer(Event.Player);
-			wait(G_OutroGhost != Null && LastGhost != Null);
-			G_OutroGhost.Nickname = "Last Race: " ^ Event.Player.Name;
-						
-			FinishRace(Event.Player, LastGhost);	
-			IsFinished = True;	
-			MB_Sleep(2700);
-			Ghost_RemoveAll();
+			if(!S_IsInLocalMulti)
+			{
+				G_OutroGhost = Ghost_RetrieveFromPlayer(Event.Player);
+				G_OutroGhost.Result.NbRespawns = Event.Player.Score.NbRespawnsRequested;
+				declare LastGhost = Ghost_RetrieveFromPlayer(Event.Player);
+				wait(G_OutroGhost != Null && LastGhost != Null);
+				G_OutroGhost.Nickname = "Last Race: " ^ Event.Player.Name;					
+				FinishRace(Event.Player, LastGhost);		
+				IsFinished = True;	
+				MB_Sleep(2700);
+				Ghost_RemoveAll();
+			}
+			if(S_IsInLocalMulti){
+				MB_Sleep(2700);
+				Restart();
+			}
 			AfterRace(G_OutroGhost);
+			
 		}
 	}
 }

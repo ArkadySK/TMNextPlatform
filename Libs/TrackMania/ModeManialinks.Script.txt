@@ -293,13 +293,13 @@ Text DrawGameplayTextUI()	{
 
 
 /// CHRONO UI - Time / NbRespawns, speed and dist. info 
-Text DrawChronoUI(Boolean _IsPlatform)	{
+Text DrawChronoUI(Boolean _IsPlatform, Boolean _ShowSpeed)	{
     return """<manialink version="3">
 
     <label id="nbRespawnsLabel" hidden="1" halign="center" style="TextRaceChrono" textsize="10" pos="0 -78" text="???"/>
     <label id="timeLabel" hidden="1" halign="center" style="TextRaceChrono" textsize="8" pos="0 -80" text="???"/>
     
-    <frame pos="158 -80" id="SpeedFrame">
+    <frame pos="158 -80" id="SpeedFrame" hidden="1">
     <label id="speedLabel" halign="right" style="TextRaceChrono" textsize="8" pos="0 0" text="0"/>  
     <label id="distLabel" halign="right" style="TextRaceChrono" textsize="2" pos="-6 4" text="0"/>
     <label halign="right" textsize="1" pos="0 3" text="m"/>
@@ -333,19 +333,23 @@ Text DrawChronoUI(Boolean _IsPlatform)	{
         declare Player <=> GetOwner();
         Player.TrustClientSimu = False;
         
+				if({{{_ShowSpeed}}})
+					 Page.GetFirstChild("SpeedFrame").Show();
+
         if({{{_IsPlatform}}})
             (Page.GetFirstChild("nbRespawnsLabel") as CMlLabel).Show();
         else
             (Page.GetFirstChild("timeLabel") as CMlLabel).Show();
             
         while(True)	{
-			if(Player == Null) {
-				yield;
-				continue;
-			}
-            (Page.GetFirstChild("speedLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Speed * 36 / 10));
-            (Page.GetFirstChild("distLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Distance));
-            if({{{_IsPlatform}}})
+					if(Player == Null) {
+						yield;
+						continue;
+					}
+          (Page.GetFirstChild("speedLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Speed * 36 / 10));
+          (Page.GetFirstChild("distLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Distance));
+					
+					if({{{_IsPlatform}}})
                 (Page.GetFirstChild("nbRespawnsLabel") as CMlLabel).SetText(""^Player.Score.NbRespawnsRequested);
             else
                 (Page.GetFirstChild("timeLabel") as CMlLabel).SetText(TimeToTextMP(Player.CurrentRaceTime));
