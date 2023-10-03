@@ -10,6 +10,7 @@
 
 
 #Setting S_IsPlatform True
+#Setting S_IsInLocalMulti False
 
 declare CUILayer G_ChronoLayer;	
 declare CUILayer G_CPLayer;
@@ -132,7 +133,8 @@ Void InitialUILoad()	{
 	Player_UI.UILayers.add(G_ChronoLayer); 
 	Player_UI.UILayers.add(G_CPLayer); 
 	Player_UI.UILayers.add(G_GameplayLayer); 
-	Player_UI.UILayers.add(G_PauseMenuLayer);
+	if(!S_IsInLocalMulti)
+		Player_UI.UILayers.add(G_PauseMenuLayer);
 	Player_UI.UILayers.add(G_OpponentScoresLayer);
 	Player_UI.UILayers.add(G_AfterRaceLayer);
 
@@ -145,7 +147,8 @@ Void InitialUILoad()	{
 Void Restart()	{
 	G_AfterRaceLayer.ManialinkPage = "";
 	ReloadUI();
-	RefreshRecordGhost();
+	if (!S_IsInLocalMulti)
+		RefreshRecordGhost();
 	G_MapRecord = GetRecordFromGhost(G_RecordGhost);
 	MB_Sleep(100);
 	UnspawnPlayer(Players[0]);
@@ -187,7 +190,8 @@ Void AfterRace(CGhost _OutroGhost)	{
 	
 ***Match_InitMap***
 ***
-Ghost_RemoveAll();
+if(!S_IsInLocalMulti)
+	Ghost_RemoveAll();
 Scores_ClearAll();
 if(S_IsPlatform)
 	Scores_SetSortCriteria(CSmMode::ESmScoreSortOrder::Respawns);
