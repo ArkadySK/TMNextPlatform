@@ -853,11 +853,11 @@ Text DrawMusicPlayerLayer() {
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <manialink version="3">
 	<frame id="MusicInfoFrame" pos="110 140" z-index="50" >
-	<quad pos="-110 -60" z-index="-1" size="100 20" valign="center" halign="center" id="bg" opacity=".6" bgcolor="131414FF"/>
-	<quad bluramount="0.6" pos="-160 -60" z-index="-1" size="100 20" style="Bgs1" substyle="BgEmpty" valign="center"/>
-	<label pos="-154 -54" z-index="0" size="85 5" text="Author" halign="left" valign="center" textsize="3" textfont="Gotham/Gotham-Bold" id="MusicAuthor" class="musicinfo"/>
-	<label pos="-154.5 -60" z-index="0" size="85 5" text="Name" halign="left" valign="center" textsize="4" textfont="Gotham/Gotham-Medium" id="MusicName" class="musicinfo"/>
-	<label pos="-154 -66" z-index="0" size="85 5" text="Album" halign="left" valign="center" textsize="2" textfont="Gotham/Gotham-Medium" id="MusicAlbum" class="musicinfo"/>
+		<quad bluramount="0.6" pos="-160 -60.5" z-index="-1" size="100 22" style="Bgs1" substyle="BgHealthBar" valign="center"/>
+		<label pos="-154 -54" z-index="0" size="85 5" text="Author" halign="left" valign="center" textsize="3" textfont="GameFontRegular" id="MusicAuthor" class="musicinfo"/>
+		<label pos="-154.5 -60" z-index="0" size="85 5" text="Name" halign="left" valign="center" textsize="4" textfont="GameFontSemiBold" id="MusicName" class="musicinfo"/>
+		<label pos="-154 -66" z-index="0" size="85 5" text="Album" halign="left" valign="center" textsize="2" textfont="GameFontRegular" id="MusicAlbum" class="musicinfo"/>
+		<label size="14 14" text="♫" halign="center" valign="center" textcolor="FFFFFFEC" textsize="9" z-index="-9" hidden="" id="ButtonMusicText" pos="-69 -60"/>
 	</frame>
 	
 	<frame pos="-156 -86" z-index="90">

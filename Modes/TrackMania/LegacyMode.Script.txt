@@ -15,6 +15,8 @@
 //Show speedometer in race
 #Setting S_ShowSpeed False
 
+#Const RecordsPath "TMNextPlatform\\Records\\AutoSave"
+
 declare CUILayer G_ChronoLayer;	
 declare CUILayer G_CPLayer;
 declare CUILayer G_GameplayLayer;
@@ -29,14 +31,14 @@ declare Integer G_MapRecord;
 
 // Saves ghost to TMNextPlatform/Records/ folder 
 Void SaveRecordGhost(CGhost _recordGhost)	{
-	DataFileMgr.Replay_Save("TMNextPlatform\\Records\\AutoSave"^Map.MapInfo.Name^".Replay.Gbx", Map, _recordGhost);
+	DataFileMgr.Replay_Save(RecordsPath ^ Map.MapInfo.Name ^ ".Replay.Gbx", Map, _recordGhost);
 }
 
 // Refreshes best score ghost
 Void RefreshRecordGhost()	{
 	if (G_RecordGhost != Null)
 	GhostMgr.Ghost_Remove(G_RecordGhost.Id);
-	declare MapGhosts = DataFileMgr.Replay_Load("PlatformRecords\\AutoSave"^Map.MapInfo.Name^".Replay.Gbx");
+	declare MapGhosts = DataFileMgr.Replay_Load(RecordsPath ^ Map.MapInfo.Name ^ ".Replay.Gbx");
 	//wait(MapGhosts.IsProcessing);
 	MB_Sleep(1000);
 	if(!MapGhosts.HasSucceeded)
@@ -136,9 +138,10 @@ Void InitialUILoad()	{
 	Player_UI.UILayers.add(G_ChronoLayer); 
 	Player_UI.UILayers.add(G_CPLayer); 
 	Player_UI.UILayers.add(G_GameplayLayer); 
-	if(!S_IsInLocalMulti)
-		Player_UI.UILayers.add(G_PauseMenuLayer);
-	Player_UI.UILayers.add(G_MusicPlayerLayer);
+	if(!S_IsInLocalMulti)	{
+		Player_UI.UILayers.add(G_PauseMenuLayer);	
+		Player_UI.UILayers.add(G_MusicPlayerLayer);
+	}
 	Player_UI.UILayers.add(G_OpponentScoresLayer);
 	Player_UI.UILayers.add(G_AfterRaceLayer);
 
