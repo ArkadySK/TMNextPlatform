@@ -847,3 +847,205 @@ main()	{
 	
 	""";
 }
+
+Text DrawMusicPlayerLayer() {
+	return """
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<manialink version="3">
+	<frame id="MusicInfoFrame" pos="110 140" z-index="50" >
+	<quad pos="-110 -60" z-index="-1" size="100 20" valign="center" halign="center" id="bg" opacity=".6" bgcolor="131414FF"/>
+	<quad bluramount="0.6" pos="-160 -60" z-index="-1" size="100 20" style="Bgs1" substyle="BgEmpty" valign="center"/>
+	<label pos="-154 -54" z-index="0" size="85 5" text="Author" halign="left" valign="center" textsize="3" textfont="Gotham/Gotham-Bold" id="MusicAuthor" class="musicinfo"/>
+	<label pos="-154.5 -60" z-index="0" size="85 5" text="Name" halign="left" valign="center" textsize="4" textfont="Gotham/Gotham-Medium" id="MusicName" class="musicinfo"/>
+	<label pos="-154 -66" z-index="0" size="85 5" text="Album" halign="left" valign="center" textsize="2" textfont="Gotham/Gotham-Medium" id="MusicAlbum" class="musicinfo"/>
+	</frame>
+	
+	<frame pos="-156 -86" z-index="90">
+	<label size="8 8" text="♫" halign="center" valign="center" textcolor="FFFFFFEC" textsize="4" z-index="-9" hidden="" id="ButtonMusicText"/>
+	<quad z-index="-10" size="8 8" halign="center" valign="center" opacity=".65" id="ButtonMusic" bgcolor="2E2E2ECB" scriptevents="1"/>
+	</frame>
+	
+	<script><!--
+#Include "TextLib" as TextLib
+#Include "MathLib" as MathLib
+#Include "ColorLib" as ColorLib
+
+#Struct Track {	
+	Text Title;
+	Text Artist;
+	Text Album;
+	Text Image;
+	Text Filename;	   
+}
+
+#Struct MusicStatus {
+	Track CurrentTrack;
+	Boolean IsReady;
+}
+
+declare CAudioSource Music;
+declare Track[] Tracks;
+declare Text[] enabledTracks;
+declare MusicStatus Status;
+declare Integer MusicInfoHideTime;
+Track FindTrack(Text _Filename) {
+	foreach (track in Tracks) {
+		if (track.Filename == _Filename) {
+			return track;
+		}		
+	}
+	return Track{};		
+}
+
+Void UpdateMusicInfo()	{
+	(Page.GetFirstChild("MusicName") as CMlLabel).SetText(Status.CurrentTrack.Title);
+	(Page.GetFirstChild("MusicAlbum") as CMlLabel).SetText(Status.CurrentTrack.Album);
+	(Page.GetFirstChild("MusicAuthor") as CMlLabel).SetText(Status.CurrentTrack.Artist);
+	AnimMgr.Add(Page.GetFirstChild("MusicInfoFrame"), "<frame pos='110 140' />", 600, CAnimManager::EAnimManagerEasing::SineOut);
+	MusicInfoHideTime = Now + 3000;
+}
+
+Void PlayRandomSong() {
+
+		declare Integer idx = 0;
+		declare Boolean cont = True;
+		if (enabledTracks.count > 0) {
+			while(cont) {
+					idx = MathLib::Rand(0, enabledTracks.count-1);
+					if (enabledTracks[idx] != Status.CurrentTrack.Filename) {
+					cont = False;
+					}
+					yield;
+			}
+		}
+		
+		Status.IsReady = False;		
+		if (Music != Null) {
+			Audio.DestroySound(Music);
+		}
+		Audio.ClearAllDelayedSoundsEvents();
+		Music = Audio.CreateSound(enabledTracks[idx], 1.0, True, False, False);		
+		Status.CurrentTrack = FindTrack(enabledTracks[idx]);
+		Music.Play();
+		UpdateMusicInfo();
+}
+
+***OnInit***
+***
+
+declare persistent Real UICol for LocalUser;
+declare ConCol = UICol - .5;
+declare persistent Text[] TM2I_DisabledTracks for LocalUser;
+Status.IsReady = False;
+
+declare Text data;
+declare CHttpRequest Request = Http.CreateGet("https://raw.githubusercontent.com/ArkadySK/TMNextPlatform/main/Audio/Music/tracklist.json", False);
+wait(Request.IsCompleted);
+data = Request.Result;
+Http.Destroy(Request);
+
+if (Tracks.fromjson(data)) {
+	foreach (track in Tracks) {
+		if (!TM2I_DisabledTracks.exists(track.Filename)) {
+			enabledTracks.add(track.Filename);
+		}
+	}
+	PlayRandomSong();
+}
+***
+
+***Loop***
+***
+
+if(MusicInfoHideTime < Now && MusicInfoHideTime!=0 && Page.GetFirstChild("MusicInfoFrame").RelativePosition.Y == 140.)	{
+	AnimMgr.Add(Page.GetFirstChild("MusicInfoFrame"), "<frame pos='110 170' />", 600, CAnimManager::EAnimManagerEasing::SineOut);
+	MusicInfoHideTime = 0;
+	}
+	
+if (Music != Null && Music.DownloadInProgress == False) {
+	if (Status.IsReady == False) {
+		Status.IsReady = True;			
+		Music.Play();
+	}
+}
+
+***
+
+***OnKeyPress***
+***
+
+if (Event.KeyName=="N") {	
+	PlayRandomSong();
+}
+
+***
+
+***OnMouseClick***
+***
+
+if (Event.ControlId == "ButtonMusic") {	
+	PlayRandomSong();
+}
+
+***
+***OnMouseOver***
+***
+if (Event.ControlId == "ButtonMusic") {	
+declare UICol_ = UICol - .7;
+	(Page.GetFirstChild("ButtonMusic") as CMlQuad).BgColor = <UICol_, UICol_, UICol_>;
+}
+***
+
+***OnMouseOut***
+***
+if (Event.ControlId == "ButtonMusic") {	
+	(Page.GetFirstChild("ButtonMusic") as CMlQuad).BgColor = <UICol, UICol, UICol>;
+}
+***
+
+
+Void _nothing() { }
+
+/*  Main Script  */
+main() {
+
+  +++OnInit+++
+
+	while(True) {
+	if(Music.PlayLength - .2 <= Music.PlayCursor)	{
+		PlayRandomSong();
+	}
+    yield;
+    if (!PageIsVisible) {
+  			continue;
+  	}
+
+    foreach (Event in PendingEvents) {
+			switch (Event.Type) {
+				case CMlScriptEvent::Type::EntrySubmit: {
+					+++EntrySubmit+++
+				}
+				case CMlScriptEvent::Type::KeyPress: {
+					+++OnKeyPress+++
+				}
+				case CMlScriptEvent::Type::MouseClick: {
+					+++OnMouseClick+++
+				}
+				case CMlScriptEvent::Type::MouseOut: {
+					+++OnMouseOut+++
+				}
+				case CMlScriptEvent::Type::MouseOver: {
+					+++OnMouseOver+++
+				}
+			}
+		}
+
+		+++Loop+++
+  }
+
+}
+--></script>
+
+</manialink>
+""";
+}

@@ -19,6 +19,7 @@ declare CUILayer G_ChronoLayer;
 declare CUILayer G_CPLayer;
 declare CUILayer G_GameplayLayer;
 declare CUILayer G_PauseMenuLayer;
+declare CUILayer G_MusicPlayerLayer;
 declare CUILayer G_OpponentScoresLayer;
 declare CUILayer G_AfterRaceLayer;
 
@@ -127,6 +128,7 @@ Void InitialUILoad()	{
 	G_CPLayer = UIManager.UILayerCreate();
 	G_GameplayLayer = UIManager.UILayerCreate();
 	G_PauseMenuLayer = UIManager.UILayerCreate();
+	G_MusicPlayerLayer = UIManager.UILayerCreate();
 	G_OpponentScoresLayer = UIManager.UILayerCreate();
 	G_AfterRaceLayer = UIManager.UILayerCreate();
 
@@ -136,6 +138,7 @@ Void InitialUILoad()	{
 	Player_UI.UILayers.add(G_GameplayLayer); 
 	if(!S_IsInLocalMulti)
 		Player_UI.UILayers.add(G_PauseMenuLayer);
+	Player_UI.UILayers.add(G_MusicPlayerLayer);
 	Player_UI.UILayers.add(G_OpponentScoresLayer);
 	Player_UI.UILayers.add(G_AfterRaceLayer);
 
@@ -145,6 +148,7 @@ Void InitialUILoad()	{
 	G_ChronoLayer.ManialinkPage = ModeManialinks::DrawChronoUI(S_IsPlatform, ShowSpeed);
 	G_GameplayLayer.ManialinkPage = ModeManialinks::DrawGameplayTextUI();
 	G_PauseMenuLayer.ManialinkPage = ModeManialinks::PauseMenu();
+	G_MusicPlayerLayer.ManialinkPage = ModeManialinks::DrawMusicPlayerLayer();
 	G_PauseMenuLayer.Type = CUILayer::EUILayerType::InGameMenu;
 }
 
