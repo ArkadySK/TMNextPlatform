@@ -1,0 +1,37 @@
+[
+	{	
+		"Artist": "Bigbang112",
+		"Title": "Developer Night Club",
+		"Filename": "file://Media/Musics/TMNextPlatform/DeveloperNightClub.ogg",
+		"Image": "",
+		"Album": "True Bigbang's mix"
+	},
+	{	
+		"Artist": "Doo",
+		"Title": "Buffalo Skull",
+		"Filename": "file://Media/Musics/CanyonPlatform/Race/Buffalo Skull.ogg",
+		"Image": "",
+		"Album": "TM2 Canyon Platform OST"
+	},	
+	{	
+		"Artist": "Doo",
+		"Title": "Faster Than Light",
+		"Filename": "file://Media/Musics/CanyonPlatform/Race/Faster Than Light.ogg",
+		"Image": "",
+		"Album": "TM2 Canyon Platform OST"
+	},	
+	{	
+		"Artist": "Doo",
+		"Title": "Sand Storms",
+		"Filename": "file://Media/Musics/CanyonPlatform/Race/Sand Storms.ogg",
+		"Image": "",
+		"Album": "TM2 Canyon Platform OST"
+	},	
+	{	
+		"Artist": "Doo",
+		"Title": "The Lost Oasis",
+		"Filename": "file://Media/Musics/CanyonPlatform/Race/The Lost Oasis.ogg",
+		"Image": "",
+		"Album": "TM2 Canyon Platform OST"
+	}	
+]
