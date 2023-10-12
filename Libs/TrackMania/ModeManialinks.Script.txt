@@ -83,7 +83,7 @@ Text PauseMenu()	{
 
 	<frame id="HideOpt" z-index="20" pos="0 25" scale="1.2">
 		<frame pos="0 -10" scale=".85" id="menubuttons">	
-			<label pos="0 18" z-index="0" size="119 7" text="Race menu" style="TextTitle3" textfont="GameFontExtraBold" translate="1" halign="center" textsize="2.5" valign="center"/>
+			<label pos="0 18" z-index="0" size="119 7" text="Options" style="TextTitle3" textfont="GameFontExtraBold" translate="1" halign="center" textsize="2.5" valign="center"/>
 			<quad pos="0 23" z-index="-6" size="120 68" bgcolor="FFFA" style="UICommon128_1" substyle="BgDialog" halign="center"/>	
 			<quad pos="0 23" z-index="-4" size="120 10" bgcolor="FFFA" style="UICommon128_1" substyle="BgDialogTitle" halign="center"/>	
 				
