@@ -27,6 +27,8 @@ declare CUILayer G_LayerGameplay;
 
 Void SetupUi()  // for CTmRules
 {
+	declare persistent Boolean Persistent_ShowSpeed for Users[0];
+
 	UIManager.UIAll.ScoreTableVisibility = CUIConfig::EVisibility::Normal;
 	UIManager.UIAll.ScoreTableOnlyManialink = True;
 	UIManager.UIAll.ScoreTable = "";
@@ -49,7 +51,7 @@ Void SetupUi()  // for CTmRules
 	G_LayerCheckpoint = UIManager.UILayerCreate();
 	G_LayerGameplay = UIManager.UILayerCreate();
 
-	G_LayerChrono.ManialinkPage = ModeManialinks::DrawChronoUI(True);
+	G_LayerChrono.ManialinkPage = ModeManialinks::DrawChronoUI(True, Persistent_ShowSpeed);
 	G_LayerGameplay.ManialinkPage = ModeManialinks::DrawGameplayTextUI();
 	
 	UIManager.UIAll.UILayers.add(G_LayerChrono);
