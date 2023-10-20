@@ -45,8 +45,6 @@ main()	{
 	declare metadata Integer ObjectiveSilver for Map;
 	declare metadata Integer ObjectiveBronze for Map;
 
-	log("obj silver: " ^ ObjectiveSilver);
-
 	if(UI == Null) return;
 
 	declare netwrite Boolean Net_QuitRequested for UI;
@@ -845,6 +843,25 @@ main()	{
 
 </manialink>
 	
+	""";
+}
+
+Text DrawEmptyMusicPlayerLayer() {
+	return """
+<script><!--
+main()	{
+	Audio.ClearAllDelayedSoundsEvents();
+	declare EmptyPath = "file://Media/Sounds/TMNextPlatform/empty.wav";
+	declare Music = Audio.CreateSound(EmptyPath, 1., True, True, False);
+	while(True)
+	{
+		if(Music != Null && Music.DownloadInProgress == False)
+			Music.Play();
+		yield;
+	}
+	
+}
+--></script>
 	""";
 }
 
