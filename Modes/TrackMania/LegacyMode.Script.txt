@@ -102,8 +102,7 @@ Void FinishRace(CSmPlayer _Player, CGhost _OutroGhost)	{
 			IsBetter = False;
 		else	{
 			G_MapRecord = _Player.EndTime;
-			wait(_OutroGhost != Null);	
-			ScoreMgr.Map_SetNewRecord_v2(NullId, Map.MapInfo.MapUid, "", "", _OutroGhost);
+			wait(_OutroGhost != Null);
 		}			
 	}
 	
