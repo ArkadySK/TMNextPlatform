@@ -122,17 +122,22 @@ Void ReloadUI()	{
 }
 
 Void InitMusicPlayer()	{
+	if(S_IsInLocalMulti)
+		return;
 	G_MusicPlayerLayer = UIManager.UILayerCreate();
-	
-	declare Player_UI = UIManager.GetUI(Players[0]);
-	if(!S_IsInLocalMulti)	
-		Player_UI.UILayers.add(G_MusicPlayerLayer);
-		
+		declare Player_UI = UIManager.GetUI(Players[0]);
+	Player_UI.UILayers.add(G_MusicPlayerLayer);
 	G_MusicPlayerLayer.ManialinkPage = ModeManialinks::DrawEmptyMusicPlayerLayer();
 }
 
 Void LoadMusicPlayer()	{
-	G_MusicPlayerLayer.ManialinkPage = ModeManialinks::DrawMusicPlayerLayer();
+	if(S_IsInLocalMulti)
+		return;
+	declare persistent Boolean Persistent_DisableMusicPlayer for Users[0];
+	if(!Persistent_DisableMusicPlayer)
+		G_MusicPlayerLayer.ManialinkPage = ModeManialinks::DrawMusicPlayerLayer();
+	else 
+		G_MusicPlayerLayer.ManialinkPage = "";
 }
 
 Void InitialUILoad()	{
