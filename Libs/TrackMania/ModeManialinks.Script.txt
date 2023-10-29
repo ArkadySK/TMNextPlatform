@@ -70,7 +70,7 @@ Text PauseMenu()	{
 	</stylesheet>
 	
 <frame z-index="100">
-	<quad pos="0 -96" z-index="-50" size="320 200" halign="center" valign="bottom" bgcolor="1C1C1C5C" style="Bgs1" substyle="BgGradBottom" scriptevents="1" opacity=".4"/>
+	<quad z-index="-50" size="3200 2000" halign="center" valign="center" bgcolor="1C1C1C5C" style="Bgs1" substyle="BgGradBottom" scriptevents="1" opacity=".4"/>
 	
 	<frame id="LockFrame" pos="0 0" z-index="90" hidden="1">
 		<quad pos="0 -1" z-index="1" size="165 30" halign="center" valign="center" id="bg00" style="Bgs1" substyle="BgDialogBlur"/>			
