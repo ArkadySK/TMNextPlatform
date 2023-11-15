@@ -66,6 +66,7 @@ Integer GetRecordFromGhost(CGhost _recordGhost)	{
 
 // Saves ghosts if improvement
 Void FinishRace(CSmPlayer _Player, CGhost _OutroGhost)	{
+	G_OpponentScoresLayer.ManialinkPage = "";
 	Player_SetCurRaceAsPrevRace(_Player);
 	declare IsBetter = True;
 	
