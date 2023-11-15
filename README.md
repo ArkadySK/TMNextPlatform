@@ -2,6 +2,9 @@
 
 The classic gamemode from TM1 and TM2 arrives back to TM2020!
 
+## What is the Platform mode about?
+Instead of racing against the time, you have to try to finish the map with as least respawns as possible.
+
 ### This project contains:
 - Platform mode for solo (unfinished)
 - Platform mode for multiplayer (about to be finished, I am waiting for your ideas to be added :D )
