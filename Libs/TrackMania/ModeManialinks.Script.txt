@@ -601,7 +601,6 @@ Void Left()	{
 				SaveButton.Focus();
 			else	{
 				SaveReplay();
-				HideSaveReplayDialog();
 			}
 		}
 		if(Event.MenuNavAction == CMlScriptEvent::EMenuNavAction::Cancel)	
@@ -741,13 +740,10 @@ Void HideNewRecordDialog()	{
 }
 
 Void SaveReplay()	{
-	
 	HoverAfterRaceButton(-1);
 	declare netwrite Text Net_SaveReplayUrl for UI;
 	Net_SaveReplayUrl = (Page.GetFirstChild("ReplayUrl") as CMlEntry).Value;
-	log("Saving replay..." ^ Net_SaveReplayUrl);
-	Audio.PlaySoundEvent(CAudioManager::ELibSound::Valid, 0, 1.);
-	HideSaveReplayDialog();
+	Audio.PlaySoundEvent(CAudioManager::ELibSound::HideDialog, 0, 1.);
 }
 
 Void PreLoad()	{
@@ -829,7 +825,6 @@ main()	{
 				}
 				if(Event.ControlId == "SaveReplaySave")	{
 					SaveReplay();
-					HideSaveReplayDialog();
 				}
 				if(AfterRaceButtons.exists(Event.ControlId))	{
 					SelectAfterRaceButton(i);
