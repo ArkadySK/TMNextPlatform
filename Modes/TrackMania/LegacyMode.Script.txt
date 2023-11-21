@@ -110,6 +110,7 @@ Void FinishRace(CSmPlayer _Player, CGhost _OutroGhost)	{
 	
 	Player_SetCurRaceAsBestRace(_Player);
 	Player_ClearRaceWaypointTimes(_Player);
+	Player_BeginNewRace(_Player, 0);
 	Player_SetFinishTime(_Player, _Player.EndTime);
 	
 	G_AfterRaceLayer.ManialinkPage = ModeManialinks::DrawAfterRaceUI(S_IsPlatform, _Player.Score.NbRespawnsRequested, G_MapRecord, IsBetter);
