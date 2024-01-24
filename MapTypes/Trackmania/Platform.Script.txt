@@ -16,16 +16,15 @@ declare Integer G_NbRespawns;
 declare Integer G_PassedCpCount;
 declare Integer G_CpCount;
 
-/////////////////////////////////////
-// Validate
-
 declare Ident[Text] G_Vehicles;
 
 declare CUILayer G_LayerChrono;
 declare CUILayer G_LayerCheckpoint;
 declare CUILayer G_LayerGameplay;
+declare CUILayer G_MusicPlayerLayer;
 
-Void SetupUi()  // for CTmRules
+
+Void SetupUi()
 {
 	declare persistent Boolean Persistent_ShowSpeed for Users[0];
 
@@ -34,6 +33,7 @@ Void SetupUi()  // for CTmRules
 	UIManager.UIAll.ScoreTable = "";
 	
 	UIManager.UIAll.OverlayMute321Go = False;
+	UIManager.UIAll.OverlayHide321Go = True;
 	UIManager.UIAll.OverlayHideBackground = True;
 	UIManager.UIAll.OverlayHideCheckPointList = True;
 	UIManager.UIAll.OverlayHidePersonnalBestAndRank = True;
@@ -46,18 +46,23 @@ Void SetupUi()  // for CTmRules
 	UIManager.UIAll.OverlayHideConsumables = True;
 	UIManager.UIAll.OverlayHideRoundScores = True;
 	UIManager.UIAll.OverlayHideCountdown = True;
+	UIManager.UIAll.ScoreTableVisibility = CUIConfig::EVisibility::ForcedHidden;
 		
 	G_LayerChrono = UIManager.UILayerCreate();
 	G_LayerCheckpoint = UIManager.UILayerCreate();
 	G_LayerGameplay = UIManager.UILayerCreate();
+	G_MusicPlayerLayer = UIManager.UILayerCreate();
 
 	G_LayerChrono.ManialinkPage = ModeManialinks::DrawChronoUI(True, Persistent_ShowSpeed);
 	G_LayerGameplay.ManialinkPage = ModeManialinks::DrawGameplayTextUI();
-	
+	G_MusicPlayerLayer.ManialinkPage = ModeManialinks::DrawMusicPlayerLayer();
+
 	UIManager.UIAll.UILayers.add(G_LayerChrono);
 	UIManager.UIAll.UILayers.add(G_LayerCheckpoint);
 	UIManager.UIAll.UILayers.add(G_LayerGameplay);
+	UIManager.UIAll.UILayers.add(G_MusicPlayerLayer);
 }
+
 
 Void SetupRules()	{
 	Mode.RespawnBehaviour = CSmMode::ERespawnBehaviour::AlwaysRespawn;
@@ -72,6 +77,7 @@ Void CleanupUi(CSmMode _Rules)  // for CSmRules
 	G_LayerChrono = Null;
 	G_LayerCheckpoint = Null;
 	G_LayerGameplay = Null;
+	G_MusicPlayerLayer = Null;
 }
 
 
@@ -109,17 +115,6 @@ Void SetDefaultObjectives(Integer _AuthorRespawns)
 	1 + _AuthorRespawns + _AuthorRespawns/10, 
 	3 + _AuthorRespawns + _AuthorRespawns/5,
 	10 + _AuthorRespawns + _AuthorRespawns/2);
-}
-
-
-CAnchorData FindAnchorByPosition(Vec3 _Pos)	{
-	foreach	(Anchor in AnchorData)	{
-		if (Anchor.WaypointType == CAnchorData::EWaypointType::Checkpoint)
-			log(_Pos ^ " vs " ^ Anchor.Position);
-			if(Anchor.Position == _Pos)
-				return Anchor;
-	}
-	return Null;
 }
 
 
@@ -192,6 +187,10 @@ Void RestartRace(CSmPlayer _Player)	{
 	G_PassedCpCount = 0;
 	G_NbRespawns = 0;
 }
+
+
+/////////////////////////////////////
+// Validate map. Launch with gamemode.
 
 Void DoValidate(Boolean IsTest) {	
 	ValidationEndRequested = False;
@@ -288,18 +287,10 @@ Void DoValidate(Boolean IsTest) {
 
 
 /////////////////////////////////////
-// EditObjectives
+// Edit Objectives. Shows objectives dialog box.
 
 Void EditObjectives() 
 {
-	// dialog box to edit objectives:
-	//   Objectives:
- 	//		Author:  0  respawns
-	//		Gold:	 1  respawns  
-	//		Bronze:	 3  respawns  
-	//		Silver:	 10  respawns
-	//   Auto | Ok | Cancel
-
 	declare metadata Integer ObjectiveAuthor 	for Map;
 	declare metadata Integer ObjectiveGold 		for Map;
 	declare metadata Integer ObjectiveSilver 	for Map;
