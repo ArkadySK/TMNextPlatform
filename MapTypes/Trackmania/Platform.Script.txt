@@ -13,8 +13,8 @@
 #Const SupportedTasks "Validation"
 
 declare Integer G_NbRespawns;
+declare Integer G_PassedCpCount;
 declare Integer G_CpCount;
-declare CAnchorData[] G_PassedCpAnchors;
 
 /////////////////////////////////////
 // Validate
@@ -62,6 +62,7 @@ Void SetupUi()  // for CTmRules
 Void SetupRules()	{
 	Mode.RespawnBehaviour = CSmMode::ERespawnBehaviour::AlwaysRespawn;
 	Mode.GiveUpBehaviour = CSmMode::EGiveUpBehaviour::GiveUp;
+	Mode.CheckpointBehaviour = CSmMode::ECheckpointBehaviour::Default; 
 	Mode.UseLaunchedCheckpoints = False;
 }
 
@@ -188,7 +189,7 @@ Void RestartRace(CSmPlayer _Player)	{
 	Mode.UIManager.UIAll.StatusMessage = "";
 	EnterPlayground(1);
 	Mode.UIManager.UIAll.UISequence = CUIConfig::EUISequence::Playing;
-	G_PassedCpAnchors.clear();
+	G_PassedCpCount = 0;
 	G_NbRespawns = 0;
 }
 
@@ -226,7 +227,7 @@ Void DoValidate(Boolean IsTest) {
 
 		if(Players.count == 0 || Player == Null)	{
 			G_NbRespawns = 0;
-			G_PassedCpAnchors.clear();
+			G_PassedCpCount = 0;
 			ValidationEndRequested = True;
 			continue;
 		}
@@ -234,33 +235,25 @@ Void DoValidate(Boolean IsTest) {
 		foreach(Event in Mode.PendingEvents) {
 			if(Event.GiveUp)	{
 				G_NbRespawns = -1;
-				G_PassedCpAnchors.clear();
+				G_PassedCpCount = 0;
 			}
 
-			// check the checkpoints
+			// Check the checkpoints
 			if(Event.Type == CSmModeEvent::EType::OnPlayerRequestRespawn)	{
 				G_NbRespawns += 1;
 			}
 			if(Event.Type == CSmModeEvent::EType::OnPlayerTriggersWaypoint && !IsTest)	{
-				declare CurAnchor <=> FindAnchorByPosition(Event.Landmark.Position);
-				if(CurAnchor == Null)	{
-					log("ERROR - CP anchor not found!");
-					continue;
-				}
-				if(G_PassedCpAnchors.exists(CurAnchor))
-					continue;
-				else	{
-					G_PassedCpAnchors.add(CurAnchor);
-				}
+				log("Player passed a CP!");
+				G_PassedCpCount += 1;
 				declare CurCP_BestTime = -1;
-				if(Event.Player.Score.BestRaceTimes.count > G_PassedCpAnchors.count)
-					CurCP_BestTime = Event.Player.Score.BestRaceTimes[G_PassedCpAnchors.count-1];
+				if(Event.Player.Score.BestRaceTimes.count > G_PassedCpCount)
+					CurCP_BestTime = Event.Player.Score.BestRaceTimes[G_PassedCpCount - 1];
 				else
 					CurCP_BestTime = -1;
 				G_LayerCheckpoint.ManialinkPage = ModeManialinks::UpdateCheckPointUI(Event.WaypointTime, CurCP_BestTime);
 
-				//when player passes all the checkpoints and gets into finish
-				if(G_PassedCpAnchors.count > G_CpCount)	{
+				// When player passes all the checkpoints and gets into finish
+				if(G_PassedCpCount > G_CpCount)	{
 					ValidationStatus = CMapType::ValidationStatus::Validated;	
 					
 					if (BestScore_G_NbRespawns == -1 || G_NbRespawns < BestScore_G_NbRespawns) {
