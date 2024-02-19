@@ -71,7 +71,7 @@ Void SetupRules()	{
 	Mode.UseLaunchedCheckpoints = False;
 }
 
-Void CleanupUi(CSmMode _Rules)  // for CSmRules
+Void CleanupUi(CSmMode _Rules)
 {
 	_Rules.UIManager.ResetAll();
 	G_LayerChrono = Null;
@@ -172,7 +172,34 @@ Void UpdateValidability()
 
 }
 
+/////////////////////////////////////
+// Finish map validation. Save player records and show notifications.
+Void FininshRace() {
+	ValidationStatus = CMapType::ValidationStatus::Validated;	
+					
+	declare persistent BestScore_G_NbRespawns for Map = -1;
+	if (BestScore_G_NbRespawns == -1 || G_NbRespawns < BestScore_G_NbRespawns) {
+		Mode.UIManager.UIAll.StatusMessage = TextLib::Compose(_("You set a new personal record!"));
+		if (G_NbRespawns != 1) //len pre preklady, nebojte sa
+			Mode.UIManager.UIAll.BigMessage = TextLib::Compose(_("%1 respawns"), TextLib::ToText(G_NbRespawns));
+		else 
+			Mode.UIManager.UIAll.BigMessage = _("1 respawn");
+		BestScore_G_NbRespawns = G_NbRespawns;
+		SetDefaultObjectives(BestScore_G_NbRespawns);					
+	}
+	else if(G_NbRespawns == BestScore_G_NbRespawns)	{
+		Mode.UIManager.UIAll.StatusMessage = TextLib::Compose(_("Equalled."));
+		Mode.UIManager.UIAll.BigMessage = TextLib::Compose(_("Best: %1"), TextLib::ToText(BestScore_G_NbRespawns));
+	}
+	else	{
+		Mode.UIManager.UIAll.StatusMessage = TextLib::Compose(_("Try again!"));
+		Mode.UIManager.UIAll.BigMessage = TextLib::Compose(_("Best: %1"), TextLib::ToText(BestScore_G_NbRespawns));
+	}
+	Mode.UIManager.UIAll.UISequence = CUIConfig::EUISequence::Outro;
+}
 
+/////////////////////////////////////
+// Restart validation.
 Void RestartRace(CSmPlayer _Player)	{
 	
 	Mode.UIManager.UIAll.UISequence = CUIConfig::EUISequence::Playing;
@@ -191,7 +218,6 @@ Void RestartRace(CSmPlayer _Player)	{
 
 /////////////////////////////////////
 // Validate map. Launch with gamemode.
-
 Void DoValidate(Boolean IsTest) {	
 	ValidationEndRequested = False;
 	if(!IsTest) 
@@ -253,26 +279,7 @@ Void DoValidate(Boolean IsTest) {
 
 				// When player passes all the checkpoints and gets into finish
 				if(G_PassedCpCount > G_CpCount)	{
-					ValidationStatus = CMapType::ValidationStatus::Validated;	
-					
-					if (BestScore_G_NbRespawns == -1 || G_NbRespawns < BestScore_G_NbRespawns) {
-						Mode.UIManager.UIAll.StatusMessage = TextLib::Compose(_("You set a new personal record!"));
-						if (G_NbRespawns != 1) //len pre preklady, nebojte sa
-							Mode.UIManager.UIAll.BigMessage = TextLib::Compose(_("%1 respawns"), TextLib::ToText(G_NbRespawns));
-						else 
-							Mode.UIManager.UIAll.BigMessage = _("1 respawn");
-						BestScore_G_NbRespawns = G_NbRespawns;
-						SetDefaultObjectives(BestScore_G_NbRespawns);					
-					}
-					else if(G_NbRespawns == BestScore_G_NbRespawns)	{
-						Mode.UIManager.UIAll.StatusMessage = TextLib::Compose(_("Equalled."));
-						Mode.UIManager.UIAll.BigMessage = TextLib::Compose(_("Best: %1"), TextLib::ToText(BestScore_G_NbRespawns));
-					}
-					else	{
-						Mode.UIManager.UIAll.StatusMessage = TextLib::Compose(_("Try again!"));
-						Mode.UIManager.UIAll.BigMessage = TextLib::Compose(_("Best: %1"), TextLib::ToText(BestScore_G_NbRespawns));
-					}
-					Mode.UIManager.UIAll.UISequence = CUIConfig::EUISequence::Outro;
+					FininshRace();
 					sleep(3000);
 					RestartRace(Player);
 				}
@@ -282,13 +289,11 @@ Void DoValidate(Boolean IsTest) {
 
 	CleanupUi(Mode);
 	LeavePlayground();
-
 }
 
 
 /////////////////////////////////////
 // Edit Objectives. Shows objectives dialog box.
-
 Void EditObjectives() 
 {
 	declare metadata Integer ObjectiveAuthor 	for Map;
@@ -394,7 +399,6 @@ Void EditObjectives()
 
 /////////////////////////////////////
 // Main
-
 main() {	
 	EnableMapTypeStartTest = True;
 
