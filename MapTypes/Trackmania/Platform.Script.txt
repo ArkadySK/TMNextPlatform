@@ -267,8 +267,7 @@ Void DoValidate(Boolean IsTest) {
 			if(Event.Type == CSmModeEvent::EType::OnPlayerRequestRespawn)	{
 				G_NbRespawns += 1;
 			}
-			if(Event.Type == CSmModeEvent::EType::OnPlayerTriggersWaypoint && !IsTest)	{
-				log("Player passed a CP!");
+			if(Event.Type == CSmModeEvent::EType::OnPlayerTriggersWaypoint)	{
 				G_PassedCpCount += 1;
 				declare CurCP_BestTime = -1;
 				if(Event.Player.Score.BestRaceTimes.count > G_PassedCpCount)
@@ -278,7 +277,7 @@ Void DoValidate(Boolean IsTest) {
 				G_LayerCheckpoint.ManialinkPage = ModeManialinks::UpdateCheckPointUI(Event.WaypointTime, CurCP_BestTime);
 
 				// When player passes all the checkpoints and gets into finish
-				if(G_PassedCpCount > G_CpCount)	{
+				if(G_PassedCpCount > G_CpCount && !IsTest)	{
 					FininshRace();
 					sleep(3000);
 					RestartRace(Player);
