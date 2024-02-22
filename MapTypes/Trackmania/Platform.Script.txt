@@ -258,7 +258,6 @@ Void DoValidate(Boolean IsTest) {
 		// Fix for Event.GiveUp not being fired in Test Mode:
 		if(Player.CurrentRaceTime <= 0 && IsTest) {
 			G_NbRespawns = -1;
-			PlayerRestarting = True;
 			Player.Score.NbRespawnsRequested = 0;
 			sleep(100);
 		}
