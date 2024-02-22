@@ -223,7 +223,6 @@ Void DoValidate(Boolean IsTest) {
 	if(!IsTest) 
 		assert(ValidationStatus == ::ValidationStatus::Validable  || ValidationStatus == ::ValidationStatus::Validated);
 
-
 	declare persistent BestScore_G_NbRespawns for Map = -1;
 
 	if (ValidationStatus == ::ValidationStatus::Validable) {
@@ -246,7 +245,6 @@ Void DoValidate(Boolean IsTest) {
 	wait(Mode.Players.count >= 1);
 	declare Player <=> Mode.Players[0];
 	
-
 	while (!ValidationEndRequested) {	
 		yield;
 
@@ -257,6 +255,14 @@ Void DoValidate(Boolean IsTest) {
 			continue;
 		}
 		
+		// Fix for Event.GiveUp not being fired in Test Mode:
+		if(Player.CurrentRaceTime <= 0 && IsTest) {
+			G_NbRespawns = -1;
+			PlayerRestarting = True;
+			Player.Score.NbRespawnsRequested = 0;
+			sleep(100);
+		}
+
 		foreach(Event in Mode.PendingEvents) {
 			if(Event.GiveUp)	{
 				G_NbRespawns = -1;

@@ -340,17 +340,15 @@ Text DrawChronoUI(Boolean _IsPlatform, Boolean _ShowSpeed)	{
             (Page.GetFirstChild("timeLabel") as CMlLabel).Show();
             
         while(True)	{
-					if(Player == Null) {
-						yield;
-						continue;
-					}
-          (Page.GetFirstChild("speedLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Speed * 36 / 10));
-          (Page.GetFirstChild("distLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Distance));
+			if(Player == Null) {
+				yield;
+				continue;
+			}
+			(Page.GetFirstChild("speedLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Speed * 36 / 10));
+			(Page.GetFirstChild("distLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Distance));
 					
-					if({{{_IsPlatform}}})
-                (Page.GetFirstChild("nbRespawnsLabel") as CMlLabel).SetText(""^Player.Score.NbRespawnsRequested);
-            else
-                (Page.GetFirstChild("timeLabel") as CMlLabel).SetText(TimeToTextMP(Player.CurrentRaceTime));
+			(Page.GetFirstChild("nbRespawnsLabel") as CMlLabel).SetText(""^Player.Score.NbRespawnsRequested);
+			(Page.GetFirstChild("timeLabel") as CMlLabel).SetText(TimeToTextMP(Player.CurrentRaceTime));
             yield;
         }
     }
