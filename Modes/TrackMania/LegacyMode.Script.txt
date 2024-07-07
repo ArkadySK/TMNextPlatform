@@ -54,15 +54,15 @@ Void RefreshRecordGhost()	{
 	}
 }
 
-// Gets time (int) from record ghost
-Integer GetRecordFromGhost(CGhost _recordGhost)	{
-	if(S_IsPlatform == True || _recordGhost == Null)	{
-		if (_recordGhost == Null)
+// Gets time (int) or nb respawns (int) from record ghost
+Integer GetRecordFromGhost(CGhost _RecordGhost)	{
+	if (_RecordGhost == Null)
 			return -1;
-		return _recordGhost.Result.NbRespawns;
-	}
-	
-	return ScoreMgr.Map_GetRecord(NullId, Map.MapInfo.MapUid, "");
+
+	if(S_IsPlatform == True)	
+		return _RecordGhost.Result.NbRespawns;
+		
+	return -1;
 }
 
 // Saves ghosts if improvement
@@ -214,7 +214,6 @@ Void AfterRace(CGhost _OutroGhost)	{
 	MB_Sleep(100);
 	if(_OutroGhost == Null)
 		return;
-	log(Ghost_IsReplayOver(_OutroGhost.Id));
 	UI.Spectator_SetForcedTarget_Ghost(_OutroGhost.Id);
 	//Ghost_Add(_OutroGhost, False);
 	UI.SpectatorForceCameraType = 0;
