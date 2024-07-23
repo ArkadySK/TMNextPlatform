@@ -47,7 +47,7 @@ Void RefreshRecordGhost()	{
 		return;
 	
 	declare MapGhost = MapGhosts.Ghosts[0];
-	MapGhost.Nickname = "Personal Best: ";
+	MapGhost.Nickname = TextLib::GetTranslatedText("Personal best");
 	if(MapGhost!=Null)	{
 		GhostMgr.Ghost_Add(MapGhost, True, 0);
 		G_RecordGhost = MapGhost;
