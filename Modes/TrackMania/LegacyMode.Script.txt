@@ -14,6 +14,8 @@
 #Setting S_IsInLocalMulti False
 //Show speedometer in race
 #Setting S_ShowSpeed False
+//Default font name for UI, use "GameFontRegular" for default font; empty for chrono style font
+#Setting S_FontName "GameFontRegular"
 
 #Const RecordsPath "TMNextPlatform\\Records\\AutoSave"
 
@@ -167,6 +169,8 @@ Void InitialUILoad()	{
 
 	declare persistent Boolean Persistent_ShowSpeed for Users[0];
 	declare ShowSpeed = (S_IsInLocalMulti && S_ShowSpeed) || (!S_IsInLocalMulti && Persistent_ShowSpeed);
+
+	ModeManialinks::SetCustomFontName(S_FontName);
 
 	G_ChronoLayer.ManialinkPage = ModeManialinks::DrawChronoUI(S_IsPlatform, ShowSpeed);
 	G_GameplayLayer.ManialinkPage = ModeManialinks::DrawGameplayTextUI();

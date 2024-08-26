@@ -1,3 +1,10 @@
+declare Text FontName;
+
+Void SetCustomFontName(Text _FontName)	{
+	FontName = _FontName;
+}
+
+
 Text DrawOpponentScoresUI(Text _PB)	{
 	return """
 	<manialink version="3">
@@ -5,7 +12,7 @@ Text DrawOpponentScoresUI(Text _PB)	{
 		<style class="MedalIcon" pos="0 -1" z-index="2" size="8 8" style="MedalsBig"/>
 		<style class="MedalName" pos="9 -5.3" z-index="2" size="32 10" valign="center2" textfont="GameFontSemiBold" textsize="1.5"/>
 		<style class="MedalBg" scale="1" size="58 6" style="UICommon128_1" substyle="BgToolTilted" modulatecolor="222" pos="-4 -2" opacity="0.7"/>
-		<style id="AuthorScore GoldScore SilverScore BronzeScore UserScore" textfont="GameFontRegular" pos="47 -4.7" size="10 8" valign="center" textsize="2" halign="center" z-index="2" style="TextRaceChrono"/>
+		<style id="AuthorScore GoldScore SilverScore BronzeScore UserScore" textfont="{{{FontName}}}" pos="47 -4.7" size="10 8" valign="center" textsize="2" halign="center" z-index="2" style="TextRaceChrono"/>
 </stylesheet>
 		
 <frame id="FrameAuthor" pos="-160 82">
@@ -237,7 +244,7 @@ Text PauseMenu()	{
 /// Boost / Freewheel / Special UI
 Text DrawGameplayTextUI()	{
     return """<manialink version="3">
-    <label id="boosterLabel" text="" translate="1" textemboss="1" halign="center" textfont="GameFontRegular" textsize="4" pos="0 60"/>
+    <label id="boosterLabel" text="" translate="1" textemboss="1" halign="center" textfont="{{{FontName}}}" textsize="4" pos="0 60"/>
     <script><!--
     
     CSmPlayer GetOwner() {
@@ -285,7 +292,7 @@ Text DrawGameplayTextUI()	{
     --></script>
     </manialink>
     """;
-    }
+}
 
 
 
@@ -294,13 +301,13 @@ Text DrawGameplayTextUI()	{
 Text DrawChronoUI(Boolean _IsPlatform, Boolean _ShowSpeed)	{
     return """<manialink version="3">
 
-    <label id="nbRespawnsLabel" hidden="1" halign="center" style="TextRaceChrono" textsize="10" pos="0 -78" text="???"/>
-    <label id="timeLabel" hidden="1" halign="center" style="TextRaceChrono" textsize="8" pos="0 -80" text="???"/>
+    <label id="nbRespawnsLabel" hidden="1" halign="center" style="TextRaceChrono" textfont="{{{FontName}}}" textsize="10" pos="0 -78" text="???"/>
+    <label id="timeLabel" hidden="1" halign="center" style="TextRaceChrono" textfont="{{{FontName}}}" textsize="8" pos="0 -80" text="???"/>
     
     <frame pos="158 -80" id="SpeedFrame" hidden="1">
-    <label id="speedLabel" halign="right" style="TextRaceChrono" textsize="8" pos="0 0" text="0"/>  
-    <label id="distLabel" halign="right" style="TextRaceChrono" textsize="2" pos="-6 4" text="0"/>
-    <label halign="right" textsize="1" pos="0 3" text="m"/>
+		<label id="speedLabel" halign="right" style="TextRaceChrono" textfont="{{{FontName}}}" textsize="8" pos="0 0" text="0"/>  
+		<label id="distLabel" halign="right" style="TextRaceChrono" textfont="{{{FontName}}}" textsize="2" pos="-6 4" text="0"/>
+		<label halign="right" textsize="1" pos="0 3" text="m"/>
     </frame>
     
     <script><!--
@@ -329,26 +336,30 @@ Text DrawChronoUI(Boolean _IsPlatform, Boolean _ShowSpeed)	{
     
     main()	{
         declare Player <=> GetOwner();
+		declare NbRespawnsLabel <=> (Page.GetFirstChild("nbRespawnsLabel") as CMlLabel);
+		declare TimeLabel <=> (Page.GetFirstChild("timeLabel") as CMlLabel);
+		declare SpeedLabel <=> (Page.GetFirstChild("speedLabel") as CMlLabel);
+		declare DistLabel <=> (Page.GetFirstChild("distLabel") as CMlLabel);
         Player.TrustClientSimu = False;
-        
-				if({{{_ShowSpeed}}})
-					 Page.GetFirstChild("SpeedFrame").Show();
+
+		if({{{_ShowSpeed}}})
+				Page.GetFirstChild("SpeedFrame").Show();
 
         if({{{_IsPlatform}}})
-            (Page.GetFirstChild("nbRespawnsLabel") as CMlLabel).Show();
+            NbRespawnsLabel.Show();
         else
-            (Page.GetFirstChild("timeLabel") as CMlLabel).Show();
-            
+            TimeLabel.Show();
+
         while(True)	{
 			if(Player == Null) {
 				yield;
 				continue;
 			}
-			(Page.GetFirstChild("speedLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Speed * 36 / 10));
-			(Page.GetFirstChild("distLabel") as CMlLabel).SetText(""^MathLib::FloorInteger(Player.Distance));
+			SpeedLabel.SetText(""^MathLib::FloorInteger(Player.Speed * 36 / 10));
+			DistLabel.SetText(""^MathLib::FloorInteger(Player.Distance));
 					
-			(Page.GetFirstChild("nbRespawnsLabel") as CMlLabel).SetText(""^Player.Score.NbRespawnsRequested);
-			(Page.GetFirstChild("timeLabel") as CMlLabel).SetText(TimeToTextMP(Player.CurrentRaceTime));
+			NbRespawnsLabel.SetText(""^Player.Score.NbRespawnsRequested);
+			TimeLabel.SetText(TimeToTextMP(Player.CurrentRaceTime));
             yield;
         }
     }
@@ -366,8 +377,8 @@ Text DrawChronoUI(Boolean _IsPlatform, Boolean _ShowSpeed)	{
 Text UpdateCheckPointUI(Integer _WaypointTime, Integer _AnotherTime)	{
     return """<manialink version="3">
     <frame z-index="-10" pos="0 28">
-        <label halign="center" style="TextRaceChrono" textsize="4" pos="0 6" id="cas"/>
-        <label halign="center" style="TextRaceChrono" textsize="4" pos="0 0" id="cas2"/>
+        <label halign="center" style="TextRaceChrono" textfont="{{{FontName}}}" textsize="4" pos="0 6" id="cas"/>
+        <label halign="center" style="TextRaceChrono" textfont="{{{FontName}}}" textsize="4" pos="0 0" id="cas2"/>
     </frame>
     <script><!--
     
