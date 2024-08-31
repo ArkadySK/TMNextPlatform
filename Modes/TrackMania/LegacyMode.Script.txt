@@ -230,7 +230,7 @@ Void AutoSelectGamemode() {
 		return;
 	}
 	
-	if(TextLib::Find(Map.MapType, "platform", False, False))
+	if(TextLib::Find("platform", Map.MapType, False, False))
 		IsPlatform = True;
 	else
 		IsPlatform = False;
