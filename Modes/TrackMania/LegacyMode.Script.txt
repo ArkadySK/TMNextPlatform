@@ -8,12 +8,14 @@
 
 #Include "Libs/TrackMania/ModeManialinks.Script.txt" as ModeManialinks
 
-//S_IsPlatform = True: Platform mode; S_IsPlatform = False: Race mode
-#Setting S_IsPlatform True
+//IsPlatform = True: Platform mode; IsPlatform = False: Race mode
+#Setting S_ForcePlatform False
 //Enable this setting when you are in local multi or online
 #Setting S_IsInLocalMulti False
 //Show speedometer in race
 #Setting S_ShowSpeed False
+//Default font name for UI, use "GameFontRegular" for default font; empty for chrono style font
+#Setting S_FontName "GameFontRegular"
 
 #Const RecordsPath "TMNextPlatform\\Records\\AutoSave"
 
@@ -30,6 +32,7 @@ declare Text PrevNet_SaveReplayUrl;
 declare CGhost G_RecordGhost;
 declare CGhost G_OutroGhost;
 declare Integer G_MapRecord;
+declare Boolean IsPlatform;
 
 // Saves ghost to TMNextPlatform/Records/ folder 
 Void SaveRecordGhost(CGhost _recordGhost)	{
@@ -59,7 +62,7 @@ Integer GetRecordFromGhost(CGhost _RecordGhost)	{
 	if (_RecordGhost == Null)
 			return -1;
 
-	if(S_IsPlatform == True)	
+	if(IsPlatform == True)	
 		return _RecordGhost.Result.NbRespawns;
 		
 	return -1;
@@ -72,7 +75,7 @@ Void FinishRace(CSmPlayer _Player, CGhost _OutroGhost)	{
 	declare IsBetter = True;
 	
 // In platform gamemode:
-	if(S_IsPlatform)	{
+	if(IsPlatform)	{
 		// If NbRespawns is worse, ignore record: 
 		if(_Player.Score.NbRespawnsRequested > G_MapRecord && G_MapRecord != -1)
 			IsBetter = False;
@@ -113,7 +116,7 @@ Void FinishRace(CSmPlayer _Player, CGhost _OutroGhost)	{
 	Player_BeginNewRace(_Player, 0);
 	Player_SetFinishTime(_Player, _Player.EndTime);
 	
-	G_AfterRaceLayer.ManialinkPage = ModeManialinks::DrawAfterRaceUI(S_IsPlatform, _Player.Score.NbRespawnsRequested, G_MapRecord, IsBetter);
+	G_AfterRaceLayer.ManialinkPage = ModeManialinks::DrawAfterRaceUI(IsPlatform, _Player.Score.NbRespawnsRequested, G_MapRecord, IsBetter);
 }
 
 Void ReloadUI()	{
@@ -168,7 +171,9 @@ Void InitialUILoad()	{
 	declare persistent Boolean Persistent_ShowSpeed for Users[0];
 	declare ShowSpeed = (S_IsInLocalMulti && S_ShowSpeed) || (!S_IsInLocalMulti && Persistent_ShowSpeed);
 
-	G_ChronoLayer.ManialinkPage = ModeManialinks::DrawChronoUI(S_IsPlatform, ShowSpeed);
+	ModeManialinks::SetCustomFontName(S_FontName);
+
+	G_ChronoLayer.ManialinkPage = ModeManialinks::DrawChronoUI(IsPlatform, ShowSpeed);
 	G_GameplayLayer.ManialinkPage = ModeManialinks::DrawGameplayTextUI();
 	G_PauseMenuLayer.ManialinkPage = ModeManialinks::PauseMenu();
 	G_PauseMenuLayer.Type = CUILayer::EUILayerType::InGameMenu;
@@ -218,16 +223,29 @@ Void AfterRace(CGhost _OutroGhost)	{
 	//Ghost_Add(_OutroGhost, False);
 	UI.SpectatorForceCameraType = 0;
 }
+
+Void AutoSelectGamemode() {
+	if(S_ForcePlatform) {
+		IsPlatform = True;
+		return;
+	}
+	
+	if(TextLib::Find("platform", Map.MapType, False, False))
+		IsPlatform = True;
+	else
+		IsPlatform = False;
+}
 	
 ***Match_InitMap***
 ***
+AutoSelectGamemode();
 InitMusicPlayer();
 if(!S_IsInLocalMulti)
 	Ghost_RemoveAll();
 Scores_ClearAll();
 InitialUILoad();
 Restart();
-if(S_IsPlatform)
+if(IsPlatform)
 	Scores_SetSortCriteria(CSmMode::ESmScoreSortOrder::Respawns);
 else
 	Scores_SetSortCriteria(CSmMode::ESmScoreSortOrder::BestRace);
