@@ -9,7 +9,7 @@
 
 #Include "Libs/TrackMania/ModeManialinks.Script.txt" as ModeManialinks
 
-
+#Const C_FontName "GameFontRegular"
 #Const SupportedTasks "Validation"
 
 declare Integer G_NbRespawns;
@@ -53,6 +53,7 @@ Void SetupUi()
 	G_LayerGameplay = UIManager.UILayerCreate();
 	G_MusicPlayerLayer = UIManager.UILayerCreate();
 
+	ModeManialinks::SetCustomFontName(C_FontName);
 	G_LayerChrono.ManialinkPage = ModeManialinks::DrawChronoUI(True, Persistent_ShowSpeed);
 	G_LayerGameplay.ManialinkPage = ModeManialinks::DrawGameplayTextUI();
 	G_MusicPlayerLayer.ManialinkPage = ModeManialinks::DrawMusicPlayerLayer();
