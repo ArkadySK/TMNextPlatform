@@ -46,6 +46,8 @@ Text DrawOpponentScoresUI(Text _PB)	{
 	<label text="{{{_PB}}}" id="UserScore"/>
 </frame>
 <script><!--
+#Include "TextLib" as TextLib
+
 main()	{
 	declare metadata Integer ObjectiveAuthor for Map;
 	declare metadata Integer ObjectiveGold for Map;
@@ -59,10 +61,32 @@ main()	{
 	Net_QuitRequested = False;
 	Net_RestartRequested = False;
 	
-	(Page.GetFirstChild("AuthorScore") as CMlLabel).SetText(""^ObjectiveAuthor);
-	(Page.GetFirstChild("GoldScore") as CMlLabel).SetText(""^ObjectiveGold);
-	(Page.GetFirstChild("SilverScore") as CMlLabel).SetText(""^ObjectiveSilver);
-	(Page.GetFirstChild("BronzeScore") as CMlLabel).SetText(""^ObjectiveBronze);
+	declare Text AuthorScore = ""^ObjectiveAuthor;
+	declare Text GoldScore = ""^ObjectiveGold;
+	declare Text SilverScore = ""^ObjectiveSilver;
+	declare Text BronzeScore = ""^ObjectiveBronze;
+
+	if(ObjectiveAuthor == 0 && ObjectiveGold == 0 && ObjectiveSilver == 0 && ObjectiveBronze == 0) {
+		if(Map.MapInfo.TMObjective_AuthorTime > 1000) { //it's race, convert to time
+			AuthorScore = TextLib::TimeToText(Map.MapInfo.TMObjective_AuthorTime, True);
+			GoldScore = TextLib::TimeToText(Map.MapInfo.TMObjective_GoldTime, True);
+			SilverScore = TextLib::TimeToText(Map.MapInfo.TMObjective_SilverTime, True);
+			BronzeScore = TextLib::TimeToText(Map.MapInfo.TMObjective_BronzeTime, True);
+		} else { // use platform formatting
+			AuthorScore = ""^Map.MapInfo.TMObjective_AuthorTime;
+			GoldScore = ""^Map.MapInfo.TMObjective_GoldTime;
+			SilverScore = ""^Map.MapInfo.TMObjective_SilverTime;
+			BronzeScore = ""^Map.MapInfo.TMObjective_BronzeTime;
+		}
+	}
+		
+	(Page.GetFirstChild("AuthorScore") as CMlLabel).SetText(AuthorScore);
+	(Page.GetFirstChild("GoldScore") as CMlLabel).SetText(GoldScore);
+	(Page.GetFirstChild("SilverScore") as CMlLabel).SetText(SilverScore);
+	(Page.GetFirstChild("BronzeScore") as CMlLabel).SetText(BronzeScore);
+	
+	log("objective: " ^ Map.MapInfo.TMObjective_GoldTime);
+	log("objective text: " ^ Map.ObjectiveTextGold);
 }
 --></script>
 </manialink>
